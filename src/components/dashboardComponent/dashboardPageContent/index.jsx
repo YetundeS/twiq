@@ -12,7 +12,7 @@ import { generateSignString } from "@/lib/utils";
 import { fetchUser } from "@/apiCalls/authAPI";
 import Image from "next/image";
 import { useSideBar } from "@/store/sidebarStore";
-import { modelsOverview } from "../../../../constants/dahsboard";
+import { modelsOverview } from "../../../constants/dahsboard";
 
 const DashboardPageContent = () => {
   const router = useRouter();

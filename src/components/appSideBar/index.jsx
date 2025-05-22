@@ -26,48 +26,7 @@ import {
   MenubarItem,
   MenubarMenu, MenubarTrigger
 } from "@/components/ui/menubar";
-
-
-// models
-const models = [
-  {
-    name: "Carousel",
-    url: "carousel",
-    icon: () => <Home className="home-icon" />,
-  },
-  {
-    name: "Storyteller",
-    url: "storyteller",
-    icon: () => <Home className="home-icon" />,
-  },
-  {
-    name: "Headlines",
-    url: "headlines",
-    icon: () => <Home className="home-icon" />,
-  },
-  {
-    name: "LinkedIn Your Business",
-    url: "linkedin-business",
-    icon: () => <Home className="home-icon" />,
-  },
-  {
-    name: "LinkedIn Personal",
-    url: "linkedin-personal",
-    icon: () => <Home className="home-icon" />,
-  },
-  {
-    name: "Captions",
-    url: "captions",
-    icon: () => <Home className="home-icon" />,
-  },
-  {
-    name: "Video Scripts",
-    url: "video-scripts",
-    icon: () => <Home className="home-icon" />,
-  },
-];
-
-export const ORGANIZATIONAL_ROLES = ["admin", "developer"];
+import { models, ORGANIZATIONAL_ROLES } from "@/constants/sidebar";
 
 export function AppSidebar() {
   const updateUser = useAuthStore((state) => state.updateUser);
@@ -161,20 +120,6 @@ export function AppSidebar() {
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              
-              {/* {models.map((item) => (
-                <SidebarMenuItem key={item.title} className="sidebarMenuItem">
-                  <SidebarMenuButton className="sidebarMenuBtn" asChild>
-                    <a
-                      href={`/platform/${organization}/${item.url}/`}
-                      className="sideBarItem"
-                    >
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))} */}
             </SidebarMenu>
           </SidebarGroupContent>
           {/* <SidebarGroupContent>
