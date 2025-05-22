@@ -25,7 +25,7 @@ const DashboardPageContent = () => {
 
   useEffect(() => {
     if (isHydrated && !user) {
-      router.push("/");
+      router.push("/auth");
     }
   }, [user, isHydrated]);
 
@@ -49,10 +49,10 @@ const DashboardPageContent = () => {
         {!isSidebarOpen && (
           <>
             <div onClick={toggleSidebar} className="pageTop_iconWrapper">
-              <PanelRightOpen size="22px" className="pageTop_icons" />
+              <PanelRightOpen size="22px"/>
             </div>
             <div className="pageTop_iconWrapper">
-              <SquarePen size="22px" className="pageTop_icons" />
+              <SquarePen size="22px"/>
             </div>
           </>
         )}

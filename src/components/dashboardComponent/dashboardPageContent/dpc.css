@@ -7,6 +7,24 @@
     overflow-x: hidden;
 }
 
+
+/* Define the scrollbar width first */
+.page_content::-webkit-scrollbar {
+  width: 12px; /* or whatever width you want */
+}
+
+/* Style the scrollbar track */
+.page_content::-webkit-scrollbar-track {
+    background-color: var(--page-content-bg);
+}
+
+/* Optional: style the thumb (the draggable part) */
+.page_content::-webkit-scrollbar-thumb {
+  background-color: rgb(146, 146, 146);
+  border: 4px solid var(--page-content-bg); 
+  border-radius: 10px;
+}
+
 .pageTop {
     height: 55px;
     width: 100%;

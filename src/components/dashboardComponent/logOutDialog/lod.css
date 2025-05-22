@@ -1,0 +1,31 @@
+.dialogBody {
+    background-color: var(--page-content-bg);
+    border-radius: 12px;
+    border: none;
+    color: white;
+}
+
+.dialogDescription {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 1rem 0;
+    gap: 1rem;
+}
+
+.dialogBtn {
+    font-size: 12px;
+    width: max-content;
+    color: white;
+}
+
+.dialogBtn.black {
+    color: black;
+}
+
+
+@media (max-width: 575px) {
+    .dialogBody {
+        max-width: 90vw;
+    }
+}

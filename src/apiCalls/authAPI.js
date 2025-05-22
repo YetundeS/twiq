@@ -14,7 +14,7 @@ export const createUser = async (formData) => {
       user_name,
       email,
       password,
-      organization_name
+      organization_name,
     });
 
     return { status: response.status, user: response.data };
@@ -31,7 +31,7 @@ export const createUser = async (formData) => {
 export const loginUser = async (formData) => {
   const { email, password } = formData;
   try {
-    const response = await API.post(`/user/login`, { email, password })
+    const response = await API.post(`/user/login`, { email, password });
 
     // Store token in localStorage
     localStorage.setItem("access_token", response.data.access_token);
@@ -104,7 +104,6 @@ export const fetchUser = async (updateUser) => {
       return;
     }
 
-    
     // 🔹 Get auth headers
     const authHeader = addAuthHeader();
 
@@ -112,15 +111,15 @@ export const fetchUser = async (updateUser) => {
     const response = await API.get("/user/getUser", {
       headers: {
         "Content-Type": "application/json",
-          ...authHeader,  // 🔥 Spread token header dynamically
+        ...authHeader, // 🔥 Spread token header dynamically
       },
     });
 
-      updateUser(response?.data.user);
+    updateUser(response?.data.user);
   } catch (error) {
-    console.log('err: ', error)
     toast.error("Error fetching user", {
-      description: 'Error - fetching user',
+      description:
+        error?.response?.data?.error || error?.message || "Something went wrong.",
       style: { border: "none", color: "red" },
     });
   }

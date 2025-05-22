@@ -1,5 +1,5 @@
 import {
-  Home, PanelRightOpen, Settings, SlidersHorizontal, Sparkles, SquarePen
+  Home, LogOut, PanelRightOpen, Settings, SlidersHorizontal, Sparkles, SquarePen
 } from "lucide-react";
 
 import {
@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/sidebar";
 import "./appSideBar.css";
 import useAuthStore from "@/store/authStore";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { generateSignString } from "@/lib/utils";
 import { useSideBar } from "@/store/sidebarStore";
@@ -27,13 +26,14 @@ import {
   MenubarMenu, MenubarTrigger
 } from "@/components/ui/menubar";
 import { models, ORGANIZATIONAL_ROLES } from "@/constants/sidebar";
+import useLogOutDialogStore from "@/store/useLogOutDialogStore";
+import LogOutDialog from "../dashboardComponent/logOutDialog";
 
 export function AppSidebar() {
-  const updateUser = useAuthStore((state) => state.updateUser);
   const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
   const [organization, setOrganization] = useState("");
-  const router = useRouter();
   const { user } = useAuthStore();
+  const { openDialog } = useLogOutDialogStore();
 
   useEffect(() => {
     if (!user) return;
@@ -41,34 +41,31 @@ export function AppSidebar() {
     setOrganization(signString);
   }, [user]);
 
-  // const logOut = () => {
-  //   updateUser(null);
 
-  //   logOutUser();
-  //   router.push("/auth");
-  // };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  
 
   return (
     <Sidebar className="sidebar">
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="fixedHeight_area">
           <SidebarGroupLabel className="h-max">
             <div className="topAction_box">
-              <div onClick={toggleSidebar} className="pageTop_iconWrapper">
-                <PanelRightOpen size="22px" className="pageTop_icons" />
+              <div onClick={toggleSidebar} className="sidebar_pageTop_iconWrapper">
+                <PanelRightOpen size="22px" />
               </div>
-              <div className="pageTop_iconWrapper">
-                <SquarePen size="22px" className="pageTop_icons" />
+              <div className="sidebar_pageTop_iconWrapper">
+                <SquarePen size="22px" />
               </div>
             </div>
           </SidebarGroupLabel>
+          <div className="scrollableArea">
           <SidebarGroupContent>
             <SidebarMenu className="sidebar_menu">
-              {!ORGANIZATIONAL_ROLES.includes(user?.user_name) && (
+              {ORGANIZATIONAL_ROLES.includes(user?.user_name) && (
                 <SidebarMenuItem className="sidebarMenuItem admin">
                   <SidebarMenuButton asChild>
                     <a
@@ -140,12 +137,13 @@ export function AppSidebar() {
               
             </SidebarMenu>
           </SidebarGroupContent> */}
+          </div>
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="logOutBar">
+            <SidebarMenuButton className="upgradeBar">
               <div className="sideBar_iconBox">
                 <Sparkles className="sparkles_icon" />
               </div>
@@ -155,8 +153,14 @@ export function AppSidebar() {
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
+          <SidebarMenuItem onClick={openDialog}>
+            <SidebarMenuButton className="upgradeBar logout">
+              <LogOut /> <span className="txtHead">Log Out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+      <LogOutDialog />
     </Sidebar>
   );
 }
