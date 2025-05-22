@@ -1,3 +1,4 @@
+import Image from "next/image";
 import "./modelOverview.css";
 import { motion } from "framer-motion";
 
@@ -15,11 +16,21 @@ const ModelOverview = ({ model, organizationName }) => {
         }}
         className="icon_container"
       >
-        <model.Icon className="modelIcon" size={46} />
+        <Image
+          src={`/images/model_icons/${model?.icon}.png`}
+          width={500}
+          height={500}
+          alt="model icon"
+          className="modelImg"
+        />
       </motion.div>
       <div className={`info_container`}>
         <p className="model_title">{model?.title}</p>
-        <p className="model_description">{model?.description}</p>
+        <p className="model_description">
+          {model?.description?.map((desc, i) => (
+            <span key={i}>{desc}</span>
+          ))}
+        </p>
       </div>
     </a>
   );
@@ -28,7 +39,6 @@ const ModelOverview = ({ model, organizationName }) => {
 export default ModelOverview;
 
 export const AdminAction = ({ action }) => {
-
   return (
     <div onClick={action?.function} className="modelOverview action">
       <motion.div

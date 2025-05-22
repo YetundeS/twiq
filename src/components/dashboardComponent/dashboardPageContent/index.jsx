@@ -11,42 +11,8 @@ import { useHydrationZustand } from "@codebayu/use-hydration-zustand";
 import { generateSignString } from "@/lib/utils";
 import { fetchUser } from "@/apiCalls/authAPI";
 import Image from "next/image";
-import { Search, BookOpen, FileText, FileCode, Mic } from "lucide-react";
 import { useSideBar } from "@/store/sidebarStore";
-
-const modelsOverview = [
-  {
-    title: "Legal Assistant",
-    description: "Find relevant case laws in minutes instead of hours.",
-    Icon: Search,
-    link: "legal-assistant",
-  },
-  {
-    title: "E-Discovery",
-    description: "AI assistant that helps you go through files in seconds.",
-    Icon: BookOpen,
-    link: "e-discovery",
-  },
-  {
-    title: "Document Automation",
-    description:
-      "Automated document generation based on McGrath Kane templates.",
-    Icon: FileText,
-    link: "document-automation",
-  },
-  {
-    title: "Contract Review",
-    description: "Eliminate mistakes and flag risks in contracts.",
-    Icon: FileCode,
-    link: "contract-review",
-  },
-  {
-    title: "Transcription",
-    description: "AI-powered transcription and deposition summary.",
-    Icon: Mic,
-    link: "transcription",
-  },
-];
+import { modelsOverview } from "../../../../constants/dahsboard";
 
 const DashboardPageContent = () => {
   const router = useRouter();
