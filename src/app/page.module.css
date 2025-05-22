@@ -1,0 +1,13 @@
+.page {
+    box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+}
+
+.main {
+    width: 100vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}

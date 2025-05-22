@@ -1,0 +1,29 @@
+.landingPage {
+    width: 100vw;
+    min-height: 100vh;
+    height: max-content;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+/* Mobile */
+@media (max-width: 1024px) {
+
+.landingPage {
+}
+
+
+}
+
+/* Mobile */
+@media (max-width: 575px) {
+
+.landingPage {
+}
+
+
+}

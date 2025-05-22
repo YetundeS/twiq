@@ -1,0 +1,157 @@
+.authPage {
+    width: 100vw;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+    background: var(--auth-bg);
+    font-family: 'SF Pro', 'Blinker', 'Poppins', Arial, Helvetica, sans-serif;
+}
+
+.form_component {
+    width: 80%;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1500px;
+    max-height: 900px;
+    position: relative;
+    z-index: 99;
+}
+
+.form_carousel_container {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.loginImg {
+    width: 80%;
+    height: max-content;
+}
+
+.loginCaption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.loginCaption .dot {
+    font-size: 48px;
+}
+
+.loginCaption .noProblem {
+    color: var(--fog);
+}
+
+.authForm_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 45%;
+    height: 100%;
+    padding: 2.5rem;
+    padding-top: 4rem;
+    box-sizing: border-box;
+    gap: .6rem;
+    background: #000;
+    border-radius: 14px;
+}
+
+.formTitle {
+    font-size: 38px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+}
+
+.subTxt {
+    color: rgb(186, 186, 186);
+    font-size: 14px;
+}
+
+.subTxt.forgot {
+    margin-top: 1rem;
+}
+
+.subTxt span {
+    color: rgb(141, 141, 212);
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+
+@media (max-width: 1024px) {
+
+    .form_component {
+        width: 100%;
+        flex-direction: column-reverse;
+    }
+
+
+    .authForm_wrapper {
+        width: 65%;
+        height: max-content;
+        padding-top: 1.5rem;
+        gap: .6rem;
+        align-items: center;
+    }
+
+
+    .loginCaption {
+        text-align: center;
+        font-size: 32px;
+    }
+}
+
+
+
+@media (max-width: 575px) {
+
+    .form_component {
+        width: 95%;
+        height: max-content;
+        padding-bottom: 3rem;
+        gap: 1.6rem;
+    }
+
+    .form_carousel_container {
+        width: 100%;
+    }
+
+    .loginImg {
+        display: none;
+    }
+
+
+    .loginCaption {
+        font-size: 26px;
+    }
+
+
+    .authForm_wrapper {
+        width: 100%;
+        height: 100%;
+    }
+
+
+    .formTitle {
+        font-size: 32px;
+    }
+
+}

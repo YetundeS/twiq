@@ -1,0 +1,255 @@
+.sidebar {
+  color: white;
+}
+
+.sideBarItem {
+  color: white;
+}
+
+.userInfo_box {
+  padding: 1rem .3rem;
+  height: max-content;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: .7rem;
+  font-size: 13.5px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.userLetter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-size: 18px;
+  padding: .7rem;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background-color: #fff;
+  text-transform: uppercase;
+}
+
+.userInfo_subContainer {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .3rem;
+}
+
+.user_name {
+  color: white;
+}
+
+.user_email {
+  color: gray;
+  font-size: 11px;
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.sidebar_menu {
+  padding: 1.5rem .5rem;
+  gap: .7rem;
+}
+
+.sidebarMenuItem.admin {
+  border-top: 1px solid rgb(140, 140, 140);
+  margin-top: 1rem;
+}
+
+.logOutBar {
+  color: white;
+}
+
+.logOutBar:hover {
+  color: black;
+}
+
+
+
+/* sidebar-icon.css */
+
+.home-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.sidebarMenuItem:hover .home-icon {
+  animation: bounceDown 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+/* Define the bounce animation */
+@keyframes bounceDown {
+  0% {
+    transform: translateY(-30px);
+  }
+
+  60% {
+    transform: translateY(-2px);
+  }
+
+  80% {
+    transform: translateY(-6px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.sidebarMenuItem:hover .shake-icon path {
+  stroke-dasharray: 1000;
+  /* total length of the path */
+  stroke-dashoffset: 1000;
+  /* hide it initially */
+  animation: drawPath 8s ease forwards;
+}
+
+/* Define the animation */
+@keyframes drawPath {
+  to {
+    stroke-dashoffset: 0;
+    /* reveal the full path */
+  }
+}
+
+
+@keyframes runToHalt {
+  0% {
+    transform: translateX(-100%) scale(1) rotate(0deg);
+    /* Start from off-screen */
+  }
+
+  80% {
+    transform: translateX(3px) scale(1.1) rotate(5deg);
+    /* Athlete starts to slow down and stretch */
+  }
+
+  100% {
+    transform: translateX(0) scale(1) rotate(0deg);
+    /* Comes to a halt, normal size, centered */
+  }
+}
+
+/* Apply the animation to the icon on hover */
+.sidebarMenuItem:hover .telescope-icon {
+  animation: runToHalt 0.5s ease-out forwards;
+  /* Slide in with halt effect */
+}
+
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    /* transform: translateY(20px); */
+  }
+
+  100% {
+    opacity: 1;
+    /* transform: translateY(0); */
+  }
+}
+
+.sidebarMenuItem:hover .caption-icon {
+  animation: fadeIn 2s ease-out forwards;
+}
+
+
+/* Define the scrolling effect animation */
+@keyframes scrollFlow {
+  0% {
+    stroke-dashoffset: 100;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Target the Scroll icon's path */
+.sidebarMenuItem:hover .scroll-icon path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: scrollFlow 1.3s ease-in-out forwards;
+}
+
+@keyframes blink {
+
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
+    opacity: 1;
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    opacity: 0;
+  }
+}
+
+/* When hovering the parent sidebar item */
+.sidebarMenuItem:hover .scan-icon path {
+  animation: blink 1.2s ease-in-out forwards;
+}
+
+/* Define the slide, pause, and fall animation */
+@keyframes slidePauseFall {
+  0% {
+    transform: translateX(50px) translateY(-1px) rotate(20deg);
+    opacity: 0;
+  }
+
+  40% {
+    transform: translateX(0px) translateY(-1px) rotate(20deg);
+    opacity: 1;
+  }
+
+  60% {
+    transform: translateX(0px) translateY(-1px) rotate(20deg);
+    /* slight pause at 0px, no rotation yet */
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(0px) translateY(0px) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* When hovering the sidebar item */
+.sidebarMenuItem:hover .book-icon path:last-child {
+  animation: slidePauseFall 0.8s ease-out forwards;
+  transform-origin: bottom left;
+  /* Makes it rotate like it's falling naturally */
+  transform-origin: bottom center;
+  /* <--- Changed this */
+}
+
+
+
+
+
+.sidebarMenuItem:hover .admin-icon line:is([x1="14"][x2="14"], [x1="8"][x2="8"], [x1="16"][x2="16"]) {
+  animation: sliderMove 0.6s ease-in-out 0s 4 alternate;
+}
+
+@keyframes sliderMove {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(5px);
+  }
+}
