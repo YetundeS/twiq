@@ -1,13 +1,5 @@
 import {
-  Captions,
-  Handshake,
-  Home,
-  LibraryBig,
-  LogOut,
-  ScanEye,
-  Scroll,
-  SlidersHorizontal,
-  Telescope,
+  Home, PanelRightOpen, Settings, SlidersHorizontal, Sparkles, SquarePen
 } from "lucide-react";
 
 import {
@@ -24,57 +16,62 @@ import {
 import "./appSideBar.css";
 import useAuthStore from "@/store/authStore";
 import { useRouter } from "next/navigation";
-import { logOutUser } from "@/apiCalls/authAPI";
 import { useEffect, useState } from "react";
 import { generateSignString } from "@/lib/utils";
+import { useSideBar } from "@/store/sidebarStore";
 
-// Menu items.
-const items = [
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu, MenubarTrigger
+} from "@/components/ui/menubar";
+
+
+// models
+const models = [
   {
-    title: "Dashboard",
-    url: "",
+    name: "Carousel",
+    url: "carousel",
     icon: () => <Home className="home-icon" />,
   },
   {
-    title: "Legal Assistant",
-    url: "legal-assistant",
-    icon: () => <Handshake className="shake-icon" />,
+    name: "Storyteller",
+    url: "storyteller",
+    icon: () => <Home className="home-icon" />,
   },
   {
-    title: "E-Discovery",
-    url: "e-discovery",
-    icon: () => <Telescope className="telescope-icon" />,
+    name: "Headlines",
+    url: "headlines",
+    icon: () => <Home className="home-icon" />,
   },
   {
-    title: "Transcription",
-    url: "transcription",
-    icon: () => <Captions className="caption-icon" />,
+    name: "LinkedIn Your Business",
+    url: "linkedin-business",
+    icon: () => <Home className="home-icon" />,
   },
   {
-    title: "Document Automation",
-    url: "document-automation",
-    icon: () => <Scroll className="scroll-icon" />,
+    name: "LinkedIn Personal",
+    url: "linkedin-personal",
+    icon: () => <Home className="home-icon" />,
   },
   {
-    title: "Contract Review",
-    url: "contract-review",
-    icon: () => <ScanEye className="scan-icon" />,
+    name: "Captions",
+    url: "captions",
+    icon: () => <Home className="home-icon" />,
   },
   {
-    title: "Company Knowledge Base",
-    url: "knowledge-base",
-    icon: () => <LibraryBig className="book-icon" />,
+    name: "Video Scripts",
+    url: "video-scripts",
+    icon: () => <Home className="home-icon" />,
   },
 ];
 
-export const ORGANIZATIONAL_ROLES = [
-  "admin", 
-  "developer"
-]
-
+export const ORGANIZATIONAL_ROLES = ["admin", "developer"];
 
 export function AppSidebar() {
   const updateUser = useAuthStore((state) => state.updateUser);
+  const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
   const [organization, setOrganization] = useState("");
   const router = useRouter();
   const { user } = useAuthStore();
@@ -85,43 +82,35 @@ export function AppSidebar() {
     setOrganization(signString);
   }, [user]);
 
-  const logOut = () => {
-    updateUser(null);
+  // const logOut = () => {
+  //   updateUser(null);
 
-    logOutUser();
-    router.push("/");
+  //   logOutUser();
+  //   router.push("/auth");
+  // };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
-    <Sidebar className="">
+    <Sidebar className="sidebar">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="h-max">
-            <div className="userInfo_box">
-              <div className="userLetter"><p>{user?.user_name?.[0] || "-"}</p></div>
-              <div className="userInfo_subContainer">
-                <p className="user_name">{user?.user_name || "username"}</p>
-                <p className="user_email">{user?.email || "email"}</p>
+            <div className="topAction_box">
+              <div onClick={toggleSidebar} className="pageTop_iconWrapper">
+                <PanelRightOpen size="22px" className="pageTop_icons" />
+              </div>
+              <div className="pageTop_iconWrapper">
+                <SquarePen size="22px" className="pageTop_icons" />
               </div>
             </div>
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="sidebar_menu">
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title} className="sidebarMenuItem">
-                  <SidebarMenuButton asChild>
-                    <a
-                      href={`/platform/${organization}/${item.url}/`}
-                      className="sideBarItem"
-                    >
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-              {ORGANIZATIONAL_ROLES.includes(user?.user_name) && (
-                <SidebarMenuItem key={"admin"} className="sidebarMenuItem admin">
+              {!ORGANIZATIONAL_ROLES.includes(user?.user_name) && (
+                <SidebarMenuItem className="sidebarMenuItem admin">
                   <SidebarMenuButton asChild>
                     <a
                       href={`/platform/${organization}/admin/`}
@@ -133,15 +122,92 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               )}
+              <SidebarMenuItem className="sidebarMenuItem">
+                <Menubar className="menuBar">
+                  <MenubarMenu>
+                    <SidebarMenuButton className="sidebarMenuBtn" asChild>
+                      <MenubarTrigger className="menubarTrigger">
+                        <div className="sideBarItem models">
+                          <Home className="home-icon" />
+                          <span>Models</span>
+                        </div>
+                      </MenubarTrigger>
+                    </SidebarMenuButton>
+                    <MenubarContent className="menubarContent">
+                      {models?.map((item, i) => (
+                        <MenubarItem key={i} className="menubarItem">
+                          <a
+                            href={`/platform/${organization}/${item.url}/`}
+                            className="menu_sideBarItem"
+                          >
+                            <item.icon />
+                            <span>{item.name}</span>
+                          </a>
+                        </MenubarItem>
+                      ))}
+                    </MenubarContent>
+                  </MenubarMenu>
+                </Menubar>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem className="sidebarMenuItem admin">
+                <SidebarMenuButton asChild>
+                  <a
+                    href={`/platform/${organization}/settings/`}
+                    className="sideBarItem"
+                  >
+                    <Settings className="settings-icon" />
+                    <span>Settings</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              {/* {models.map((item) => (
+                <SidebarMenuItem key={item.title} className="sidebarMenuItem">
+                  <SidebarMenuButton className="sidebarMenuBtn" asChild>
+                    <a
+                      href={`/platform/${organization}/${item.url}/`}
+                      className="sideBarItem"
+                    >
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))} */}
             </SidebarMenu>
           </SidebarGroupContent>
+          {/* <SidebarGroupContent>
+            <SidebarMenu className="sidebar_menu">
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title} className="sidebarMenuItem">
+                  <SidebarMenuButton className="sidebarMenuBtn" asChild>
+                    <a
+                      href={`/platform/${organization}/${item.url}/`}
+                      className="sideBarItem"
+                    >
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+              
+            </SidebarMenu>
+          </SidebarGroupContent> */}
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem onClick={logOut}>
+          <SidebarMenuItem>
             <SidebarMenuButton className="logOutBar">
-              <LogOut /> <span className="logOutTxt">Log Out</span>
+              <div className="sideBar_iconBox">
+                <Sparkles className="sparkles_icon" />
+              </div>
+              <div className="logOutTxt">
+                <p className="txtHead">Upgrade plan</p>
+                <p className="txtsubHead">More access to best features</p>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
