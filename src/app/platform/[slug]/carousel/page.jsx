@@ -50,6 +50,7 @@ const CarouselPage = () => {
             streamingData={streamingData}
             streaming={streaming}
             messagesEndRef={messagesEndRef}
+            setInputValue={setInputValue}
           />
           <ChatInputArea
             inputValue={inputValue}

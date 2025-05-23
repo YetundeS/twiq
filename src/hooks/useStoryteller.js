@@ -6,7 +6,7 @@ import { usePromptSuggestions } from "./usePromptSuggestion";
 
 
 
-export default function useCarousel() {
+export default function useStoryteller() {
   const [inputValue, setInputValue] = useState("");
   const [sendBtnActive, setSendBtnActive] = useState(false);
   const [streamingData, setStreamingData] = useState("");

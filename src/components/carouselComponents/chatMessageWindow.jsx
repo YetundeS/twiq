@@ -7,6 +7,7 @@ const ChatMessageWindow = ({
   streamingData,
   streaming,
   messagesEndRef,
+  setInputValue,
 }) => {
   return (
     <div className="chats_area">
@@ -23,7 +24,7 @@ const ChatMessageWindow = ({
         </>
       ) : (
         <div className="newChatArea">
-          <ModelTemplates />
+          <ModelTemplates setInputValue={setInputValue} />
           <div className="messagesEnd" ref={messagesEndRef} />
         </div>
       )}

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import "./mt.css";
 import { assistantPromptTemplates } from "@/constants/model";
 
-const ModelTemplates = () => {
+const ModelTemplates = ({ setInputValue }) => {
   const pathname = usePathname();
   const [templates, setTemplates] = useState([]);
 
@@ -24,9 +24,9 @@ const ModelTemplates = () => {
     <div className="modelTemplates">
       <h3 className="templatesTitle">Templates</h3>
       <div className="modelCard_wrapper">
-        {templates.length &&
+        {templates.length > 0 &&
           templates.map((template, index) => (
-            <div key={index} className="modelCard">
+            <div key={index} className="modelCard" onClick={() => setInputValue(template)}>
               <p>{template}</p>
             </div>
           ))}
@@ -35,4 +35,4 @@ const ModelTemplates = () => {
   );
 };
 
-export default ModelTemplates;
+export default ModelTemplates; 

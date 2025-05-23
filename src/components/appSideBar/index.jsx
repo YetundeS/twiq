@@ -1,4 +1,4 @@
-import { LogOut, Package, PanelRightOpen, Settings, SlidersHorizontal, Sparkles, SquarePen } from "lucide-react";
+import { Home, LogOut, Package, PanelRightOpen, Settings, SlidersHorizontal, Sparkles, SquarePen } from "lucide-react";
 
 import {
   Sidebar,
@@ -76,6 +76,17 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               )}
+                <SidebarMenuItem className="sidebarMenuItem admin">
+                  <SidebarMenuButton asChild>
+                    <a
+                      href={`/platform/${organization}/`}
+                      className="sideBarItem"
+                    >
+                      <Home className="home-icon" />
+                      <span>Home</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               <SidebarMenuItem className="sidebarMenuItem">
                 <Menubar className="menuBar">
                   <MenubarMenu>
