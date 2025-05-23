@@ -1,0 +1,44 @@
+.modelName_wrapper {
+    margin-left: auto;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+
+.modelName_box {
+    padding: .6rem 1.4rem;
+    border-radius: 12px;
+    background-color: var(--model-name-box);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modelName_box:hover {
+    background-color: var(--model-name-box-hover);
+}
+
+.hoverCard_content {
+    background-color: var(--sidebar);
+    border-radius: 12px;
+    border: none;
+    color: white;
+    font-size: 12px;
+    /* padding: .6rem; */
+    white-space: pre-wrap;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+}
+
+
+.hoverCard_content > span {
+    opacity: .8;
+
+}
+
+.hoverCard_content > span::before {
+  content: "• "; /* Bullet character with space */
+  color: rgb(255, 255, 255);  /* bullet color */
+  font-weight: bold; /* optional */
+}

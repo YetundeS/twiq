@@ -1,0 +1,45 @@
+.modelTemplates {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.templatesTitle {
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.modelCard_wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    align-items: stretch; /* Make sure grid items stretch in height */
+}
+
+.modelCard {
+    width: 100%;
+    border: 2px solid #303030;
+    display: flex;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+    padding: .8rem;
+    border-radius: 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+}
+
+.modelCard:hover {
+    transform: scale(1.04);
+}
+
+.modelCard > p {
+    opacity: .8;
+}

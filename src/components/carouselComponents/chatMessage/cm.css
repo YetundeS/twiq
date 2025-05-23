@@ -1,0 +1,104 @@
+.chatMessage_message {
+    width: max-content;
+    max-width: 65%;
+    height: max-content;
+    padding: .5rem 1rem;
+    background-color: var(--color-text-dark);
+    border-radius: 14px;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    color: white;
+    position: relative;
+}
+
+
+.chatMessage_message.error {
+    background-color: #cd1b18e6;
+    font-size: 14px;
+}
+
+.chatMessage_message.loading {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem .7rem;
+    border-radius: 20px;
+}
+
+.chatMessage_message.user {
+    align-self: flex-end;
+}
+
+
+.aitextMessageBlock {
+    overflow-x: auto;
+    padding-bottom: .3rem;
+}
+
+.transcriptionAITxt-container {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    color: rgb(108, 108, 108);
+    width: max-content;
+    max-width: 90%;
+}
+
+.transcriptionAITxt-container.user {
+    align-self: flex-end;
+}
+
+.transcriptionAITxt {
+    font-size: 12px;
+}
+
+
+
+/* HTML: <div class="loader"></div> */
+.loader {
+    height: 10px;
+    aspect-ratio: 6;
+    --c: #000 90%, #0000;
+    background:
+        radial-gradient(circle closest-side at left 6px top 50%, var(--c)),
+        radial-gradient(circle closest-side, var(--c)),
+        radial-gradient(circle closest-side at right 6px top 50%, var(--c));
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    animation: l4 1s infinite alternate;
+}
+
+@keyframes l4 {
+    to {
+        width: 25px;
+        aspect-ratio: 1
+    }
+}
+
+.downloadText {
+    color: rgb(103, 141, 255);
+    text-decoration: underline;
+}
+
+
+
+
+@media (max-width: 575px) {
+    .chatMessage_message {
+        max-width: 80%;
+        padding: .4rem 1rem;
+        font-size: 3.2vw;
+    }
+
+
+    .chatMessage_message.error {
+        font-size: 3vw;
+    }
+
+    .loader {
+        height: 6px;
+    }
+
+}
