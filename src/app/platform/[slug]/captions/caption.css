@@ -1,13 +1,3 @@
- .caption-Page_wrapper {
-    width: 100vw;
-    height: 100vh;
-    box-sizing: border-box;
-    overflow-y: auto;
-    display: flex;
-    position: relative;
-}
-
-
 .caption-page_content {
     width: 100%;
     min-height: 100vh;

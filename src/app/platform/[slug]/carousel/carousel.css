@@ -1,13 +1,3 @@
-.carouselPage_wrapper {
-    width: 100vw;
-    height: 100vh;
-    box-sizing: border-box;
-    overflow-y: auto;
-    display: flex;
-    position: relative;
-
-}
-
 
 .carousel_page_content {
     width: 100%;
