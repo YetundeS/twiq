@@ -1,4 +1,4 @@
-import { Home, LogOut, Package, PanelRightOpen, Settings, SlidersHorizontal, Sparkles, SquarePen } from "lucide-react";
+import { Home, LogOut, Package, PanelRightOpen, Settings, SlidersHorizontal, Sparkles } from "lucide-react";
 
 import {
   Sidebar,
@@ -11,11 +11,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import "./appSideBar.css";
-import useAuthStore from "@/store/authStore";
-import { useEffect, useState } from "react";
 import { generateSignString } from "@/lib/utils";
+import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
+import { useEffect, useState } from "react";
+import "./appSideBar.css";
 
 import {
   Menubar,
@@ -26,6 +26,7 @@ import {
 import { models, ORGANIZATIONAL_ROLES } from "@/constants/sidebar";
 import useLogOutDialogStore from "@/store/useLogOutDialogStore";
 import LogOutDialog from "../dashboardComponent/logOutDialog";
+import NewChatBtn from "../dashboardComponent/newChatBtn";
 
 export function AppSidebar() {
   const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
@@ -55,9 +56,7 @@ export function AppSidebar() {
               <div onClick={toggleSidebar} className="sidebar_pageTop_iconWrapper">
                 <PanelRightOpen size="22px" />
               </div>
-              <div className="sidebar_pageTop_iconWrapper">
-                <SquarePen size="22px" />
-              </div>
+              <NewChatBtn />
             </div>
           </SidebarGroupLabel>
           <div className="scrollableArea">

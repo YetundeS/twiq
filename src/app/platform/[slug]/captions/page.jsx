@@ -1,11 +1,12 @@
 "use client";
 
-import useCaption from "@/hooks/useCaption";
-import "./caption.css";
-import { PanelRightOpen, SquarePen } from "lucide-react";
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
+import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
+import useCaption from "@/hooks/useCaption";
+import { PanelRightOpen } from "lucide-react";
+import "./caption.css";
 
 const CaptionModel = () => {
   const {
@@ -36,9 +37,7 @@ const CaptionModel = () => {
             >
               <PanelRightOpen size="22px" />
             </div>
-            <div className="caption-pageTop_iconWrapper">
-              <SquarePen size="22px" />
-            </div>
+            <NewChatBtn alt />
           </>
         )}
         <ModelName name={modelName} content={modelDescription} />

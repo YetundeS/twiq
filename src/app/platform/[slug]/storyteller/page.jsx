@@ -1,11 +1,12 @@
 "use client";
 
-import "./storyteller.css";
-import { PanelRightOpen, SquarePen } from "lucide-react";
-import ModelName from "@/components/modelsComponent/modelName";
-import useStoryteller from "@/hooks/useStoryteller";
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
+import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
+import ModelName from "@/components/modelsComponent/modelName";
+import useStoryteller from "@/hooks/useStoryteller";
+import { PanelRightOpen } from "lucide-react";
+import "./storyteller.css";
 
 const StorytellerModel = () => {
   const {
@@ -36,9 +37,7 @@ const StorytellerModel = () => {
             >
               <PanelRightOpen size="22px" />
             </div>
-            <div className="storytelling-pageTop_iconWrapper">
-              <SquarePen size="22px" />
-            </div>
+            <NewChatBtn alt />
           </>
         )}
         <ModelName name={modelName} content={modelDescription} />

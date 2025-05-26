@@ -1,11 +1,12 @@
 "use client";
 
-import "./video-scripts.css";
-import { PanelRightOpen, SquarePen } from "lucide-react";
-import useVSM from "@/hooks/useVSM";
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
+import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
+import useVSM from "@/hooks/useVSM";
+import { PanelRightOpen } from "lucide-react";
+import "./video-scripts.css";
 
 const VideoScriptsModel = () => {
   const {
@@ -33,9 +34,7 @@ const VideoScriptsModel = () => {
             <div onClick={toggleSidebar} className="vs-pageTop_iconWrapper">
               <PanelRightOpen size="22px" />
             </div>
-            <div className="vs-pageTop_iconWrapper">
-              <SquarePen size="22px" />
-            </div>
+            <NewChatBtn alt />
           </>
         )}
         <ModelName name={modelName} content={modelDescription} />

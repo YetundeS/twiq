@@ -1,11 +1,12 @@
 "use client";
 
-import "./lp.css";
-import { PanelRightOpen, SquarePen } from "lucide-react";
-import useLIP from "@/hooks/useLIP";
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
+import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
+import useLIP from "@/hooks/useLIP";
+import { PanelRightOpen } from "lucide-react";
+import "./lp.css";
 
 const LinkedInPersonalModel = () => {
   const {
@@ -33,9 +34,7 @@ const LinkedInPersonalModel = () => {
             <div onClick={toggleSidebar} className="lp-pageTop_iconWrapper">
               <PanelRightOpen size="22px" />
             </div>
-            <div className="lp-pageTop_iconWrapper">
-              <SquarePen size="22px" />
-            </div>
+            <NewChatBtn alt />
           </>
         )}
         <ModelName name={modelName} content={modelDescription} />

@@ -1,11 +1,12 @@
 "use client";
 
-import "./carousel.css";
-import { PanelRightOpen, SquarePen } from "lucide-react";
-import useCarousel from "@/hooks/useCarousel";
-import ModelName from "@/components/modelsComponent/modelName";
-import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
+import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
+import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
+import ModelName from "@/components/modelsComponent/modelName";
+import useCarousel from "@/hooks/useCarousel";
+import { PanelRightOpen } from "lucide-react";
+import "./carousel.css";
 
 const CarouselPage = () => {
   const {
@@ -36,9 +37,7 @@ const CarouselPage = () => {
             >
               <PanelRightOpen size="22px" />
             </div>
-            <div className="carousel_pageTop_iconWrapper">
-              <SquarePen size="22px" />
-            </div>
+            <NewChatBtn alt />
           </>
         )}
         <ModelName name={modelName} content={modelDescription} />

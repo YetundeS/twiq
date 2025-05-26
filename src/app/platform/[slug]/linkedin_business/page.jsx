@@ -1,11 +1,12 @@
 "use client";
 
-import useLIB from "@/hooks/useLIB";
-import "./lb.css";
-import { PanelRightOpen, SquarePen } from "lucide-react";
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
+import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
+import useLIB from "@/hooks/useLIB";
+import { PanelRightOpen } from "lucide-react";
+import "./lb.css";
 
 const LinkedInBusinessModel = () => {
   const {
@@ -33,9 +34,7 @@ const LinkedInBusinessModel = () => {
             <div onClick={toggleSidebar} className="lb-pageTop_iconWrapper">
               <PanelRightOpen size="22px" />
             </div>
-            <div className="lb-pageTop_iconWrapper">
-              <SquarePen size="22px" />
-            </div>
+            <NewChatBtn alt />
           </>
         )}{" "}
         <ModelName name={modelName} content={modelDescription} />

@@ -33,6 +33,19 @@
     background-color: #393939;
 }
 
+.newchat_hoverCardContent {
+  width: max-content;
+  padding: .5rem;
+  font-size: 12.8px;
+    background-color: var(--active-sidebar-item);
+    border: none;
+    color: white;
+}
+
+.newchat_hoverCardContent {
+  background-color: var(--sidebar);
+}
+
 .scrollableArea {
   flex: 1;
   width: 100%;
