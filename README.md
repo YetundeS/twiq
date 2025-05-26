@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TWIQ - AI Coaching Platform - Frontend
 
-## Getting Started
+This is the **Next.js** frontend application for the AI Coaching Platform.  
+Users can interact with multiple AI coaches via chat interfaces, view chat history, and manage their accounts.
 
-First, run the development server:
+---
 
-```bash
+## 🚀 Features
+
+- Access 7 different AI coach models from the dashboard  
+- Chat interface similar to ChatGPT with streaming AI responses  
+- Sidebar displays recent chat sessions per AI coach  
+- User authentication & session management with Supabase  
+- Clean, vibrant, light-themed UI, responsive design  
+
+---
+
+## 📁 Project Structure
+
+/components # React components (Chat UI, Sidebar, Auth forms, etc.)
+/pages # Next.js pages (dashboard, assistant chat, login, etc.)
+/lib # API helpers and utilities
+/styles # Global and component-level CSS / styling
+/public # Static assets (images, icons)
+
+
+---
+
+## ⚙️ Environment Variables
+
+Create a `.env.local` file in the project root with:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api    # Backend API base URL
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url       # Supabase project URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key      # Supabase anon/public API key
+```
+## 🛠 Setup & Development
+Clone the repository
+
+#### 1. Install dependencies
+```
+npm install
+# or
+yarn install
+```
+#### 2. Start the development server:
+```
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### 3. Open http://localhost:3000 in your browser
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 📡 API Integration
+- Frontend calls backend REST API for all user data and chat interactions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Authentication handled by Supabase with JWT tokens stored in cookies or local storage
 
-## Learn More
+- Streaming AI responses supported through server-sent events or websockets
 
-To learn more about Next.js, take a look at the following resources:
+## 💡 Developer Notes
+ 1. Use /lib/api.js to add or modify API call functions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ 2. Follow existing React component patterns and styling conventions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+ 3. The sidebar lists chat sessions grouped by AI coach — clicking loads that chat with context
 
-## Deploy on Vercel
+ 4. New chats create new sessions on the backend, old chats load existing context
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+ 5. Communicate backend API changes early to maintain frontend compatibility
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📖 Useful Commands
+
+| Command | Description |
+| --------------- | --------------- | 
+| npm run dev    | Build production bundle    |
+| npm run start    | Start production server    | 
+| npm run lint    | Run linter checks    | 
+
+
+
+# Contact
+Project Maintainer: Muftau - muftau201@gmail.com
