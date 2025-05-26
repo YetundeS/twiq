@@ -1,28 +1,22 @@
 // dashboard/[slug]/layout.jsx
 "use client";
 
-import { useEffect } from "react";
-import { fetchUser } from "@/apiCalls/authAPI";
+import { AppSidebar } from "@/components/appSideBar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/appSideBar";
-import "./dashboard.css";
 import { useHydrationZustand } from "@codebayu/use-hydration-zustand";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import "./dashboard.css";
 
 export default function DashboardLayout({ children }) {
   const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
-  const { user, updateUser } = useAuthStore();
+  const { user } = useAuthStore();
 
   const isHydrated = useHydrationZustand(useAuthStore);
     const router = useRouter();
 
-  useEffect(() => {
-    fetchUser(updateUser);
-  }, []);
-
-  
   useEffect(() => {
     if (isHydrated && !user) {
       router.push("/auth");

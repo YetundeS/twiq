@@ -1,8 +1,8 @@
 import {
-    BriefcaseBusiness,
-    Captions,
-    FileUser,
-    GalleryVertical, Newspaper, NotepadText, Users
+  BriefcaseBusiness,
+  Captions,
+  FileUser,
+  GalleryVertical, Newspaper, NotepadText, Users
 } from "lucide-react";
 
 // models
@@ -24,12 +24,12 @@ export const models = [
   },
   {
     name: "LinkedIn Your Business",
-    url: "linkedin-business",
+    url: "linkedin_business",
     icon: () => <BriefcaseBusiness className="home-icon" />,
   },
   {
     name: "LinkedIn Personal",
-    url: "linkedin-personal",
+    url: "linkedin_personal",
     icon: () => <FileUser className="home-icon" />,
   },
   {
@@ -39,7 +39,7 @@ export const models = [
   },
   {
     name: "Video Scripts",
-    url: "video-scripts",
+    url: "video_scripts",
     icon: () => <NotepadText className="home-icon" />,
   },
 ];

@@ -1,43 +1,27 @@
 "use client";
 
-import "./dpc.css";
-import { PanelRightOpen, SquarePen } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import ModelOverview from "@/components/modelOverview";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import useAuthStore from "@/store/authStore";
-import { useHydrationZustand } from "@codebayu/use-hydration-zustand";
+import { Separator } from "@/components/ui/separator";
 import { generateSignString } from "@/lib/utils";
-import { fetchUser } from "@/apiCalls/authAPI";
-import Image from "next/image";
+import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
+import { PanelRightOpen, SquarePen } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { modelsOverview } from "../../../constants/dahsboard";
+import "./dpc.css";
 
 const DashboardPageContent = () => {
-  const router = useRouter();
-  const [organization, setOrganization] = useState("");
+ const [organization, setOrganization] = useState("");
   const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
 
-  const { user, updateUser } = useAuthStore();
-
-  const isHydrated = useHydrationZustand(useAuthStore);
-
-  useEffect(() => {
-    if (isHydrated && !user) {
-      router.push("/auth");
-    }
-  }, [user, isHydrated]);
+  const { user } = useAuthStore();
 
   useEffect(() => {
     if (!user) return;
     const signString = generateSignString(user?.organization_name);
     setOrganization(signString);
   }, [user]);
-
-  useEffect(() => {
-    fetchUser(updateUser);
-  }, []); // Runs only on mount (hard reload)
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

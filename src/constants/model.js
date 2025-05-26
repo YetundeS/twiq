@@ -26,7 +26,7 @@ export const assistantPromptTemplates = {
     "Give me 10 creative hooks to introduce [specific topic] using the [T] from the TWIQ Method in a way that grabs attention instantly.",
   ],
 
-  "linkedin-business": [
+  "linkedin_business": [
     "My brand/company website is [site url]. I need a professional post for my company using the [T] from the [T/W/I/Q] Method. The topic is [insert topic]. Can you help me craft it?",
     "Can you create an engaging post for my company that challenges conventional thinking about [insert topic]? Using the [W] from the [T/W/I/Q] Method.",
     "Help me write a post that shares a success story about [specific achievement] and builds trust with our audience, using the [I] from the [T/W/I/Q] Method.",
@@ -35,7 +35,7 @@ export const assistantPromptTemplates = {
     "I need a concise, engaging post that highlights our company values and connects with our audience. Can you help? Using the [T] from the [T/W/I/Q] Method.",
   ],
 
-  "linkedin-personal": [
+  "linkedin_personal": [
     "I need a LinkedIn post based on [T] of the [T/W/I/Q] Method. The topic is [insert topic]. Can you help me craft it?",
     "Can you write a LinkedIn post? The topic is [insert topic], based on [W] of the [T/W/I/Q] Method. Make sure it starts with a bold hook about [insert theme] and gives actionable advice. I am in the [name of your industry].",
     "I want to share a relatable story about [insert personal experience] on LinkedIn. Based on [I] of the [T/W/I/Q] Method. Can you help me format it in the Top Voicer style on LinkedIn?",
@@ -52,11 +52,22 @@ export const assistantPromptTemplates = {
     "Help me craft a short, engaging caption for [specific goal or theme], rooted in the [W] of the [T/W/I/Q] method framework.",
   ],
 
-  "video-scripts": [
+  "video_scripts": [
     "What’s a viral video idea based on the [Q] of the [T/W/I/Q] Method for [specific goal] and this [specific audience]? I am in [your industry].",
     "I need a video script for [topic] using the TWIQ Method. Let’s start with [Q] and [insert theme]. I am in the [your industry].",
     "Generate a 1-2 minute TWIQ video script to connect with [audience type], with focus on [W] in [T/W/I/Q] method.",
     "Help me craft a video script based on the [I] of the [T/W/I/Q] Method that inspires action on [specific problem or topic].",
     "I need a scroll-stopping video script for [specific niche or goal] using the [W] of the [T/W/I/Q] Method. Let’s focus on [specific challenge or theme] to connect with my audience.",
   ],
+};
+
+
+export const COACH_ASSISTANTS = {
+  carousel: 'asst_v8lwEKfUhwbCjj31zW3QWJL9',
+  storyteller: 'asst_25Mfs5oHUVkcp8EoCSTabyRg',
+  headlines: 'asst_BVvyVt5stKSny9Om81wBomvU',
+  linkedin_business: 'asst_gs5POc8Srqq9NfcR3fLZhlNF',
+  linkedin_personal: 'asst_XI2ZT74RmmE43N7Wm5leP1yL',
+  captions: 'asst_D6JhKrMPH46WPdzA0hmzI3LY',
+  video_scripts: 'asst_RcxmUQDIacMEO0BzABwb6tsa',
 };

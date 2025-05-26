@@ -22,14 +22,14 @@ export const modelDetailsMap = {
       "Use the TWIQ Method to grab attention, drive clicks, and spotlight your message.",
     ],
   },
-  "linkedin-business": {
+  "linkedin_business": {
     name: "LinkedIn Your Business",
     description: [
       "Create posts that show what your brand is good at and what it cares about.",
       "Help your company stand out and make real connections.",
     ],
   },
-  "linkedin-personal": {
+  "linkedin_personal": {
     name: "LinkedIn Personal",
     description: [
       "Make strong LinkedIn posts fast to build your personal brand.",
@@ -43,7 +43,7 @@ export const modelDetailsMap = {
       "Craft witty, relatable, and engaging captions that connect with your audience.",
     ],
   },
-  "video-scripts": {
+  "video_scripts": {
     name: "Video Scripts",
     description: [
       "Craft viral 1-2 minute video scripts that captivate and convert.",
