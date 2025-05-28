@@ -7,7 +7,7 @@ import ModelName from "@/components/modelsComponent/modelName";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import { PanelRightOpen } from "lucide-react";
-import "../carousel.css";
+import "../video-scripts.css";
 
 const CarouselChat = () => {
   const isMobile = useIsMobile();
