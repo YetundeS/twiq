@@ -21,7 +21,6 @@ export const useSidebarChats = () => {
         const segments = pathname.split('/').filter(Boolean);
         const assistantSlug = segments[2];  // index 2 is always your assistant slug
 
-        // console.log('assistantSlug: ', assistantSlug)
         if (!assistantSlug) {
             updateSideBarSessions([])
         } else if (!currentAssistantSlug || assistantSlug !== currentAssistantSlug) { // only re-fetch if no slug yet (first load) or slug changed

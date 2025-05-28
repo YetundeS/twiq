@@ -10,7 +10,7 @@ import { usePromptSuggestions } from "./usePromptSuggestion";
 
 
 
-export default function useCarouselChat() {
+export default function useAssistantChat({ modelName, assistantSlug}) {
   const [inputValue, setInputValue] = useState("");
   const [sendBtnActive, setSendBtnActive] = useState(false);
   const [streamingData, setStreamingData] = useState("");
@@ -28,9 +28,7 @@ export default function useCarouselChat() {
   const { addToSideBarSessions, isSidebarOpen, setIsSidebarOpen } = useSideBar();
   const { activeSessionID, activeChatMessages: chats, updateActiveSessionID, updateActiveChatMessages, setActiveChatMessages } = useModelsStore();
 
-  const modelName = "Carousel";
-  const assistantSlug = 'carousel';
-  const modelDescription = modelDetailsMap['carousel']?.description;
+  const modelDescription = modelDetailsMap[assistantSlug]?.description;
 
   const { suggestions } = usePromptSuggestions(inputValue, modelName, modelDescription);
 
@@ -43,12 +41,13 @@ export default function useCarouselChat() {
   useEffect(() => {
     const match = pathname.match(/\/platform\/@[^/]+\/[^/]+\/([^/?#]+)/);
     const sessionId = match?.[1];
+    console.log('sessionId: ', sessionId)
     if (!sessionId) return;
 
     setIsFetchingChats(true);
 
     updateActiveSessionID(sessionId)
-    fetchMessages(sessionId, setIsFetchingChats, setActiveChatMessages);
+    fetchMessages(sessionId, assistantSlug, setIsFetchingChats, setActiveChatMessages);
   }, [pathname, setActiveChatMessages, updateActiveSessionID]);
 
 
@@ -180,7 +179,6 @@ export default function useCarouselChat() {
   return {
     isSidebarOpen,
     toggleSidebar,
-    modelName,
     modelDescription,
     isFetchingChats,
     inputValue,

@@ -4,34 +4,35 @@ import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
-import useCarouselChat from "@/hooks/useCarouselChat";
+import { useIsMobile } from "@/hooks/use-mobile";
+import useAssistantChat from "@/hooks/useAssistantChat";
 import { PanelRightOpen } from "lucide-react";
 import "./carousel.css";
 
 const CarouselPage = () => {
-  
-    const {
-      isSidebarOpen,
-      toggleSidebar,
-      modelName,
-      modelDescription,
-      // isFetchingChats,
-      inputValue,
-      setInputValue,
-      sendMessage,
-      closeStreaming,
-      streamingData,
-      streaming,
-      sendBtnActive,
-      chats,
-      messagesEndRef,
-      aiSuggestions
-    } = useCarouselChat();
+  const isMobile = useIsMobile();
+
+  const {
+    isSidebarOpen,
+    toggleSidebar,
+    modelDescription,
+    // isFetchingChats,
+    inputValue,
+    setInputValue,
+    sendMessage,
+    closeStreaming,
+    streamingData,
+    streaming,
+    sendBtnActive,
+    chats,
+    messagesEndRef,
+    aiSuggestions
+  } = useAssistantChat('Carousel', 'carousel');
 
   return (
     <div className="carousel_page_content">
       <div className="carousel_pageTop">
-        {!isSidebarOpen && (
+        {(!isSidebarOpen || isMobile) && (
           <>
             <div
               onClick={toggleSidebar}
@@ -42,7 +43,7 @@ const CarouselPage = () => {
             <NewChatBtn alt />
           </>
         )}
-        <ModelName name={modelName} content={modelDescription} />
+        <ModelName name={'carousel'} content={modelDescription} />
       </div>
       <div className="carousel_pageBody">
         <div className="carousel_pageBody_innerBox">

@@ -4,16 +4,19 @@ import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
-import useCaption from "@/hooks/useCaption";
+import { useIsMobile } from "@/hooks/use-mobile";
+import useAssistantChat from "@/hooks/useAssistantChat";
 import { PanelRightOpen } from "lucide-react";
 import "./caption.css";
 
 const CaptionModel = () => {
+  const isMobile = useIsMobile();
+
   const {
     isSidebarOpen,
     toggleSidebar,
-    modelName,
     modelDescription,
+    // isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -23,13 +26,13 @@ const CaptionModel = () => {
     sendBtnActive,
     chats,
     messagesEndRef,
-    aiSuggestions,
-  } = useCaption();
+    aiSuggestions
+  } = useAssistantChat('Captions', 'captions');
 
   return (
     <div className="caption-page_content">
       <div className="caption-pageTop">
-        {!isSidebarOpen && (
+        {(!isSidebarOpen || isMobile) && (
           <>
             <div
               onClick={toggleSidebar}
@@ -40,7 +43,7 @@ const CaptionModel = () => {
             <NewChatBtn alt />
           </>
         )}
-        <ModelName name={modelName} content={modelDescription} />
+        <ModelName name={'Captions'} content={modelDescription} />
       </div>
       <div className="caption-pageBody">
         <div className="caption-pageBody_innerBox">

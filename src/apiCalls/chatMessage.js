@@ -1,13 +1,13 @@
 import { addAuthHeader } from "@/lib/utils";
 import { toast } from "sonner";
 
-export const fetchMessages = async (sessionId, setIsFetchingChats, setActiveChatMessages) => {
+export const fetchMessages = async (sessionId, assistantSlug, setIsFetchingChats, setActiveChatMessages) => {
     try {
         // 🔹 Get auth headers
         const authHeader = addAuthHeader();
 
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/fetch/${sessionId}`,
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/fetch/${sessionId}?assistantSlug=${assistantSlug}`,
             {
                 headers: {
                     'Content-Type': 'application/json',

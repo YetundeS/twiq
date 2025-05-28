@@ -5,7 +5,7 @@ import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
 import { useIsMobile } from "@/hooks/use-mobile";
-import useStoryteller from "@/hooks/useStoryteller";
+import useAssistantChat from "@/hooks/useAssistantChat";
 import { PanelRightOpen } from "lucide-react";
 import "./storyteller.css";
 
@@ -17,6 +17,7 @@ const StorytellerModel = () => {
     toggleSidebar,
     modelName,
     modelDescription,
+    // isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -26,8 +27,9 @@ const StorytellerModel = () => {
     sendBtnActive,
     chats,
     messagesEndRef,
-    aiSuggestions,
-  } = useStoryteller();
+    aiSuggestions
+  } = useAssistantChat('Storyteller', 'storyteller');
+
 
   return ( 
     <div className="storytelling-page_content">
@@ -43,7 +45,7 @@ const StorytellerModel = () => {
             <NewChatBtn alt />
           </>
         )}
-        <ModelName name={modelName} content={modelDescription} />
+        <ModelName name={'storyteller'} content={modelDescription} />
       </div>
       <div className="storytelling-pageBody">
         <div className="storytelling-pageBody_innerBox">

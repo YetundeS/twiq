@@ -7,9 +7,9 @@ import ModelName from "@/components/modelsComponent/modelName";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import { PanelRightOpen } from "lucide-react";
-import "../carousel.css";
+import "../storyteller.css";
 
-const CarouselChat = () => {
+const StorytellerChat = () => {
   const isMobile = useIsMobile();
 
   const {
@@ -27,33 +27,33 @@ const CarouselChat = () => {
     chats,
     messagesEndRef,
     aiSuggestions
-  } = useAssistantChat('Carousel', 'carousel');
+  } = useAssistantChat('Storyteller', 'storyteller');
 
   return (
-    <div className="carousel_page_content">
-      <div className="carousel_pageTop">
+    <div className="storytelling-page_content">
+      <div className="storytelling-pageTop">
         {(!isSidebarOpen || isMobile) && (
           <>
             <div
               onClick={toggleSidebar}
-              className="carousel_pageTop_iconWrapper"
+              className="storytelling-pageTop_iconWrapper"
             >
               <PanelRightOpen size="22px" />
             </div>
             <NewChatBtn alt />
           </>
         )}
-        <ModelName name={'carousel'} content={modelDescription} />
+        <ModelName name={'storyteller'} content={modelDescription} />
       </div>
-      <div className="carousel_pageBody">
-        <div className="carousel_pageBody_innerBox">
+      <div className="storytelling-pageBody">
+        <div className="storytelling-pageBody_innerBox">
           <ChatMessageWindow
             chats={chats}
             streamingData={streamingData}
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
-            assistantSlug={'carousel'}
+            assistantSlug={'storyteller'}
             isFetchingChats={isFetchingChats}
           />
           <ChatInputArea
@@ -71,4 +71,4 @@ const CarouselChat = () => {
   );
 };
 
-export default CarouselChat;
+export default StorytellerChat;

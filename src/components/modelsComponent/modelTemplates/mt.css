@@ -20,7 +20,8 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
-    align-items: stretch; /* Make sure grid items stretch in height */
+    align-items: stretch;
+    /* Make sure grid items stretch in height */
 }
 
 .modelCard {
@@ -40,6 +41,26 @@
     transform: scale(1.04);
 }
 
-.modelCard > p {
+.modelCard>p {
     opacity: .8;
+}
+
+
+@media (max-width: 1026px) {
+    .modelCard_wrapper {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+@media (max-width: 575px) {
+    .modelCard_wrapper {
+        grid-template-columns: 1fr;
+        gap: .6rem;
+    }
+
+    .templatesTitle {
+        font-size: 26px;
+    }
+
 }

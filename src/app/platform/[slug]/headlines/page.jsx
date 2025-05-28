@@ -4,17 +4,19 @@ import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
-import useHeadlines from "@/hooks/useHeadlines";
+import { useIsMobile } from "@/hooks/use-mobile";
+import useAssistantChat from "@/hooks/useAssistantChat";
 import { PanelRightOpen } from "lucide-react";
 import "./headlines.css";
 
 const HeadlinesModel = () => {
+  const isMobile = useIsMobile();
 
   const {
     isSidebarOpen,
     toggleSidebar,
-    modelName,
     modelDescription,
+    // isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -25,12 +27,12 @@ const HeadlinesModel = () => {
     chats,
     messagesEndRef,
     aiSuggestions
-  } = useHeadlines();
+  } = useAssistantChat('Headlines', 'headlines');
 
   return (
     <div className="headline-page_content">
       <div className="headline-pageTop">
-        {!isSidebarOpen && (
+        {(!isSidebarOpen || isMobile) && (
           <>
             <div
               onClick={toggleSidebar}
@@ -41,7 +43,7 @@ const HeadlinesModel = () => {
             <NewChatBtn alt />
           </>
         )}
-        <ModelName name={modelName} content={modelDescription} />
+        <ModelName name={'headlines'} content={modelDescription} />
       </div>
       <div className="headline-pageBody">
         <div className="headlines-pageBody_innerBox">
