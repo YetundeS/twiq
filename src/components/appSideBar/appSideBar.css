@@ -1,5 +1,6 @@
 .sidebar {
   border: none;
+  text-transform: capitalize;
 }
 
 .fixedHeight_area {
@@ -114,7 +115,14 @@
   background-color: var(--active-sidebar-item);
 }
 
-
+.chatsLabel {
+  width: 100%;
+  color: rgb(172, 172, 172);
+  padding: .5rem;
+  font-size: 12.8px;
+  font-weight: 600;
+  margin-top: 1.2rem;
+}
 
 .sideBarItem {
   color: white;
@@ -123,6 +131,10 @@
   align-items: center;
   gap: .8rem;
   padding: 1.32rem .5rem;
+}
+
+.sideBarItem.active {
+  background-color: var(--active-sidebar-item);
 }
 
 
@@ -253,4 +265,16 @@
   100% {
     transform: rotate(180deg);
   }
+}
+
+
+.loadingIndicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    width: 100%;
+    font-size: 20px;
+    gap: .8rem;
 }

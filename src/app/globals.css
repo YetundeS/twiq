@@ -70,7 +70,9 @@ body {
 --model-name-box: #303030b2;
 --model-name-box-hover: #383838;
 
---chat-input-bg: #303030e6;
+--chat-input-bg: #303030;
+
+--chat-message-bg: #303030;
 
 /* colors set end*/
 

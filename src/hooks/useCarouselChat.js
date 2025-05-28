@@ -1,0 +1,194 @@
+import { fetchMessages } from "@/apiCalls/chatMessage";
+import { sendChatMessage } from "@/apiCalls/sendChatMessage";
+import { modelDetailsMap } from "@/constants/carousel";
+import { useSideBar } from "@/store/sidebarStore";
+import useModelsStore from "@/store/useModelsStore";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { usePromptSuggestions } from "./usePromptSuggestion";
+
+
+
+export default function useCarouselChat() {
+  const [inputValue, setInputValue] = useState("");
+  const [sendBtnActive, setSendBtnActive] = useState(false);
+  const [streamingData, setStreamingData] = useState("");
+  const [streaming, setStreaming] = useState(false);
+  const [aiSuggestions, setAISuggestions] = useState([]);
+  const streamingDataRef = useRef("");
+  const eventSourceRef = useRef(null);
+  const messagesEndRef = useRef(null);
+
+  const pathname = usePathname();
+  const [isFetchingChats, setIsFetchingChats] = useState(true);
+
+
+  const { addToSideBarSessions, isSidebarOpen, setIsSidebarOpen } = useSideBar();
+  const { activeSessionID, activeChatMessages: chats, updateActiveSessionID, updateActiveChatMessages, setActiveChatMessages } = useModelsStore();
+
+  const modelName = "Carousel";
+  const assistantSlug = 'carousel';
+  const modelDescription = modelDetailsMap['carousel']?.description;
+
+  const { suggestions } = usePromptSuggestions(inputValue, modelName, modelDescription);
+
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  useEffect(() => {
+    const match = pathname.match(/\/platform\/@[^/]+\/[^/]+\/([^/?#]+)/);
+    const sessionId = match?.[1];
+    if (!sessionId) return;
+
+    setIsFetchingChats(true);
+
+    updateActiveSessionID(sessionId)
+    fetchMessages(sessionId, setIsFetchingChats, setActiveChatMessages);
+  }, [pathname, setActiveChatMessages, updateActiveSessionID]);
+
+
+  // imported
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chats]);
+
+  useEffect(() => {
+    setSendBtnActive(inputValue && !streaming);
+  }, [inputValue, streaming]);
+
+
+  const sendMessage = async () => {
+    if (!inputValue || streaming) return;
+
+    const userChat = {
+      sender: "user", // "user" || 'assistant'
+      content: inputValue,
+      sessionID: activeSessionID || 'newChat',
+      created_at: new Date(),
+    };
+
+    // Update local state 
+    updateActiveChatMessages(userChat);
+
+    setStreaming(true);
+    setStreamingData("");
+    streamingDataRef.current = "";
+
+    const abortController = new AbortController();
+    eventSourceRef.current = abortController;
+
+    sendChatMessage(
+      inputValue,
+      activeSessionID,
+      assistantSlug,
+      (streamedData) => {
+        setStreamingData((prev) => {
+          const updatedData = prev + streamedData;
+          streamingDataRef.current = updatedData;
+          return updatedData;
+        });
+      },
+      () => {
+        setStreaming(false);
+        const finalMessage = streamingDataRef.current; // capture here
+        setStreamingData(""); // reset
+
+        const assistantChat = {
+          sender: "assistant",
+          content: finalMessage,
+          sessionID: activeSessionID || 'newChat',
+          created_at: new Date(),
+        };
+
+        updateActiveChatMessages(assistantChat);
+      },
+      (error) => {
+        closeStreaming();
+        const assistantErrorChat = {
+          sender: "assistant",
+          status: "error",
+          content: error?.includes("Unauthorized")
+            ? "Unauthorized - Please login"
+            : "Server Error - Please try again.",
+          sessionID: activeSessionID || 'newChat',
+          created_at: new Date(),
+        };
+
+        updateActiveChatMessages(assistantErrorChat);
+      },
+      abortController,
+      (chatSession) => {
+        if(chatSession.id) {
+          // console.log('chatSession: ', chatSession)
+          handleNewChatSession(chatSession);
+        }
+      }
+    );
+
+    setInputValue("");
+  };
+
+  // end streaming output from assistant
+  const closeStreaming = () => {
+    if (eventSourceRef.current instanceof AbortController) {
+      eventSourceRef.current.abort();
+      if (streamingDataRef.current) {
+        const assistantChat = {
+          sender: "assistant",
+          content: streamingDataRef.current,
+          sessionID: activeSessionID || 'newChat',
+          created_at: new Date(),
+        };
+
+        updateActiveChatMessages(assistantChat);
+      }
+      setStreaming(false);
+      setStreamingData("");
+      streamingDataRef.current = "";
+      eventSourceRef.current = null;
+    }
+  };
+
+
+  const handleNewChatSession = async (newChatSession) => {
+      console.log('newChatSession: ', newChatSession)
+      addToSideBarSessions(newChatSession);
+      updateActiveSessionID(newChatSession?.id);
+  };
+
+  // closes stream when component unmounts unexpectedly
+  useEffect(() => {
+    return () => {
+      closeStreaming();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (suggestions && suggestions?.length > 0) {
+      setAISuggestions(suggestions)
+    }
+
+  }, [suggestions])
+
+
+  return {
+    isSidebarOpen,
+    toggleSidebar,
+    modelName,
+    modelDescription,
+    isFetchingChats,
+    inputValue,
+    setInputValue,
+    sendMessage,
+    closeStreaming,
+    streamingData,
+    streaming,
+    sendBtnActive,
+    chats,
+    messagesEndRef,
+    aiSuggestions,
+  };
+}

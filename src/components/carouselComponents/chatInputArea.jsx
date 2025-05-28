@@ -1,7 +1,7 @@
 import { MoveUp } from "lucide-react";
-import "./cc.css";
-import SquareIcon from "../shapes/stop";
 import { useEffect, useRef } from "react";
+import SquareIcon from "../shapes/stop";
+import "./cc.css";
 
 const ChatInputArea = ({
   inputValue,
@@ -52,7 +52,7 @@ const ChatInputArea = ({
           </div>
         ) : (
           <div onClick={closeStreaming} className="stopBtn">
-            <SquareIcon fill="#000000" size={20} />
+            <SquareIcon fill="#000000" size={16} />
           </div>
         )}
         </div>

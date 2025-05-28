@@ -1,172 +1,176 @@
-import { modelDetailsMap } from "@/constants/carousel";
-import { useSideBar } from "@/store/sidebarStore";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { usePromptSuggestions } from "./usePromptSuggestion";
+// import { sendChatMessage } from "@/apiCalls/sendChatMessage";
+// import { modelDetailsMap } from "@/constants/carousel";
+// import { useSideBar } from "@/store/sidebarStore";
+// import useModelsStore from "@/store/useModelsStore";
+// import { usePathname } from "next/navigation";
+// import { useEffect, useRef, useState } from "react";
+// import { usePromptSuggestions } from "./usePromptSuggestion";
 
 
 
-export default function useCarousel() {
-  const [inputValue, setInputValue] = useState("");
-  const [sendBtnActive, setSendBtnActive] = useState(false);
-  const [streamingData, setStreamingData] = useState("");
-  const [streaming, setStreaming] = useState(false);
-  const [aiSuggestions, setAISuggestions] = useState([]);
-  const streamingDataRef = useRef("");
-  const eventSourceRef = useRef(null);
-  const messagesEndRef = useRef(null);
+// export default function useCarousel() {
+//   const [inputValue, setInputValue] = useState("");
+//   const [sendBtnActive, setSendBtnActive] = useState(false);
+//   const [streamingData, setStreamingData] = useState("");
+//   const [streaming, setStreaming] = useState(false);
+//   const [aiSuggestions, setAISuggestions] = useState([]);
+//   const streamingDataRef = useRef("");
+//   const eventSourceRef = useRef(null);
+//   const messagesEndRef = useRef(null);
 
 
-  const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
+//   const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
+//   const { activeSessionID, activeChatMessages: chats, updateActiveChatMessages } = useModelsStore();
 
-  const [modelName, setModelName] = useState("Model");
-  const [modelDescription, setModelDescription] = useState([]);
+//   const [modelName, setModelName] = useState("Model");
+//   const [assistantSlug, setAssistantSlug] = useState('');
+//   const [modelDescription, setModelDescription] = useState([]);
 
-  const { suggestions } = usePromptSuggestions(inputValue, modelName, modelDescription);
+//   const { suggestions } = usePromptSuggestions(inputValue, modelName, modelDescription);
 
-  const chats = []
+//   const pathname = usePathname();
 
-  const pathname = usePathname();
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-
-
-  useEffect(() => {
-    const segments = pathname.split("/").filter(Boolean);
-    const current = segments[segments.length - 1];
-
-    const model = modelDetailsMap[current];
-    if (model) {
-      setModelName(model.name);
-      setModelDescription(model.description);
-    } else {
-      setModelName("Model");
-      setModelDescription([]);
-    }
-  }, [pathname]);
-
-// imported
+//   const toggleSidebar = () => {
+//     setIsSidebarOpen(!isSidebarOpen);
+//   };
 
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chats]);
 
-  useEffect(() => {
-    setSendBtnActive(inputValue && !streaming);
-  }, [inputValue, streaming]);
+//   useEffect(() => {
+//     const segments = pathname.split("/").filter(Boolean);
+//     const current = segments[segments.length - 1];
+
+//     const model = modelDetailsMap[current];
+//     if (model) {
+//       setAssistantSlug(current);
+//       setModelName(model.name);
+//       setModelDescription(model.description);
+//     } else {
+//       setModelName("");
+//       setModelDescription([]);
+//     }
+//   }, [pathname]);
+
+// // imported
 
 
-  const sendMessage = async () => {
-    if (!inputValue || streaming) return;
+//   useEffect(() => {
+//     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+//   }, [chats]);
 
-    // const userChat = {
-    //   sender: "user",
-    //   status: "la_request",
-    //   message: inputValue,
-    //   time: new Date(),
-    // };
+//   useEffect(() => {
+//     setSendBtnActive(inputValue && !streaming);
+//   }, [inputValue, streaming]);
 
-    // // Update local state + storage
-    // updateChats(userChat);
-    // // Queue for batched DB write
-    // queueLAChatForDB(userChat);
 
-    // setStreaming(true);
-    // setStreamingData("");
-    // streamingDataRef.current = "";
+//   const sendMessage = async () => {
+//     if (!inputValue || streaming) return;
 
-    // const abortController = new AbortController();
-    // eventSourceRef.current = abortController;
+//     const userChat = {
+//       sender: "user", // "user" || 'assistant'
+//       content: inputValue,
+//       sessionID: activeSessionID || 'newChat',
+//       created_at: new Date(),
+//     };
 
-    // queryLegalAssistant(
-    //   inputValue,
-    //   (streamedData) => {
-    //     setStreamingData((prev) => {
-    //       if (prev.endsWith(streamedData)) return prev;
-    //       const updatedData = prev + streamedData;
-    //       streamingDataRef.current = updatedData;
-    //       return updatedData;
-    //     });
-    //   },
-    //   (error) => {
-    //     closeStreaming();
-    //     const errorChat = {
-    //       sender: "bot",
-    //       status: "error",
-    //       message: error?.includes("Unauthorized")
-    //         ? "Unauthorized - Please login"
-    //         : "Server Error - Please try again.",
-    //       time: new Date(),
-    //     };
-    //     updateChats(errorChat);
-    //     queueLAChatForDB(errorChat);
-    //   },
-    //   () => {
-    //     const botChat = {
-    //       sender: "bot",
-    //       status: "la_request",
-    //       message: streamingDataRef.current,
-    //       time: new Date(),
-    //     };
-    //     updateChats(botChat);
-    //     queueLAChatForDB(botChat);
-    //     setStreaming(false);
-    //     setStreamingData("");
-    //   },
-    //   abortController
-    // );
+//     // Update local state 
+//     updateActiveChatMessages(userChat);
 
-    setInputValue("");
-  };
+//     setStreaming(true);
+//     setStreamingData("");
+//     streamingDataRef.current = "";
 
-  const closeStreaming = () => {
-    // if (eventSourceRef.current instanceof AbortController) {
-    //   eventSourceRef.current.abort();
-    //   if (streamingDataRef.current) {
-    //     const botChat = {
-    //       sender: "bot",
-    //       status: "la_request",
-    //       message: streamingDataRef.current,
-    //       time: new Date(),
-    //     };
+//     const abortController = new AbortController();
+//     eventSourceRef.current = abortController;
 
-    //     updateChats(botChat);
-    //     queueLAChatForDB(botChat); // ← Batch this too
-    //   }
-      setStreaming(false);
-      setStreamingData("");
-      streamingDataRef.current = "";
-      eventSourceRef.current = null;
-    // }
-  };
+//     sendChatMessage(
+//       inputValue,
+//       activeSessionID,
+//       assistantSlug,
+//       (streamedData) => {
+//         setStreamingData((prev) => {
+//           if (prev.endsWith(streamedData)) return prev;
+//           const updatedData = prev + streamedData;
+//           streamingDataRef.current = updatedData;
+//           return updatedData;
+//         });
+//       },
+//       () => {
+//         const assistantChat = {
+//           sender: "assistant",
+//           content: streamingDataRef.current,
+//           sessionID: activeSessionID || 'newChat',
+//           created_at: new Date(),
+//         };
 
-// imported end
+//         updateActiveChatMessages(assistantChat)
 
-useEffect(() => {
-  if(suggestions && suggestions?.length > 0) {
-    setAISuggestions(suggestions)
-  }
+//         setStreaming(false);
+//         setStreamingData("");
+//       },
+//       (error) => {
+//         closeStreaming();
+//         const assistantErrorChat = {
+//           sender: "assistant",
+//           status: "error",
+//           content: error?.includes("Unauthorized")
+//             ? "Unauthorized - Please login"
+//             : "Server Error - Please try again.",
+//           sessionID: activeSessionID || 'newChat',
+//           created_at: new Date(),
+//         };
 
-}, [suggestions])
+//         updateActiveChatMessages(assistantErrorChat);
+//       },
+//       abortController
+//     );
 
-  return {
-    isSidebarOpen,
-    toggleSidebar,
-    modelName,
-    modelDescription,
-    inputValue,
-    setInputValue,
-    sendMessage,
-    closeStreaming,
-    streamingData,
-    streaming,
-    sendBtnActive,
-    chats,
-    messagesEndRef,
-    aiSuggestions
-  };
-}
+//     setInputValue("");
+//   };
+
+//   const closeStreaming = () => {
+//     if (eventSourceRef.current instanceof AbortController) {
+//       eventSourceRef.current.abort();
+//       if (streamingDataRef.current) {
+//         const assistantChat = {
+//           sender: "assistant",
+//           content: streamingDataRef.current,
+//           sessionID: activeSessionID || 'newChat',
+//           created_at: new Date(),
+//         };
+
+//         updateActiveChatMessages(assistantChat);
+//       }
+//       setStreaming(false);
+//       setStreamingData("");
+//       streamingDataRef.current = "";
+//       eventSourceRef.current = null;
+//     }
+//   };
+
+// // imported end
+
+// useEffect(() => {
+//   if(suggestions && suggestions?.length > 0) {
+//     setAISuggestions(suggestions)
+//   }
+
+// }, [suggestions])
+
+//   return {
+//     isSidebarOpen,
+//     toggleSidebar,
+//     modelName,
+//     modelDescription,
+//     inputValue,
+//     setInputValue,
+//     sendMessage,
+//     closeStreaming,
+//     streamingData,
+//     streaming,
+//     sendBtnActive,
+//     chats,
+//     messagesEndRef,
+//     aiSuggestions
+//   };
+// }

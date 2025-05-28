@@ -6,44 +6,26 @@ import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
 import useCarouselChat from "@/hooks/useCarouselChat";
 import { PanelRightOpen } from "lucide-react";
-import "./carousel.css";
+import "./carouselChat.css";
 
-const CarouselPage = () => {
-//   const {
-//     isSidebarOpen,
-//     toggleSidebar,
-//     modelName,
-//     modelDescription,
-//     inputValue,
-//     setInputValue,
-//     sendMessage,
-//     closeStreaming,
-//     streamingData,
-//     streaming,
-//     sendBtnActive,
-//     chats,
-//     messagesEndRef,
-//     aiSuggestions
-//   } = useCarousel();
-
-  
-    const {
-      isSidebarOpen,
-      toggleSidebar,
-      modelName,
-      modelDescription,
-      // isFetchingChats,
-      inputValue,
-      setInputValue,
-      sendMessage,
-      closeStreaming,
-      streamingData,
-      streaming,
-      sendBtnActive,
-      chats,
-      messagesEndRef,
-      aiSuggestions
-    } = useCarouselChat();
+const CarouselChat = () => {
+  const {
+    isSidebarOpen,
+    toggleSidebar,
+    modelName,
+    modelDescription,
+    isFetchingChats,
+    inputValue,
+    setInputValue,
+    sendMessage,
+    closeStreaming,
+    streamingData,
+    streaming,
+    sendBtnActive,
+    chats,
+    messagesEndRef,
+    aiSuggestions
+  } = useCarouselChat();
 
   return (
     <div className="carousel_page_content">
@@ -69,6 +51,8 @@ const CarouselPage = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            assistantSlug={'carousel'}
+            isFetchingChats={isFetchingChats}
           />
           <ChatInputArea
             inputValue={inputValue}
@@ -85,4 +69,4 @@ const CarouselPage = () => {
   );
 };
 
-export default CarouselPage;
+export default CarouselChat;
