@@ -10,7 +10,7 @@ import { usePromptSuggestions } from "./usePromptSuggestion";
 
 
 
-export default function useAssistantChat({ modelName, assistantSlug}) {
+export default function useAssistantChat( modelName, assistantSlug) {
   const [inputValue, setInputValue] = useState("");
   const [sendBtnActive, setSendBtnActive] = useState(false);
   const [streamingData, setStreamingData] = useState("");
