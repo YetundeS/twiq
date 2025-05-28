@@ -1,3 +1,4 @@
+import { useSidebar } from "@/components/ui/sidebar";
 import { modelDetailsMap } from "@/constants/carousel";
 import { useSideBar } from "@/store/sidebarStore";
 import { usePathname } from "next/navigation";
@@ -15,6 +16,7 @@ export default function useStoryteller() {
   const streamingDataRef = useRef("");
   const eventSourceRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const { toggleSidebar: mainToggle } = useSidebar();
 
 
   const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
@@ -29,6 +31,7 @@ export default function useStoryteller() {
   const pathname = usePathname();
 
   const toggleSidebar = () => {
+    mainToggle()
     setIsSidebarOpen(!isSidebarOpen);
   };
 

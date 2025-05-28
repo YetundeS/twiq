@@ -4,11 +4,14 @@ import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
+import { useIsMobile } from "@/hooks/use-mobile";
 import useStoryteller from "@/hooks/useStoryteller";
 import { PanelRightOpen } from "lucide-react";
 import "./storyteller.css";
 
 const StorytellerModel = () => {
+  const isMobile = useIsMobile();
+
   const {
     isSidebarOpen,
     toggleSidebar,
@@ -26,10 +29,10 @@ const StorytellerModel = () => {
     aiSuggestions,
   } = useStoryteller();
 
-  return (
+  return ( 
     <div className="storytelling-page_content">
       <div className="storytelling-pageTop">
-        {!isSidebarOpen && (
+        {(!isSidebarOpen || isMobile) && (
           <>
             <div
               onClick={toggleSidebar}

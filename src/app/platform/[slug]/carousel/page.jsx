@@ -9,23 +9,6 @@ import { PanelRightOpen } from "lucide-react";
 import "./carousel.css";
 
 const CarouselPage = () => {
-//   const {
-//     isSidebarOpen,
-//     toggleSidebar,
-//     modelName,
-//     modelDescription,
-//     inputValue,
-//     setInputValue,
-//     sendMessage,
-//     closeStreaming,
-//     streamingData,
-//     streaming,
-//     sendBtnActive,
-//     chats,
-//     messagesEndRef,
-//     aiSuggestions
-//   } = useCarousel();
-
   
     const {
       isSidebarOpen,

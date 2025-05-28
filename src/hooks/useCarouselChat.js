@@ -1,5 +1,6 @@
 import { fetchMessages } from "@/apiCalls/chatMessage";
 import { sendChatMessage } from "@/apiCalls/sendChatMessage";
+import { useSidebar } from "@/components/ui/sidebar";
 import { modelDetailsMap } from "@/constants/carousel";
 import { useSideBar } from "@/store/sidebarStore";
 import useModelsStore from "@/store/useModelsStore";
@@ -18,6 +19,7 @@ export default function useCarouselChat() {
   const streamingDataRef = useRef("");
   const eventSourceRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const { toggleSidebar: mainToggle } = useSidebar();
 
   const pathname = usePathname();
   const [isFetchingChats, setIsFetchingChats] = useState(true);
@@ -34,6 +36,7 @@ export default function useCarouselChat() {
 
 
   const toggleSidebar = () => {
+    mainToggle()
     setIsSidebarOpen(!isSidebarOpen);
   };
 

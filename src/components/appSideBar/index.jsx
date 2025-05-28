@@ -10,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { generateSignString } from "@/lib/utils";
 import useAuthStore from "@/store/authStore";
@@ -24,7 +25,6 @@ import {
   MenubarMenu, MenubarTrigger
 } from "@/components/ui/menubar";
 import { models, ORGANIZATIONAL_ROLES } from "@/constants/sidebar";
-import { useCurrentSessionID } from "@/hooks/useCurrentSessionID";
 import { useSidebarChats } from "@/hooks/useSideBarHook";
 import useLogOutDialogStore from "@/store/useLogOutDialogStore";
 import useModelsStore from "@/store/useModelsStore";
@@ -40,8 +40,8 @@ export function AppSidebar() {
   const { user } = useAuthStore();
   const { openDialog } = useLogOutDialogStore();
   const { isFetching } = useSidebarChats();
-  const sessionId = useCurrentSessionID();
-  const { activeSessionID, activeChatMessages: chats, updateActiveSessionID, updateActiveChatMessages, setActiveChatMessages } = useModelsStore();
+  const { activeSessionID } = useModelsStore();
+  const { toggleSidebar: mainToggle } = useSidebar();
 
 
   useEffect(() => {
@@ -58,13 +58,9 @@ export function AppSidebar() {
 
 
   const toggleSidebar = () => {
+    mainToggle()
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-// useEffect(() => {
-//   console.log('sidebarSessions: ', sidebarSessions)
-// }, [sidebarSessions])
-
 
 
   return (

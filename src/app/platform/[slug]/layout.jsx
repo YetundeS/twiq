@@ -3,6 +3,7 @@
 
 import { AppSidebar } from "@/components/appSideBar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
 import { useHydrationZustand } from "@codebayu/use-hydration-zustand";
@@ -11,8 +12,9 @@ import { useEffect } from "react";
 import "./dashboard.css";
 
 export default function DashboardLayout({ children }) {
-  const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
+  const { setIsSidebarOpen } = useSideBar();
   const { user } = useAuthStore();
+    const isMobile = useIsMobile();
 
   const isHydrated = useHydrationZustand(useAuthStore);
     const router = useRouter();
@@ -23,8 +25,17 @@ export default function DashboardLayout({ children }) {
     }
   }, [user, isHydrated]);
 
+  useEffect(() => {
+    if(isMobile) {
+      setIsSidebarOpen(false)
+    } else {
+      setIsSidebarOpen(true)
+    }
+  }, [isMobile])
+  
+
   return (
-    <SidebarProvider open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+    <SidebarProvider >
       <div className="dashboard_wrapper">
         <AppSidebar />
         {children}
