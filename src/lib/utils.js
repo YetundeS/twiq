@@ -6,7 +6,7 @@ export function cn(...inputs) {
 }
 
 export function generateSignString(orgName) {
-  if (!orgName) return
+  if (!orgName) return;
   return "@" + orgName.replace(/\s+/g, "");
 }
 
@@ -27,7 +27,6 @@ export const validateForm = (formData) => {
   }
   return newErrors;
 };
-
 
 export const addAuthHeader = () => {
   const token = localStorage.getItem("access_token");

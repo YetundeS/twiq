@@ -6,8 +6,12 @@ import { toast } from "sonner";
 import { loginUser } from "@/apiCalls/authAPI";
 import useAuthStore from "@/store/authStore";
 import { useRouter } from "next/navigation";
-import { Eye, EyeClosed } from "lucide-react";
 import { generateSignString } from "@/lib/utils";
+import SocialButtons from "@/components/authComponents/authForms/socialButtons";
+import { Lock } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -18,7 +22,6 @@ const LoginForm = () => {
   const router = useRouter();
 
   const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const updateUser = useAuthStore((state) => state.updateUser);
@@ -92,7 +95,6 @@ const LoginForm = () => {
             router.push(`/platform/${signString}/`);
           }, 1500);
         }
-
       }
     } else {
       setErrors(newErrors);
@@ -100,53 +102,67 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="authForm">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {/* Email */}
-      <div className="authForm_field">
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className="formInput"
-          placeholder="email"
-        />
+      <div>
+        <Label
+          htmlFor="email"
+          className="font-medium text-gray-700 dark:text-gray-300"
+        >
+          Email
+        </Label>
+        <div className="relative mt-2">
+          <Input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="your@email.com"
+            value={formData.email}
+            onChange={handleChange}
+            className="rounded-xl border-gray-200 py-3 pr-4 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
+          />
+        </div>
       </div>
 
       {/* Password */}
-      <div className="authForm_field">
-        <input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          className="formInput"
-          placeholder="password"
-        />
-        {showPassword ? (
-          <EyeClosed
-            onClick={() => setShowPassword(!showPassword)}
-            className="passwordIcon"
+      <div>
+        <Label
+          htmlFor="password"
+          className="font-medium text-gray-700 dark:text-gray-300"
+        >
+          Password
+        </Label>
+        <div className="relative mt-2">
+          <Input
+            id="password"
+            type="password"
+            name="password"
+            placeholder={"Enter your password"}
+            value={formData.password}
+            onChange={handleChange}
+            className="rounded-xl border-gray-200 py-3 pr-12 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
           />
-        ) : (
-          <Eye
-            onClick={() => setShowPassword(!showPassword)}
-            className="passwordIcon"
-          />
-        )}
+          <Lock className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
+        </div>
       </div>
 
       {/* Submit Button */}
-      <button type="submit" className="formBtn">
+      <Button
+        type="submit"
+        className="w-full cursor-pointer rounded-xl bg-gray-900 py-3 text-lg font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+      >
         {!loading ? (
           <p>Log in</p>
         ) : (
           <CircularProgress color="white" size="17px" />
         )}
-      </button>
+      </Button>
+
       {(errors?.email || errors?.password) && (
         <p className="textError">{errors?.email || errors?.password}</p>
       )}
+
+      {/* <SocialButtons /> */}
     </form>
   );
 };

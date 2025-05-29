@@ -4,10 +4,12 @@ import {
   Inter,
   Lato,
   Source_Sans_3,
+  Cormorant_Garamond,
 } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import Head from "next/head";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,6 +37,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata = {
@@ -81,9 +90,9 @@ export default function RootLayout({ children }) {
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lato.variable} ${sourceSans3.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lato.variable} ${sourceSans3.variable} ${cormorant.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
         <Toaster />
       </body>
     </html>

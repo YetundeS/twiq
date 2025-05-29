@@ -1,12 +1,31 @@
-
-import './landingPage.css'
-
+import { Header } from "@/components/landingPageComponents/Header";
+import { HeroSection } from "@/components/landingPageComponents/HeroSection";
+import { HowItWorksSection } from "@/components/landingPageComponents/HowItWorksSection";
+import { StickyPrompt } from "@/components/landingPageComponents/StickyPrompt";
+import { FeatureCard } from "@/components/landingPageComponents/FeatureCard";
+import { TestimonialsSection } from "@/components/landingPageComponents/TestimonialsSection";
+import { PricingSection } from "@/components/landingPageComponents/PricingSection";
+import { FAQSection } from "@/components/landingPageComponents/FAQSection";
+import { FeatureCardsSequence } from "@/components/landingPageComponents/FeatureCardsSequence";
+import Testimonials from "@/components/landingPageComponents/Testimonials";
 
 const LandingPage = () => {
   return (
-    <div className="landingPage">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 transition-colors duration-300 dark:from-purple-900/20 dark:via-pink-900/10 dark:to-blue-900/20">
+      <Header />
+      <main>
+        <HeroSection />
+        <HowItWorksSection />
+        <TestimonialsSection />
+        {/* <Testimonials /> */}
+        <PricingSection />
+        <FAQSection />
+        {/* <FeatureCard /> */}
+        <FeatureCardsSequence />
+        <StickyPrompt />
+      </main>
     </div>
-  )
-}
+  );
+};
 
-export default LandingPage 
+export default LandingPage;
