@@ -24,7 +24,7 @@ import {
   MenubarItem,
   MenubarMenu, MenubarTrigger
 } from "@/components/ui/menubar";
-import { models, ORGANIZATIONAL_ROLES } from "@/constants/sidebar";
+import { models } from "@/constants/sidebar";
 import { useSidebarChats } from "@/hooks/useSideBarHook";
 import useLogOutDialogStore from "@/store/useLogOutDialogStore";
 import useModelsStore from "@/store/useModelsStore";
