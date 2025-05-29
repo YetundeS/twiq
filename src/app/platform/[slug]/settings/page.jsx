@@ -15,10 +15,10 @@ const UnderDevelopment = () => {
         </p>
         <div className="pt-4">
           <a
-            href="/auth"
+            href="/"
             className="inline-block bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold px-6 py-3 rounded-xl transition duration-200"
           >
-            Go to Dashboard
+            Back to Home
           </a>
         </div>
       </div>
