@@ -2,12 +2,10 @@ import { Header } from "@/components/landingPageComponents/Header";
 import { HeroSection } from "@/components/landingPageComponents/HeroSection";
 import { HowItWorksSection } from "@/components/landingPageComponents/HowItWorksSection";
 import { StickyPrompt } from "@/components/landingPageComponents/StickyPrompt";
-import { FeatureCard } from "@/components/landingPageComponents/FeatureCard";
 import { TestimonialsSection } from "@/components/landingPageComponents/TestimonialsSection";
 import { PricingSection } from "@/components/landingPageComponents/PricingSection";
 import { FAQSection } from "@/components/landingPageComponents/FAQSection";
 import { FeatureCardsSequence } from "@/components/landingPageComponents/FeatureCardsSequence";
-import Testimonials from "@/components/landingPageComponents/Testimonials";
 
 const LandingPage = () => {
   return (
@@ -17,10 +15,8 @@ const LandingPage = () => {
         <HeroSection />
         <HowItWorksSection />
         <TestimonialsSection />
-        {/* <Testimonials /> */}
         <PricingSection />
         <FAQSection />
-        {/* <FeatureCard /> */}
         <FeatureCardsSequence />
         <StickyPrompt />
       </main>

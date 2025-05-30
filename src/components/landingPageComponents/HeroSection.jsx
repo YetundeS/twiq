@@ -28,14 +28,14 @@ export function HeroSection() {
         >
           {/* Greeting */}
           <div className="align-self-start mb-2 flex justify-self-start text-xl text-gray-900 sm:text-2xl lg:text-3xl dark:text-gray-100">
-            <TextEffect per="char" preset="fade-in-blur">
+            <TextEffect per="char" preset="fade-in-blur" delay={1}>
               {SITE_CONTENT.hero.greeting}
             </TextEffect>
           </div>
 
           {/* Main heading */}
           <div className="align-self-center mb-4 flex justify-self-start text-xl leading-tight text-gray-900 sm:text-2xl lg:text-3xl dark:text-gray-100">
-            <TextEffect per="char" preset="fade-in-blur">
+            <TextEffect per="char" preset="fade-in-blur" delay={1}>
               {SITE_CONTENT.hero.mainHeading}
             </TextEffect>
           </div>
@@ -44,7 +44,7 @@ export function HeroSection() {
           <Link href={"/auth"}>
             <div className="relative">
               <div className="animate-fade-in-up animation-delay-400 mx-auto max-w-4xl">
-                <div className="hover:shadow-3xl relative rounded-3xl border border-gray-200 bg-white p-6 shadow-2xl transition-all duration-300 hover:scale-[1.02] dark:border-gray-700 dark:bg-gray-800">
+                <div className="hover:shadow-3xl relative rounded-3xl border border-gray-200 bg-white p-6 shadow-2xl transition-all duration-400 ease-in hover:scale-[1.02] dark:border-gray-700 dark:bg-gray-800">
                   <div className="flex items-end gap-4">
                     <Textarea
                       placeholder={SITE_CONTENT.hero.inputPlaceholder}
@@ -55,9 +55,9 @@ export function HeroSection() {
                     />
                     <Button
                       size="icon"
-                      className="h-12 w-12 flex-shrink-0 cursor-pointer rounded-2xl bg-purple-600 transition-all duration-200 hover:scale-105 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600"
+                      className="group h-12 w-12 flex-shrink-0 cursor-pointer rounded-2xl bg-purple-600 transition-all duration-200 hover:scale-105 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600"
                     >
-                      <Send className="h-6 w-6" />
+                      <Send className="h-6 w-6 transform transition-transform duration-200 group-hover:rotate-45" />
                     </Button>
                   </div>
                 </div>

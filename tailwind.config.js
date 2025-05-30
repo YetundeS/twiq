@@ -7,9 +7,6 @@ const config = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        cormorant: ["var(--font-cormorant)", "serif"],
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -64,9 +61,10 @@ const config = {
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
+        cormorant: ["var(--font-cormorant)", "serif"],
       },
       animation: {
-        "fade-in-up": "fadeInUp 0.8s ease-in-out forwards",
+        "fade-in-up": "fadeInUp 1.2s ease-in forwards",
         "fade-in-right": "fadeInRight 0.6s ease-in-out forwards",
         "slide-up":
           "slideUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards",

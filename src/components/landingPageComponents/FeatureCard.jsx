@@ -3,7 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { ThumbsUp } from "lucide-react";
 import Image from "next/image";
-import switchingImage from "../../../public/images/switching-image2.webp";
+import placeholderImage from "../../../public/images/placeholder-image.webp";
+
 import { motion } from "framer-motion";
 
 export function FeatureCard({ opacity = 1, blur = 0, zIndex = 1 }) {
@@ -48,7 +49,7 @@ export function FeatureCard({ opacity = 1, blur = 0, zIndex = 1 }) {
                 : "translate-y-8 opacity-0"
             }`}
           >
-            {/* Icon - positioned absolutely to float above container */}
+            {/* Icon  */}
             <div className="absolute -top-8 left-1/2 z-20 -translate-x-1/2 transform">
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-purple-200/50 bg-purple-100 shadow-xl backdrop-blur-sm dark:border-purple-600/50 dark:bg-purple-800/50">
                 <div className="text-purple-600 dark:text-purple-300">
@@ -57,11 +58,11 @@ export function FeatureCard({ opacity = 1, blur = 0, zIndex = 1 }) {
               </div>
             </div>
 
-            {/* Main white container - made much bigger */}
+            {/* Main white container */}
             <div className="relative overflow-visible rounded-3xl border border-gray-200/50 bg-white/90 px-12 pt-14 pb-12 shadow-2xl backdrop-blur-sm dark:border-gray-500/50 dark:bg-gray-700/90">
               {/* Text content */}
               <div className="mb-20 text-center">
-                <h3 className="text-lg leading-tight font-medium text-gray-900 lg:text-xl dark:text-gray-100">
+                <h3 className="text-xl leading-tight font-medium text-gray-900 dark:text-gray-100">
                   Saves hours{" "}
                   <span className="text-gray-400 dark:text-gray-400">
                     ideating
@@ -71,15 +72,15 @@ export function FeatureCard({ opacity = 1, blur = 0, zIndex = 1 }) {
                 </h3>
               </div>
 
-              {/* Image container - much bigger and positioned to spill out dramatically */}
-              <div className="relative -mx-8 -mb-8">
-                <div className="relative scale-110 transform overflow-hidden rounded-3xl shadow-2xl">
+              {/* Image container */}
+              <div className="relative -mx-8 -mb-12">
+                <div className="relative z-5 scale-110 transform overflow-hidden rounded-3xl shadow-2xl">
                   <Image
-                    src={switchingImage}
+                    src={placeholderImage}
                     alt="Content creation interface showing how TWIQ saves time on ideation and script writing"
                     width={1000}
-                    height={600}
-                    className="h-auto w-full object-cover"
+                    height={700}
+                    className="h-full w-full object-cover"
                   />
                 </div>
               </div>

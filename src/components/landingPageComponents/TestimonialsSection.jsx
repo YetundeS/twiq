@@ -3,90 +3,10 @@
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { TextEffect } from "../ui/text-effect";
-import userAvatar from "../../../public/images/user-avatar.png";
-import post from "../../../public/images/switching-image2.webp";
 import { motion } from "framer-motion";
+import { SITE_CONTENT } from "@/constants/landingPageContent";
 
-const testimonials = [
-  {
-    id: 1,
-    type: "conversation",
-    messages: [
-      {
-        user: "User",
-        avatar: userAvatar,
-        text: "I wanted to share what I came up with using your prompts 😊 a little different... but still experimenting on how I can use it in my travel niche 😊",
-        hasHeart: true,
-      },
-      {
-        user: "Assistant",
-        text: "Ahh this is amazing! You used the tool to create this??",
-        isResponse: true,
-      },
-    ],
-    postImage: post,
-    postCaption: "I did!! 😊💛 And this one too!",
-    finalMessage: "Wow, these results are incredible",
-    size: "large",
-  },
-  {
-    id: 2,
-    type: "simple",
-    user: "Sarah M.",
-    avatar: userAvatar,
-    text: "It's just perfect to write scripts... I love it! I already have first idea for video and will film with this script",
-    timestamp: "MON 08:13",
-    size: "small",
-  },
-  {
-    id: 3,
-    type: "detailed",
-    user: "Mike R.",
-    avatar: userAvatar,
-    text: "Hey Sarah! I'm not sure if I'm the first one to try it, but wow—this tool is incredible! The user interface is so smooth, the model's logic is spot on, and the output is exactly what I was hoping for. Plus the speed of the site is just perfect. You've truly created something amazing! Thank you for putting this together and for all the fantastic content you share. I'll send over the input and output now!",
-    responses: ["yessssss", "thank you!!"],
-    hasHeart: true,
-    size: "medium",
-  },
-  {
-    id: 4,
-    type: "simple",
-    user: "Emma K.",
-    avatar: userAvatar,
-    text: "This is incredible! Truly amazing. It brought tears to my eyes. Thank you, Sarah! Your impact is immeasurable. I am all the more brave for it 💜",
-    badge: "excited to hear what ya think!",
-    size: "medium",
-  },
-  {
-    id: 5,
-    type: "simple",
-    user: "Alex P.",
-    avatar: userAvatar,
-    text: "I've tried it and it was soooo good. After a few questions it developed a beautiful script really true to myself. Thank you Sarah!! 💜💜",
-    size: "small",
-  },
-  {
-    id: 6,
-    type: "detailed",
-    user: "Jessica L.",
-    avatar: userAvatar,
-    text: "I loved the interaction with the tool and the fact that it asked really good questions before creating the script. The script felt personal, relatable and conveyed the emotion I was going for. Loved it! Thanks for sharing this tool 💛",
-    hasHeart: true,
-    size: "medium",
-  },
-  {
-    id: 7,
-    type: "branded",
-    postImage: "/placeholder.svg?height=400&width=300",
-    brandText: "Viral You AI",
-    subtitle: "Viral scripts that feel like you.",
-    tagline: "be one of the first",
-    responses: ["Dammmmmm!!!!", "This is Insane!!"],
-    user: "Community",
-    avatar: userAvatar,
-    size: "large",
-  },
-];
+const testimonials = SITE_CONTENT.testimonials;
 
 export function TestimonialsSection() {
   const sectionRef = useRef(null);

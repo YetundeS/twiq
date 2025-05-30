@@ -12,6 +12,7 @@ import {
 import { useTheme } from "@/components/ui/theme-provider";
 import { SITE_CONTENT } from "@/constants/landingPageContent";
 import { TextEffect } from "../ui/text-effect";
+import Link from "next/link";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
@@ -32,7 +33,7 @@ export function Header() {
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
             <div className="text-2xl font-bold text-purple-600">
-              <TextEffect per="char" preset="fade-in-blur">
+              <TextEffect per="char" preset="fade-in-blur" delay={300}>
                 {SITE_CONTENT.brand}
               </TextEffect>
             </div>
@@ -56,11 +57,13 @@ export function Header() {
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              <div className="text-3xl font-bold text-purple-600 transition-all duration-300 group-hover:scale-105 dark:text-purple-400">
-                <TextEffect per="char" preset="fade-in-blur">
-                  {SITE_CONTENT.brand}
-                </TextEffect>
-              </div>
+              <Link href={"/"}>
+                <div className="text-3xl font-bold text-purple-600 transition-all duration-300 group-hover:scale-105 dark:text-purple-400">
+                  <TextEffect per="char" preset="fade-in-blur">
+                    {SITE_CONTENT.brand}
+                  </TextEffect>
+                </div>
+              </Link>
               <Sparkles
                 className={`size-6 text-purple-600 transition-all duration-500 dark:text-purple-400 ${
                   isHovered

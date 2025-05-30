@@ -5,68 +5,9 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TextEffect } from "../ui/text-effect";
+import { SITE_CONTENT } from "@/constants/landingPageContent";
 
-const pricingPlans = [
-  {
-    name: "Starter Plan",
-    description:
-      "Perfect for solopreneurs & creative rebels just getting started",
-    price: "$399",
-    period: "/year",
-    bots: "3+ TWIQ Bots",
-    botBadges: ["V", "C", "H"],
-    features: [
-      "Access Through TWIQ AI",
-      "Access to any 3 TWIQ Bots of your choice",
-      "Prompt + output screenshots to guide your flow",
-      "Smart captions, video scripts, carousels & posts",
-    ],
-    buttonText: "Choose Starter Plan →",
-    popular: false,
-    theme: "light",
-  },
-  {
-    name: "Pro Creator Plan",
-    description:
-      "For creators, marketers & educators ready to scale without burnout",
-    price: "$799",
-    period: "/year",
-    bots: "All 7 TWIQ Bots",
-    botBadges: ["V", "C", "L", "B"],
-    features: [
-      "Access Through TWIQ AI",
-      "Unlimited access to all 7 TWIQ Bots",
-      "Full-Year Content Planner for your business",
-      "Pre-built prompt packs for every bot",
-      "Workflow cheat sheets for batching",
-      "Priority support + template refreshes",
-      "Access to TWIQ Masterclass",
-    ],
-    buttonText: "Get Pro Plan →",
-    popular: true,
-    theme: "dark",
-  },
-  {
-    name: "Enterprise & Teams",
-    description:
-      "For agencies, coaching programs, & growing brands ready to scale content ops",
-    price: "$2,999",
-    period: "/year",
-    bots: "10+ Team Seats",
-    botBadges: ["T", "A", "B", "C"],
-    features: [
-      "Access Through TWIQ AI",
-      "Up to 10 team seats with shared access",
-      "Access to TWIQ Masterclass a $199 value",
-      "Full content access across all 7 bots",
-      "Full-Year Content Planner",
-      "Custom Bot Integrations + API support",
-    ],
-    buttonText: "Book a Demo →",
-    popular: false,
-    theme: "enterprise",
-  },
-];
+const pricingPlans = SITE_CONTENT.pricingPlans;
 
 export function PricingSection() {
   const [visibleCards, setVisibleCards] = useState([]);
@@ -143,7 +84,7 @@ export function PricingSection() {
                   : {}
               }
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className={`relative rounded-3xl border shadow-2xl ${getCardTheme(plan.theme)}`}
+              className={`relative flex flex-col rounded-3xl border shadow-2xl ${getCardTheme(plan.theme)}`}
             >
               {plan.popular && (
                 <div className="absolute -top-3 right-6">
@@ -153,7 +94,7 @@ export function PricingSection() {
                 </div>
               )}
 
-              <div className="p-8">
+              <div className="flex h-full flex-col p-8">
                 {/* Header */}
                 <div className="mb-6">
                   <h3
@@ -239,7 +180,7 @@ export function PricingSection() {
 
                 {/* Button */}
                 <Button
-                  className={`w-full rounded-xl py-3 text-lg font-semibold transition-all duration-200 hover:scale-105 ${getButtonStyle(plan.theme)}`}
+                  className={`mt-auto w-full cursor-pointer rounded-xl py-3 text-lg font-semibold transition-all duration-200 hover:scale-105 ${getButtonStyle(plan.theme)}`}
                 >
                   {plan.buttonText}
                 </Button>

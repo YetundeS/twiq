@@ -4,39 +4,9 @@ import { useEffect, useState, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 import { TextEffect } from "../ui/text-effect";
 import { motion } from "framer-motion";
+import { SITE_CONTENT } from "@/constants/landingPageContent";
 
-const faqs = [
-  {
-    question: "How does TWIQ preserve my authentic voice?",
-    answer:
-      "TWIQ uses advanced AI that analyzes your writing style, tone, and personality to enhance your content while maintaining your unique voice. It doesn't replace your authenticity—it amplifies it.",
-  },
-  {
-    question: "Can I use TWIQ for different types of content?",
-    answer:
-      "TWIQ works with various content types including social media posts, video scripts, blog articles, email campaigns, and more. Our AI adapts to different formats while keeping your voice consistent.",
-  },
-  {
-    question: "How quickly can I create content with TWIQ?",
-    answer:
-      "Most users create polished, viral-ready content in under 5 minutes. Simply input your story or idea, and TWIQ will enhance it into engaging content that resonates with your audience.",
-  },
-  {
-    question: "Is there a limit to how much content I can create?",
-    answer:
-      "It depends on your plan. Our Starter plan includes 10 scripts per month, while Pro and Enterprise plans offer unlimited content creation. You can upgrade anytime as your needs grow.",
-  },
-  {
-    question: "Can I collaborate with my team on TWIQ?",
-    answer:
-      "Yes! Our Enterprise plan includes team collaboration features, allowing multiple users to work together, share templates, and maintain consistent brand voice across all content.",
-  },
-  {
-    question: "What if I'm not satisfied with the results?",
-    answer:
-      "We offer a 30-day money-back guarantee. If TWIQ doesn't help you create better content, we'll refund your subscription—no questions asked.",
-  },
-];
+const faqs = SITE_CONTENT.faqs;
 
 export function FAQSection() {
   const [openItems, setOpenItems] = useState([]);
@@ -107,7 +77,7 @@ export function FAQSection() {
             >
               <button
                 onClick={() => toggleItem(index)}
-                className="flex w-full items-center justify-between px-6 py-6 text-left transition-colors duration-200 hover:bg-gray-50/50 dark:hover:bg-gray-600/50"
+                className="flex w-full cursor-pointer items-center justify-between px-6 py-6 text-left transition-colors duration-200 hover:bg-gray-50/50 dark:hover:bg-gray-600/50"
               >
                 <span className="pr-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
                   {faq.question}

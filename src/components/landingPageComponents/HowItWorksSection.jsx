@@ -48,7 +48,7 @@ export function HowItWorksSection() {
             }`}
           >
             <div className="animate-fade-in-up max-w-[500px] text-xl leading-tight font-medium text-gray-900 sm:text-2xl lg:text-3xl dark:text-gray-100">
-              <TextEffect per="char" preset="fade-in-blur">
+              <TextEffect per="char" preset="fade-in-blur" delay={1}>
                 {SITE_CONTENT.howItWorks.headline}
               </TextEffect>
             </div>
@@ -64,12 +64,12 @@ export function HowItWorksSection() {
           >
             <div className="animate-fade-in-up animation-delay-200 max-w-[400px] space-y-6">
               <div className="leading-relaxed text-gray-700 dark:text-gray-300">
-                <TextEffect per="char" preset="fade-in-blur">
+                <TextEffect per="char" preset="fade-in-blur" delay={1}>
                   {SITE_CONTENT.howItWorks.subheading}
                 </TextEffect>
               </div>
               <div className="leading-relaxed text-gray-600 dark:text-gray-400">
-                <TextEffect per="char" preset="fade-in-blur">
+                <TextEffect per="char" preset="fade-in-blur" delay={1}>
                   {SITE_CONTENT.howItWorks.description}
                 </TextEffect>
               </div>
