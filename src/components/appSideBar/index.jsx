@@ -1,4 +1,4 @@
-import { Home, LogOut, Package, PanelRightOpen, Settings, SlidersHorizontal, Sparkles, SquarePen } from "lucide-react";
+import { Home, LogOut, MessagesSquare, Package, PanelRightOpen, Settings, SlidersHorizontal, Sparkles } from "lucide-react";
 
 import {
   Sidebar,
@@ -10,12 +10,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import "./appSideBar.css";
-import useAuthStore from "@/store/authStore";
-import { useEffect, useState } from "react";
 import { generateSignString } from "@/lib/utils";
+import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
+import { useEffect, useState } from "react";
+import "./appSideBar.css";
 
 import {
   Menubar,
@@ -24,14 +25,29 @@ import {
   MenubarMenu, MenubarTrigger
 } from "@/components/ui/menubar";
 import { models, ORGANIZATIONAL_ROLES } from "@/constants/sidebar";
+import { useSidebarChats } from "@/hooks/useSideBarHook";
 import useLogOutDialogStore from "@/store/useLogOutDialogStore";
+import useModelsStore from "@/store/useModelsStore";
+import Link from "next/link";
 import LogOutDialog from "../dashboardComponent/logOutDialog";
+import NewChatBtn from "../dashboardComponent/newChatBtn";
+import SpinnerLoader from "../dashboardComponent/spinnerLoader";
 
 export function AppSidebar() {
-  const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
+  const { sidebarSessions, isSidebarOpen, setIsSidebarOpen } = useSideBar();
+  const [sessions, setSession ] = useState([]);
   const [organization, setOrganization] = useState("");
   const { user } = useAuthStore();
   const { openDialog } = useLogOutDialogStore();
+  const { isFetching } = useSidebarChats();
+  const { activeSessionID } = useModelsStore();
+  const { toggleSidebar: mainToggle } = useSidebar();
+
+
+  useEffect(() => {
+    setSession([...sidebarSessions]);
+  }, [sidebarSessions])
+  
 
   useEffect(() => {
     if (!user) return;
@@ -42,9 +58,10 @@ export function AppSidebar() {
 
 
   const toggleSidebar = () => {
+    mainToggle()
     setIsSidebarOpen(!isSidebarOpen);
   };
-  
+
 
   return (
     <Sidebar className="sidebar">
@@ -55,27 +72,25 @@ export function AppSidebar() {
               <div onClick={toggleSidebar} className="sidebar_pageTop_iconWrapper">
                 <PanelRightOpen size="22px" />
               </div>
-              <div className="sidebar_pageTop_iconWrapper">
-                <SquarePen size="22px" />
-              </div>
+              <NewChatBtn />
             </div>
           </SidebarGroupLabel>
           <div className="scrollableArea">
-          <SidebarGroupContent>
-            <SidebarMenu className="sidebar_menu">
-              {ORGANIZATIONAL_ROLES.includes(user?.user_name) && (
-                <SidebarMenuItem className="sidebarMenuItem admin">
-                  <SidebarMenuButton asChild>
-                    <a
-                      href={`/platform/${organization}/admin/`}
-                      className="sideBarItem"
-                    >
-                      <SlidersHorizontal className="admin-icon" />
-                      <span>Admin</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
+            <SidebarGroupContent>
+              <SidebarMenu className="sidebar_menu">
+                {ORGANIZATIONAL_ROLES.includes(user?.user_name) && (
+                  <SidebarMenuItem className="sidebarMenuItem admin">
+                    <SidebarMenuButton asChild>
+                      <Link
+                        href={`/platform/${organization}/admin/`}
+                        className="sideBarItem"
+                      >
+                        <SlidersHorizontal className="admin-icon" />
+                        <span>Admin</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
                 <SidebarMenuItem className="sidebarMenuItem admin">
                   <SidebarMenuButton asChild>
                     <a
@@ -87,65 +102,69 @@ export function AppSidebar() {
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              <SidebarMenuItem className="sidebarMenuItem">
-                <Menubar className="menuBar">
-                  <MenubarMenu>
-                    <SidebarMenuButton className="sidebarMenuBtn" asChild>
-                      <MenubarTrigger className="menubarTrigger">
-                        <div className="sideBarItem models">
-                          <Package className="home-icon" />
-                          <span>Models</span>
-                        </div>
-                      </MenubarTrigger>
-                    </SidebarMenuButton>
-                    <MenubarContent className="menubarContent">
-                      {models?.map((item, i) => (
-                        <MenubarItem key={i} className="menubarItem">
-                          <a
-                            href={`/platform/${organization}/${item.url}/`}
-                            className="menu_sideBarItem"
-                          >
-                            <item.icon />
-                            <span>{item.name}</span>
-                          </a>
-                        </MenubarItem>
-                      ))}
-                    </MenubarContent>
-                  </MenubarMenu>
-                </Menubar>
-              </SidebarMenuItem>
+                <SidebarMenuItem className="sidebarMenuItem">
+                  <Menubar className="menuBar">
+                    <MenubarMenu>
+                      <SidebarMenuButton className="sidebarMenuBtn" asChild>
+                        <MenubarTrigger className="menubarTrigger">
+                          <div className="sideBarItem models">
+                            <Package className="home-icon" />
+                            <span>Models</span>
+                          </div>
+                        </MenubarTrigger>
+                      </SidebarMenuButton>
+                      <MenubarContent className="menubarContent">
+                        {models?.map((item, i) => (
+                          <MenubarItem key={i} className="menubarItem">
+                            <a
+                              href={`/platform/${organization}/${item.url}/`}
+                              className="menu_sideBarItem"
+                            >
+                              <item.icon />
+                              <span>{item.name}</span>
+                            </a>
+                          </MenubarItem>
+                        ))}
+                      </MenubarContent>
+                    </MenubarMenu>
+                  </Menubar>
+                </SidebarMenuItem>
 
-              <SidebarMenuItem className="sidebarMenuItem admin">
-                <SidebarMenuButton asChild>
-                  <a
-                    href={`/platform/${organization}/settings/`}
-                    className="sideBarItem"
-                  >
-                    <Settings className="settings-icon" />
-                    <span>Settings</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-          {/* <SidebarGroupContent>
-            <SidebarMenu className="sidebar_menu">
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title} className="sidebarMenuItem">
-                  <SidebarMenuButton className="sidebarMenuBtn" asChild>
-                    <a
-                      href={`/platform/${organization}/${item.url}/`}
+                <SidebarMenuItem className="sidebarMenuItem admin">
+                  <SidebarMenuButton asChild>
+                    <Link
+                      href={`/platform/${organization}/settings/`}
                       className="sideBarItem"
                     >
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                      <Settings className="settings-icon" />
+                      <span>Settings</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
-              
-            </SidebarMenu>
-          </SidebarGroupContent> */}
+
+                <p className="chatsLabel"> - Chats</p>
+                {!isFetching ? (
+                  <>
+                    {sessions?.map((session, i) => (
+                      <SidebarMenuItem key={i} className="sidebarMenuItem">
+                        <SidebarMenuButton className="sidebarMenuBtn" asChild>
+                          <Link
+                            href={`/platform/${organization}/${session?.assistant_slug}/${session?.id}`}
+                            className={`sideBarItem ${activeSessionID === session?.id && 'active'}`}
+                          >
+                            <MessagesSquare />
+                            <span>{session.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}</>
+                ) : (
+                  <div className="loadingIndicator">
+                    <SpinnerLoader className="smaller" />
+                  </div>
+                )}
+              </SidebarMenu>
+            </SidebarGroupContent>
           </div>
         </SidebarGroup>
       </SidebarContent>

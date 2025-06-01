@@ -7,16 +7,16 @@ import ModelName from "@/components/modelsComponent/modelName";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import { PanelRightOpen } from "lucide-react";
-import "./carousel.css";
+import "../carousel.css";
 
-const CarouselPage = () => {
+const CarouselChat = () => {
   const isMobile = useIsMobile();
 
   const {
     isSidebarOpen,
     toggleSidebar,
     modelDescription,
-    // isFetchingChats,
+    isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -53,6 +53,8 @@ const CarouselPage = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            assistantSlug={'carousel'}
+            isFetchingChats={isFetchingChats}
           />
           <ChatInputArea
             inputValue={inputValue}
@@ -69,4 +71,4 @@ const CarouselPage = () => {
   );
 };
 
-export default CarouselPage;
+export default CarouselChat;

@@ -1,18 +1,23 @@
 "use client";
 
-import "./storyteller.css";
-import { PanelRightOpen, SquarePen } from "lucide-react";
-import ModelName from "@/components/modelsComponent/modelName";
-import useStoryteller from "@/hooks/useStoryteller";
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
+import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
+import ModelName from "@/components/modelsComponent/modelName";
+import { useIsMobile } from "@/hooks/use-mobile";
+import useAssistantChat from "@/hooks/useAssistantChat";
+import { PanelRightOpen } from "lucide-react";
+import "./storyteller.css";
 
 const StorytellerModel = () => {
+  const isMobile = useIsMobile();
+
   const {
     isSidebarOpen,
     toggleSidebar,
     modelName,
     modelDescription,
+    // isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -22,13 +27,14 @@ const StorytellerModel = () => {
     sendBtnActive,
     chats,
     messagesEndRef,
-    aiSuggestions,
-  } = useStoryteller();
+    aiSuggestions
+  } = useAssistantChat('Storyteller', 'storyteller');
 
-  return (
+
+  return ( 
     <div className="storytelling-page_content">
       <div className="storytelling-pageTop">
-        {!isSidebarOpen && (
+        {(!isSidebarOpen || isMobile) && (
           <>
             <div
               onClick={toggleSidebar}
@@ -36,12 +42,10 @@ const StorytellerModel = () => {
             >
               <PanelRightOpen size="22px" />
             </div>
-            <div className="storytelling-pageTop_iconWrapper">
-              <SquarePen size="22px" />
-            </div>
+            <NewChatBtn alt />
           </>
         )}
-        <ModelName name={modelName} content={modelDescription} />
+        <ModelName name={'storyteller'} content={modelDescription} />
       </div>
       <div className="storytelling-pageBody">
         <div className="storytelling-pageBody_innerBox">

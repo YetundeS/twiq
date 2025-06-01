@@ -1,35 +1,38 @@
 "use client";
 
-import "./headlines.css";
-import { PanelRightOpen, SquarePen } from "lucide-react";
-import useHeadlines from "@/hooks/useHeadlines";
-import ModelName from "@/components/modelsComponent/modelName";
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
+import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
+import ModelName from "@/components/modelsComponent/modelName";
+import { useIsMobile } from "@/hooks/use-mobile";
+import useAssistantChat from "@/hooks/useAssistantChat";
+import { PanelRightOpen } from "lucide-react";
+import "./headlines.css";
 
 const HeadlinesModel = () => {
+  const isMobile = useIsMobile();
 
-    const {
-      isSidebarOpen,
-      toggleSidebar,
-      modelName,
-      modelDescription,
-      inputValue,
-      setInputValue,
-      sendMessage,
-      closeStreaming,
-      streamingData,
-      streaming,
-      sendBtnActive,
-      chats,
-      messagesEndRef,
-      aiSuggestions
-    } = useHeadlines();
+  const {
+    isSidebarOpen,
+    toggleSidebar,
+    modelDescription,
+    // isFetchingChats,
+    inputValue,
+    setInputValue,
+    sendMessage,
+    closeStreaming,
+    streamingData,
+    streaming,
+    sendBtnActive,
+    chats,
+    messagesEndRef,
+    aiSuggestions
+  } = useAssistantChat('Headlines', 'headlines');
 
   return (
     <div className="headline-page_content">
       <div className="headline-pageTop">
-        {!isSidebarOpen && (
+        {(!isSidebarOpen || isMobile) && (
           <>
             <div
               onClick={toggleSidebar}
@@ -37,12 +40,10 @@ const HeadlinesModel = () => {
             >
               <PanelRightOpen size="22px" />
             </div>
-            <div className="headline-pageTop_iconWrapper">
-              <SquarePen size="22px" />
-            </div>
+            <NewChatBtn alt />
           </>
         )}
-        <ModelName name={modelName} content={modelDescription} />
+        <ModelName name={'headlines'} content={modelDescription} />
       </div>
       <div className="headline-pageBody">
         <div className="headlines-pageBody_innerBox">

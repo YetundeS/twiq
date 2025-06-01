@@ -35,7 +35,6 @@
     gap: .4rem;
     color: var(--sidebar-toggle-btn);
     overflow: hidden;
-    /* border: 1px solid white; */
 }
 
 .carousel_pageTop_iconWrapper {
@@ -53,7 +52,6 @@
     background-color: #393939;
 }
 
-
 .carousel_pageBody {
     width: 100%;
     height: calc(100vh - 58px);
@@ -62,18 +60,24 @@
     box-sizing: border-box;
     padding: 0 2rem;
     padding-bottom: .5rem;
-    /* border: 1px solid white; */
     box-sizing: border-box;
     align-items: center;
 }
 
 .carousel_pageBody_innerBox {
-    width: 60%;
+    width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     box-sizing: border-box;
     flex-direction: column;
-    /* border: 1px solid white; */
     position: relative;
+}
+
+@media (max-width: 600px) {
+
+    .carousel_pageBody {
+        padding: 0 1.2rem;
+        padding-bottom: .5rem;
+    }
 }

@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import "./mt.css";
 import { assistantPromptTemplates } from "@/constants/model";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import "./mt.css";
 
-const ModelTemplates = ({ setInputValue }) => {
+const ModelTemplates = ({ setInputValue, assistantSlug }) => {
   const pathname = usePathname();
   const [templates, setTemplates] = useState([]);
 
   useEffect(() => {
-    const key = pathname?.split("/").pop(); // gets 'carousel' from '/carousel'
+    const key = assistantSlug ? assistantSlug : pathname?.split("/").pop();
     const matchedTemplates = assistantPromptTemplates[key];
 
     if (matchedTemplates) {
@@ -18,7 +18,7 @@ const ModelTemplates = ({ setInputValue }) => {
     } else {
       setTemplates([]);
     }
-  }, [pathname]);
+  }, [pathname, assistantSlug]);
 
   return (
     <div className="modelTemplates">
