@@ -1,4 +1,6 @@
+import { ThemeProvider } from "@/components/ui/theme-provider";
 import {
+  Cormorant_Garamond,
   Geist,
   Geist_Mono,
   Inter,
@@ -37,35 +39,43 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
 export const metadata = {
-  title: "TWIQ – AI-Powered Scriptwriting Research Assistant",
+  title: "TWIQ AI Coaches – Content Creation Powered by Storytelling",
   description:
-    "TWIQ helps content creators and video scriptwriters turn ideas into compelling video scripts using the T/W/I/Q Method – Thought, Wisdom, Insight, and Questions.",
+    "Supercharge your content with AI coaches trained in the TWIQ Method. Generate carousels, scripts, captions, headlines, and LinkedIn posts tailored to your industry and audience—effortlessly.",
   keywords: [
-    "video scriptwriting",
-    "content creation AI",
-    "storytelling assistant",
-    "TWIQ method",
-    "script planning tool",
-    "creative research AI",
-    "scriptwriting SaaS",
-    "AI for YouTube creators",
-    "content strategy AI",
+    "TWIQ Method",
+    "AI content creation",
+    "AI carousel generator",
+    "AI script writer",
+    "LinkedIn AI assistant",
+    "AI captions",
+    "Instagram carousels",
+    "video scripts",
+    "Reels and TikToks",
+    "content marketing tools",
+    "AI storytelling",
+    "thought leadership content"
   ],
-  authors: [{ name: "Your Company Name", url: "https://yourdomain.com" }],
-  creator: "Your Company Name",
   openGraph: {
-    title: "TWIQ – AI-Powered Scriptwriting Research Assistant",
+    title: "TWIQ AI Coaches – Scroll-Stopping Content, Instantly",
     description:
-      "Plan, research, and structure compelling video scripts faster with TWIQ. Built for content creators using the T/W/I/Q storytelling framework.",
-    url: "https://yourdomain.com",
-    siteName: "TWIQ",
+      "7 expert AI coaches. One TWIQ framework. Build content that hooks, converts, and connects—carousels, captions, scripts, and more.",
+    url: "https://yourdomain.com", // replace with your domain
+    siteName: "TWIQ AI Coaches",
     images: [
       {
-        url: "https://yourdomain.com/og-image.jpg",
+        url: "https://yourdomain.com/og-image.png", // Add your social sharing image
         width: 1200,
         height: 630,
-        alt: "TWIQ – AI Scriptwriting Assistant",
+        alt: "TWIQ AI Coaches – Powered by Storytelling",
       },
     ],
     locale: "en_US",
@@ -73,15 +83,14 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "TWIQ – AI Scriptwriting Assistant",
+    title: "TWIQ AI Coaches",
     description:
-      "TWIQ is built for creators. Structure your ideas and research into powerful scripts using the T/W/I/Q Method.",
-    creator: "@yourhandle",
-    images: ["https://yourdomain.com/og-image.jpg"],
+      "AI-powered carousel, video, and caption generators built for creators using the TWIQ storytelling method.",
+    images: ["https://yourdomain.com/og-image.png"], // Add your social image
+    creator: "@yourTwitterHandle", // optional
   },
-  metadataBase: new URL("https://yourdomain.com"),
+  metadataBase: new URL("https://yourdomain.com"), // replace with your domain
 };
-
 
 
 export default function RootLayout({ children }) {
@@ -124,9 +133,9 @@ export default function RootLayout({ children }) {
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lato.variable} ${sourceSans3.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lato.variable} ${sourceSans3.variable} ${cormorant.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
         <Toaster />
       </body>
     </html>

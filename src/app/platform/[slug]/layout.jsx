@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }) {
     const isMobile = useIsMobile();
 
   const isHydrated = useHydrationZustand(useAuthStore);
-    const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     if (isHydrated && !user) {

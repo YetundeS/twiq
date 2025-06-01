@@ -6,6 +6,9 @@ import { toast } from "sonner";
 import useAuthStore from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { sendResetMail } from "@/apiCalls/authAPI";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 const RecoverPassword = () => {
   const [formData, setFormData] = useState({
@@ -74,27 +77,39 @@ const RecoverPassword = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="authForm">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {/* Email */}
-      <div className="authForm_field">
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className="formInput"
-          placeholder="Enter your email"
-        />
+      <div>
+        <Label
+          htmlFor="email"
+          className="font-medium text-gray-700 dark:text-gray-300"
+        >
+          Email
+        </Label>
+        <div className="relative mt-2">
+          <Input
+            id="email"
+            type="email"
+            placeholder="your@email.com"
+            value={formData.email}
+            onChange={handleChange}
+            className="rounded-xl border-gray-200 py-3 pr-4 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
+          />
+        </div>
       </div>
 
       {/* Submit Button */}
-      <button type="submit" className="formBtn">
+      <Button
+        type="submit"
+        className="w-full cursor-pointer rounded-xl bg-gray-900 py-3 text-lg font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+      >
         {!loading ? (
-          <p>Get reset email</p>
+          <p>Reset password</p>
         ) : (
           <CircularProgress color="white" size="17px" />
         )}
-      </button>
+      </Button>
+
       {errors?.email && <p className="textError">{errors?.email}</p>}
     </form>
   );

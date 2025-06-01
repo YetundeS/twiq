@@ -1,4 +1,9 @@
-.landingPage {
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* .landingPage {
     width: 100vw;
     min-height: 100vh;
     height: max-content;
@@ -6,24 +11,22 @@
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-}
-
-
+} */
 
 /* Mobile */
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
 
 .landingPage {
 }
 
 
-}
+} */
 
 /* Mobile */
-@media (max-width: 575px) {
+/* @media (max-width: 575px) {
 
 .landingPage {
 }
 
 
-}
+} */
