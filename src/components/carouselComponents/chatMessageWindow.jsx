@@ -1,3 +1,4 @@
+import SpinnerLoader from "../dashboardComponent/spinnerLoader";
 import ModelTemplates from "../modelsComponent/modelTemplates";
 import "./cc.css";
 import ChatMessage, { ChatLoader } from "./chatMessage/chatMessage";
@@ -8,25 +9,35 @@ const ChatMessageWindow = ({
   streaming,
   messagesEndRef,
   setInputValue,
+  assistantSlug,
+  isFetchingChats
 }) => {
   return (
     <div className="chats_area">
-      {chats?.length > 0 ? (
-        <>
-          {chats?.map((chat, i) => (
-            <ChatMessage chat={chat} key={i} />
-          ))}
-          {streamingData && (
-            <ChatMessage chat={{ message: streamingData, sender: "bot" }} />
-          )}
-          {streaming && !streamingData && <ChatLoader />}
-          <div className="messagesEnd" ref={messagesEndRef} />
-        </>
-      ) : (
-        <div className="newChatArea">
-          <ModelTemplates setInputValue={setInputValue} />
-          <div className="messagesEnd" ref={messagesEndRef} />
+      {isFetchingChats ? (
+        <div className="loadingIndicator">
+          <SpinnerLoader className="smaller" />
         </div>
+      ) : (
+        <>
+          {chats?.length > 0 ? (
+            <>
+              {chats?.map((chat, i) => (
+                <ChatMessage chat={chat} key={i} />
+              ))}
+              {streaming && streamingData && (
+                <ChatMessage chat={{ content: streamingData, sender: "assistant" }} />
+              )}
+              {streaming && !streamingData && <ChatLoader />}
+              <div className="messagesEnd" ref={messagesEndRef}></div>
+            </>
+          ) : (
+            <div className="newChatArea">
+              <ModelTemplates assistantSlug={assistantSlug} setInputValue={setInputValue} />
+              <div className="messagesEnd" ref={messagesEndRef} />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

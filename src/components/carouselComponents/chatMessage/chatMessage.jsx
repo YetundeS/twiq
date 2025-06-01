@@ -1,9 +1,10 @@
 import Markdown from "react-markdown";
-import "./cm.css";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import "./cm.css";
 
 const ChatMessage = ({ chat }) => {
+  
   return (
     <div
       className={`chatMessage_message ${
@@ -12,9 +13,9 @@ const ChatMessage = ({ chat }) => {
     >
       <div className="aitextMessageBlock">
         {chat?.sender !== "user" ? (
-          <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{chat?.message}</Markdown>
+          <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{chat?.content}</Markdown>
         ) : (
-          <p>{chat?.message}</p>
+          <p>{chat?.content}</p>
         )}
       </div>
     </div>
@@ -24,7 +25,8 @@ const ChatMessage = ({ chat }) => {
 export const ChatLoader = () => {
   return (
     <div className={`chatMessage loading`}>
-        <div className="loader"></div>
+        {/* <div className="loader"></div> */}
+        <p className="fade-text">Thinking...</p>
     </div>
   );
 };

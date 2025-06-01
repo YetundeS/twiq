@@ -4,19 +4,17 @@ import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
-import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import { PanelRightOpen } from "lucide-react";
-import "./carousel.css";
+import "../headlines.css";
 
-const CarouselPage = () => {
-  const isMobile = useIsMobile();
-
+const CarouselChat = () => {
   const {
     isSidebarOpen,
     toggleSidebar,
+    modelName,
     modelDescription,
-    // isFetchingChats,
+    isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -27,32 +25,34 @@ const CarouselPage = () => {
     chats,
     messagesEndRef,
     aiSuggestions
-  } = useAssistantChat('Carousel', 'carousel');
+      } = useAssistantChat('Headlines', 'headlines');
 
   return (
-    <div className="carousel_page_content">
-      <div className="carousel_pageTop">
-        {(!isSidebarOpen || isMobile) && (
+    <div className="headline-page_content">
+      <div className="headline-pageTop">
+        {!isSidebarOpen && (
           <>
             <div
               onClick={toggleSidebar}
-              className="carousel_pageTop_iconWrapper"
+              className="headline-pageTop_iconWrapper"
             >
               <PanelRightOpen size="22px" />
             </div>
             <NewChatBtn alt />
           </>
         )}
-        <ModelName name={'carousel'} content={modelDescription} />
+        <ModelName name={'headlines'} content={modelDescription} />
       </div>
-      <div className="carousel_pageBody">
-        <div className="carousel_pageBody_innerBox">
+      <div className="headline-pageBody">
+        <div className="headlines-pageBody_innerBox">
           <ChatMessageWindow
             chats={chats}
             streamingData={streamingData}
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            assistantSlug={'headlines'}
+            isFetchingChats={isFetchingChats}
           />
           <ChatInputArea
             inputValue={inputValue}
@@ -69,4 +69,4 @@ const CarouselPage = () => {
   );
 };
 
-export default CarouselPage;
+export default CarouselChat;

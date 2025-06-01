@@ -1,4 +1,3 @@
-
 .vs-page_content {
     width: 100%;
     min-height: 100vh;
@@ -10,7 +9,8 @@
 
 /* Define the scrollbar width first */
 .vs-page_content::-webkit-scrollbar {
-  width: 12px; /* or whatever width you want */
+    width: 12px;
+    /* or whatever width you want */
 }
 
 /* Style the scrollbar track */
@@ -20,9 +20,9 @@
 
 /* Optional: style the thumb (the draggable part) */
 .vs-page_content::-webkit-scrollbar-thumb {
-  background-color: rgb(146, 146, 146);
-  border: 4px solid var(--page-content-bg); 
-  border-radius: 10px;
+    background-color: rgb(146, 146, 146);
+    border: 4px solid var(--page-content-bg);
+    border-radius: 10px;
 }
 
 .vs-pageTop {
@@ -35,7 +35,6 @@
     gap: .4rem;
     color: var(--sidebar-toggle-btn);
     overflow: hidden;
-    /* border: 1px solid white; */
 }
 
 .vs-pageTop_iconWrapper {
@@ -54,6 +53,7 @@
 }
 
 
+
 .vs-pageBody {
     width: 100%;
     height: calc(100vh - 58px);
@@ -62,18 +62,24 @@
     box-sizing: border-box;
     padding: 0 2rem;
     padding-bottom: .5rem;
-    /* border: 1px solid white; */
     box-sizing: border-box;
     align-items: center;
 }
 
 .vs-pageBody_innerBox {
-    width: 60%;
+    width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     box-sizing: border-box;
     flex-direction: column;
-    /* border: 1px solid white; */
     position: relative;
+}
+
+@media (max-width: 600px) {
+
+    .vs-pageBody {
+        padding: 0 1.2rem;
+        padding-bottom: .5rem;
+    }
 }

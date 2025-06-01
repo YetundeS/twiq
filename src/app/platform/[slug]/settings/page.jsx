@@ -1,25 +1,6 @@
-"use client";
-
 import { Construction } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import "./admin.css";
-
-const Admin = () => {
-
-  return (
-    <div className="admin-dashboard">
-      <div className="page_content">
-        <UnderDevelopment />
-        </div>
-    </div>
-  );
-};
-
-export default Admin;
 
 const UnderDevelopment = () => {
-  const router = useRouter();
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white px-4">
       <div className="text-center space-y-6 max-w-md">
@@ -33,14 +14,16 @@ const UnderDevelopment = () => {
           We're working hard to bring this page to life. Check back soon for updates!
         </p>
         <div className="pt-4">
-          <button
-            onClick={() => router.back()}
+          <a
+            href="/"
             className="inline-block bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold px-6 py-3 rounded-xl transition duration-200"
           >
-            Go Back
-          </button>
+            Back to Home
+          </a>
         </div>
       </div>
     </div>
   );
 };
+
+export default UnderDevelopment;

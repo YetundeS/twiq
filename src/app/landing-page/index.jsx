@@ -1,11 +1,11 @@
+import { FAQSection } from "@/components/landingPageComponents/FAQSection";
+import { FeatureCardsSequence } from "@/components/landingPageComponents/FeatureCardsSequence";
 import { Header } from "@/components/landingPageComponents/Header";
 import { HeroSection } from "@/components/landingPageComponents/HeroSection";
 import { HowItWorksSection } from "@/components/landingPageComponents/HowItWorksSection";
+import { PricingSection } from "@/components/landingPageComponents/PricingSection";
 import { StickyPrompt } from "@/components/landingPageComponents/StickyPrompt";
 import { TestimonialsSection } from "@/components/landingPageComponents/TestimonialsSection";
-import { PricingSection } from "@/components/landingPageComponents/PricingSection";
-import { FAQSection } from "@/components/landingPageComponents/FAQSection";
-import { FeatureCardsSequence } from "@/components/landingPageComponents/FeatureCardsSequence";
 
 const LandingPage = () => {
   return (

@@ -1,18 +1,22 @@
 "use client";
 
-import useLIB from "@/hooks/useLIB";
-import "./lb.css";
-import { PanelRightOpen, SquarePen } from "lucide-react";
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
+import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
+import { useIsMobile } from "@/hooks/use-mobile";
+import useAssistantChat from "@/hooks/useAssistantChat";
+import { PanelRightOpen } from "lucide-react";
+import "./lb.css";
 
 const LinkedInBusinessModel = () => {
+  const isMobile = useIsMobile();
+
   const {
     isSidebarOpen,
     toggleSidebar,
-    modelName,
     modelDescription,
+    // isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -22,23 +26,22 @@ const LinkedInBusinessModel = () => {
     sendBtnActive,
     chats,
     messagesEndRef,
-    aiSuggestions,
-  } = useLIB();
+    aiSuggestions
+  } = useAssistantChat("LinkedIn Your Business", 'linkedin_business');
+
 
   return (
     <div className="lb-page_content">
       <div className="lb-pageTop">
-        {!isSidebarOpen && (
+        {(!isSidebarOpen || isMobile) && (
           <>
             <div onClick={toggleSidebar} className="lb-pageTop_iconWrapper">
               <PanelRightOpen size="22px" />
             </div>
-            <div className="lb-pageTop_iconWrapper">
-              <SquarePen size="22px" />
-            </div>
+            <NewChatBtn alt />
           </>
         )}{" "}
-        <ModelName name={modelName} content={modelDescription} />
+        <ModelName name={'LinkedIn Your Business'} content={modelDescription} />
       </div>
       <div className="lb-pageBody">
         <div className="lb-pageBody_innerBox">
