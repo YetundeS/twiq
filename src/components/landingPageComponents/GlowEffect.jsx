@@ -11,7 +11,7 @@ export function GlowEffect({ children }) {
         style={{
           filter: "blur(40px)",
           background:
-            "linear-gradient(45deg, #fbcfe8, #e879f9, #c084fc, #93c5fd, #bfdbfe)",
+            "linear-gradient(45deg, #fce7f3, #f8bbd9, #e0e7ff, #bfdbfe, #dbeafe)",
         }}
         animate={{
           scale: [1, 1.05, 0.98, 1.03, 1],
@@ -20,11 +20,11 @@ export function GlowEffect({ children }) {
           x: [0, 3, -2, 1, 0],
           y: [0, -2, 3, -1, 0],
           background: [
-            "linear-gradient(45deg, #fbcfe8, #e879f9, #c084fc, #93c5fd)",
-            "linear-gradient(90deg, #f8bbd9, #a78bfa, #60a5fa, #bfdbfe)",
-            "linear-gradient(135deg, #f0abfc, #8b5cf6, #3b82f6, #dbeafe)",
-            "linear-gradient(180deg, #c084fc, #6366f1, #93c5fd, #fbcfe8)",
-            "linear-gradient(45deg, #fbcfe8, #e879f9, #c084fc, #93c5fd)",
+            "linear-gradient(45deg, #fce7f3, #f8bbd9, #e0e7ff, #bfdbfe)",
+            "linear-gradient(90deg, #fbcfe8, #c7d2fe, #93c5fd, #dbeafe)",
+            "linear-gradient(135deg, #f9a8d4, #e0e7ff, #60a5fa, #f0f9ff)",
+            "linear-gradient(180deg, #fce7f3, #ddd6fe, #bfdbfe, #fbcfe8)",
+            "linear-gradient(45deg, #fce7f3, #f8bbd9, #e0e7ff, #bfdbfe)",
           ],
         }}
         transition={{
@@ -40,7 +40,7 @@ export function GlowEffect({ children }) {
         className="absolute inset-x-[-8%] inset-y-[-4%] z-0 rounded-[inherit] opacity-25 blur-xl"
         style={{
           filter: "blur(30px)",
-          background: "linear-gradient(90deg, #f8bbd9, #a78bfa, #60a5fa)",
+          background: "linear-gradient(90deg, #fbcfe8, #e0e7ff, #93c5fd)",
         }}
         animate={{
           scale: [0.95, 1.08, 0.92, 1.04, 0.95],
@@ -49,11 +49,11 @@ export function GlowEffect({ children }) {
           x: [0, -4, 3, -2, 0],
           y: [0, 4, -3, 2, 0],
           background: [
-            "linear-gradient(90deg, #f8bbd9, #a78bfa, #60a5fa)",
-            "linear-gradient(135deg, #fbcfe8, #8b5cf6, #3b82f6)",
-            "linear-gradient(180deg, #f0abfc, #6366f1, #93c5fd)",
-            "linear-gradient(225deg, #c084fc, #4f46e5, #dbeafe)",
-            "linear-gradient(90deg, #f8bbd9, #a78bfa, #60a5fa)",
+            "linear-gradient(90deg, #fbcfe8, #e0e7ff, #93c5fd)",
+            "linear-gradient(135deg, #fce7f3, #c7d2fe, #60a5fa)",
+            "linear-gradient(180deg, #f9a8d4, #ddd6fe, #bfdbfe)",
+            "linear-gradient(225deg, #f8bbd9, #e0e7ff, #dbeafe)",
+            "linear-gradient(90deg, #fbcfe8, #e0e7ff, #93c5fd)",
           ],
         }}
         transition={{
@@ -70,7 +70,7 @@ export function GlowEffect({ children }) {
         className="absolute inset-x-[-6%] inset-y-[-3%] z-0 rounded-[inherit] opacity-20 blur-lg"
         style={{
           filter: "blur(20px)",
-          background: "linear-gradient(180deg, #f0abfc, #8b5cf6, #93c5fd)",
+          background: "linear-gradient(180deg, #f9a8d4, #ddd6fe, #bfdbfe)",
         }}
         animate={{
           scale: [1.02, 0.94, 1.06, 0.96, 1.02],
@@ -78,10 +78,10 @@ export function GlowEffect({ children }) {
           x: [0, 2, -3, 1, 0],
           y: [0, -3, 1, -2, 0],
           background: [
-            "linear-gradient(180deg, #f0abfc, #8b5cf6, #93c5fd)",
-            "linear-gradient(270deg, #e879f9, #6366f1, #bfdbfe)",
-            "linear-gradient(0deg, #c084fc, #4f46e5, #dbeafe)",
-            "linear-gradient(180deg, #f0abfc, #8b5cf6, #93c5fd)",
+            "linear-gradient(180deg, #f9a8d4, #ddd6fe, #bfdbfe)",
+            "linear-gradient(270deg, #fce7f3, #c7d2fe, #93c5fd)",
+            "linear-gradient(0deg, #fbcfe8, #e0e7ff, #dbeafe)",
+            "linear-gradient(180deg, #f9a8d4, #ddd6fe, #bfdbfe)",
           ],
         }}
         transition={{
@@ -97,15 +97,15 @@ export function GlowEffect({ children }) {
         className="absolute inset-x-[-3%] inset-y-[-1.5%] z-0 rounded-[inherit] opacity-30"
         style={{
           filter: "blur(10px)",
-          background: "linear-gradient(45deg, #f8bbd9, #a78bfa, #93c5fd)",
+          background: "linear-gradient(45deg, #f8bbd9, #e0e7ff, #bfdbfe)",
         }}
         animate={{
           scale: [1, 1.02, 1],
           opacity: [0.25, 0.35, 0.25],
           background: [
-            "linear-gradient(45deg, #f8bbd9, #a78bfa, #93c5fd)",
-            "linear-gradient(135deg, #f0abfc, #6366f1, #bfdbfe)",
-            "linear-gradient(45deg, #f8bbd9, #a78bfa, #93c5fd)",
+            "linear-gradient(45deg, #f8bbd9, #e0e7ff, #bfdbfe)",
+            "linear-gradient(135deg, #fce7f3, #c7d2fe, #93c5fd)",
+            "linear-gradient(45deg, #f8bbd9, #e0e7ff, #bfdbfe)",
           ],
         }}
         transition={{
