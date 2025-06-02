@@ -30,7 +30,7 @@ export function Header() {
   if (!mounted) {
     return (
       <header className="absolute top-0 right-0 left-0 z-50 bg-transparent">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
             <div className="text-2xl font-bold text-purple-600">
               <TextEffect per="char" preset="fade-in-blur" delay={300}>
@@ -49,7 +49,7 @@ export function Header() {
 
   return (
     <header className="absolute top-0 right-0 left-0 z-50 bg-transparent">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <div className="flex items-center">
             <div
