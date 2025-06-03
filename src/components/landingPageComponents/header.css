@@ -1,0 +1,15 @@
+
+.navbarComp {
+  width: 100vw;
+  max-width: 1800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.navbarInner_box {
+  width: 100vw;
+  max-width: 1800px;
+  margin: 0 auto;
+}

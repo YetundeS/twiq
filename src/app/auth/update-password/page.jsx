@@ -1,10 +1,10 @@
 "use client";
 
-import "../auth.css";
-import { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
 import UpdatePasswordForm from "@/components/authComponents/authForms/updatePasswordForm";
+import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import "../auth.css";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -12,56 +12,8 @@ const supabase = createClient(
 );
 
 const UpdatePassword = () => {
-  const [accessToken, setAccessToken] = useState("");
-  const [refreshToken, setRefreshToken] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // useEffect(() => {
-  //   // Get the access token and refresh token from the URL
-  //   if (typeof window !== "undefined") {
-  //     const hashParams = new URLSearchParams(window.location.hash.substring(1));
-  //     setAccessToken(hashParams.get("access_token") || "");
-  //     setRefreshToken(hashParams.get("refresh_token") || "");
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   // Authenticate the user using the access token and refresh token
-  //   const getSessionWithTokens = async () => {
-  //     if (accessToken && refreshToken) {
-  //       const { data, error } = await supabase.auth.setSession({
-  //         access_token: accessToken,
-  //         refresh_token: refreshToken,
-  //       });
-
-  //       if (error) {
-  //         setError("Invalid or expired link.");
-  //         toast.error("Error validating your session", {
-  //           description: error.message,
-  //           style: {
-  //             border: "none",
-  //             color: "red",
-  //           },
-  //         });
-  //       } else {
-  //         setError(null);
-  //       }
-  //     }
-
-  //     setLoading(false);
-  //   };
-
-  //   // Call this function only when accessToken and refreshToken are available.
-  //   if (accessToken && refreshToken) {
-  //     getSessionWithTokens();
-  //   } else {
-  //     setTimeout(() => {
-  //       setError("Access and Refresh Tokens Needed.");
-  //       setLoading(false);
-  //     }, 2500);
-  //   }
-  // }, [accessToken, refreshToken]);
 
   useEffect(() => {
   const getSessionFromURL = async () => {
@@ -138,7 +90,7 @@ const UpdatePassword = () => {
         <div className="authForm_wrapper">
           {loading && <h3 className="formTitle">Verifying...</h3>}
           {error && <h3 className="formTitle">{error}</h3>}
-          {!loading && !error && (
+          { (
             <>
               <h3 className="formTitle">Update password</h3>
               <p className="subTxt">
