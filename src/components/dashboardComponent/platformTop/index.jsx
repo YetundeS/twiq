@@ -5,17 +5,20 @@ import { CircleUserRound, Moon, Sun } from 'lucide-react';
 import Image from 'next/image';
 import './platformTop.css';
 
-
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar';
 import { accountPopMenu } from '@/constants/dahsboard';
 import { generateSignString } from '@/lib/utils';
+import useLogOutDialogStore from '@/store/useLogOutDialogStore';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import LogOutDialog from '../logOutDialog';
 
 const PlatformTop = () => {
     const { theme, setTheme } = useTheme();
     const { user } = useAuthStore();
     const [organization, setOrganization] = useState("");
+    const { openDialog } = useLogOutDialogStore();
 
     useEffect(() => {
         if (!user) return;
@@ -71,18 +74,28 @@ const PlatformTop = () => {
                     <MenubarContent className="menubarContent">
                         {accountPopMenu?.map((item, i) => (
                             <MenubarItem key={i} className="menubarItem platformTop">
-                                <a
-                                    href={`/platform/${organization}/${item.url}/`}
-                                    className="menu_sideBarItem"
-                                >
-                                    <item.icon />
-                                    <span>{item.name}</span>
-                                </a>
+                                {item?.name !== "Log Out" ?
+                                    (<Link
+                                        href={`/platform/${organization}/${item.url}/`}
+                                        className="menu_sideBarItem"
+                                    >
+                                        <item.icon />
+                                        <span>{item.name}</span>
+                                    </Link>
+                                    ) : (
+                                        <div onClick={openDialog}
+                                            className="menu_sideBarItem"
+                                        >
+                                            <item.icon />
+                                            <span>{item.name}</span>
+                                        </div>
+                                    )}
                             </MenubarItem>
                         ))}
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>
+            <LogOutDialog />
         </div>
     )
 }

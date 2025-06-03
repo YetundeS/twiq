@@ -16,8 +16,8 @@ const StorytellerModel = () => {
   const {
     isSidebarOpen,
     toggleSidebar,
-    modelName,
-    modelDescription,
+    // modelName,
+    // modelDescription,
     // isFetchingChats,
     inputValue,
     setInputValue,

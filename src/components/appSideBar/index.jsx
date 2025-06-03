@@ -113,7 +113,9 @@ export function AppSidebar() {
                           </div>
                         </MenubarTrigger>
                       </SidebarMenuButton>
-                      <MenubarContent className="menubarContent">
+                      <MenubarContent
+                        align="start"
+                        side="right" className="menubarContent">
                         {models?.map((item, i) => (
                           <MenubarItem key={i} className="menubarItem">
                             <a

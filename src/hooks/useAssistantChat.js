@@ -41,7 +41,7 @@ export default function useAssistantChat( modelName, assistantSlug) {
   useEffect(() => {
     const match = pathname.match(/\/platform\/@[^/]+\/[^/]+\/([^/?#]+)/);
     const sessionId = match?.[1];
-    console.log('sessionId: ', sessionId)
+    
     if (!sessionId) return;
 
     setIsFetchingChats(true);

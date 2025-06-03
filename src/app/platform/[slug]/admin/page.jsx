@@ -1,17 +1,17 @@
 "use client";
 
+import "@/styles/platformStyles.css";
 import { Construction } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import "./admin.css";
+// import "./admin.css";
+import "@/styles/platformStyles.css";
 
 const Admin = () => {
 
   return (
-    <div className="admin-dashboard">
       <div className="page_content">
         <UnderDevelopment />
         </div>
-    </div>
   );
 };
 

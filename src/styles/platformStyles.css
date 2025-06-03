@@ -5,7 +5,8 @@
 
     color: var(--page-text);
     overflow-x: hidden;
-    transition: background 0.2s linear;;
+    transition: background 0.2s linear;
+    border: 1px solid rgb(0, 0, 0);
 }
 
 /* Define the scrollbar width first */

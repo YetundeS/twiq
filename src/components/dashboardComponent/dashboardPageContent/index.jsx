@@ -3,7 +3,6 @@
 import ModelOverview from "@/components/modelOverview";
 import { generateSignString } from "@/lib/utils";
 import useAuthStore from "@/store/authStore";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { modelsOverview } from "../../../constants/dahsboard";
 import PlatformTop from "../platformTop";
@@ -22,24 +21,15 @@ const DashboardPageContent = () => {
   
 
   return (
-    <div className="page_content ">
-      <div className="pageTop">
+    <div className="db_page_content">
+      <div className="db_pageTop">
         <PlatformTop />
       </div>
-      <div className="pageBody">
-        <div className="aboveTheFold">
+      <div className="db_pageBody">
+        <div className="db_aboveTheFold">
           <TitleWithUnderline title={`Welcome, ${user?.user_name}`} />
-          {user?.logo_url && (
-            <Image
-              src={user?.logo_url}
-              width={700}
-              height={400}
-              alt="logo"
-              className="userLogo"
-            />
-          )}
         </div>
-        <div className="modelsOverview">
+        <div className="db_modelsOverview">
           {modelsOverview?.map((model, i) => (
             <ModelOverview
               model={model}

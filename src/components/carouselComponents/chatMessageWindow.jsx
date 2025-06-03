@@ -16,7 +16,7 @@ const ChatMessageWindow = ({
     <div className="chats_area">
       {isFetchingChats ? (
         <div className="loadingIndicator">
-          <SpinnerLoader className="smaller" />
+          <SpinnerLoader />
         </div>
       ) : (
         <>

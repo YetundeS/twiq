@@ -1,4 +1,4 @@
-.page_content {
+.db_page_content {
     width: 100%;
     min-height: 100vh;
     background: var(--page-bg);
@@ -10,24 +10,24 @@
 
 
 /* Define the scrollbar width first */
-.page_content::-webkit-scrollbar {
+.db_page_content::-webkit-scrollbar {
     width: 12px;
     /* or whatever width you want */
 }
 
 /* Style the scrollbar track */
-.page_content::-webkit-scrollbar-track {
+.db_page_content::-webkit-scrollbar-track {
     background-color: var(--page-content-bg);
 }
 
 /* Optional: style the thumb (the draggable part) */
-.page_content::-webkit-scrollbar-thumb {
+.db_page_content::-webkit-scrollbar-thumb {
     background-color: rgb(146, 146, 146);
     border: 4px solid var(--page-content-bg);
     border-radius: 10px;
 }
 
-.pageTop {
+.db_pageTop {
     height: 55px;
     width: 100%;
     padding: .5rem;
@@ -38,7 +38,7 @@
     /* border: 1px solid white; */
 }
 
-.pageTop_iconWrapper {
+.db_pageTop_iconWrapper {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,13 +49,11 @@
     padding: .6rem;
 }
 
-.pageTop_iconWrapper:hover {
+.db_pageTop_iconWrapper:hover {
     background-color: #393939;
 }
 
-.pageTop_icons {}
-
-.pageBody {
+.db_pageBody {
     width: 100%;
     height: 90%;
     display: flex;
@@ -65,26 +63,15 @@
     gap: 2rem;
 }
 
-.aboveTheFold {
+.db_aboveTheFold {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    align-self: flex-start;
 }
 
 
-.userLogo {
-    width: 180px;
-    height: max-content;
-    background-color: transparent;
-}
-
-.seperatorCss {
-    margin: 12px 0;
-    background-color: rgba(128, 128, 128, 0.519);
-    height: 2px;
-}
-
-.modelsOverview {
+.db_modelsOverview {
     width: 100%;
     display: grid;
     grid-template-columns: 280px 280px 280px 280px;
@@ -99,15 +86,15 @@
 
 @media (max-width: 1026px) {
 
-    .pageBody {
+    .db_pageBody {
         padding: 1rem 1.5rem;
     }
 
-    .dashboardTitle {
+    .db_dashboardTitle {
         font-size: 3.6vw;
     }
 
-    .modelsOverview {
+    .db_modelsOverview {
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
     }
@@ -117,17 +104,12 @@
 
 @media (max-width: 575px) {
 
-    .pageBody {
+    .db_pageBody {
         padding: 1rem 2.5rem;
     }
 
 
-    .panelBtn {
-        transform: scale(1.14);
-    }
-
-
-    .aboveTheFold {
+    .db_aboveTheFold {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -141,7 +123,7 @@
         font-size: 7vw;
     }
 
-    .modelsOverview {
+    .db_modelsOverview {
         grid-template-columns: 1fr;
         gap: 2rem;
         padding: 1.5rem 0;
@@ -154,7 +136,7 @@
 
 /* Dark Theme */
 
-.dark .page_content {
+.dark .db_page_content {
     background: var(--page-bg-dark);
 
     color: var(--page-text-dark);

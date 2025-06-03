@@ -125,17 +125,17 @@ export const modelsOverview = [
 export const accountPopMenu = [
   {
     name: "Account",
-    url: "settings/dashboard",
+    url: "settings",
     icon: () => <Gauge className="home-icon" />,
   },
   {
     name: "Billing",
-    url: "settings/billing",
-    icon: () => <Sparkles className="sparkles_icon" />,
+    url: "settings",
+    icon: () => <Sparkles className="home-icon" />,
   },
   {
     name: "Log Out",
-    url: "/auth",
+    url: "auth",
     icon: () => <LogOut className="home-icon" />,
   },
 ];
