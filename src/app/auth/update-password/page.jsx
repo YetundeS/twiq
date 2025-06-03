@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import UpdatePasswordForm from "@/components/authComponents/authForms/updatePasswordForm";
-import { createClient } from "@supabase/supabase-js";
 import GlowEffect from "@/components/landingPageComponents/GlowEffect";
 import "../auth.css";
 import { Header } from "@/components/landingPageComponents/Header";
@@ -74,11 +73,11 @@ const UpdatePassword = () => {
         <div className="w-full max-w-md px-4">
           <GlowEffect>
             <div className="rounded-3xl border border-gray-200/50 bg-white p-8 shadow-2xl backdrop-blur-sm dark:border-gray-600/50 dark:bg-gray-800">
-              {/* {loading && (
-                <h3 className="align-self-center text-2xl md:text-3xl font-medium text-gray-700 dark:text-gray-200">
+              {loading && (
+                <h3 className="align-self-center text-2xl font-medium text-gray-700 md:text-3xl dark:text-gray-200">
                   Verifying...
                 </h3>
-              )} */}
+              )}
               {error && (
                 <h3 className="align-self-center text-2xl font-medium text-red-600 md:text-3xl dark:text-red-400">
                   {error}
