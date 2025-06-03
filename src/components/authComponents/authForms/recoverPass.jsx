@@ -93,7 +93,7 @@ const RecoverPassword = () => {
             placeholder="your@email.com"
             value={formData.email}
             onChange={handleChange}
-            className="rounded-xl border-gray-200 py-3 pr-4 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
+            className="rounded-lg border-gray-200 py-5 pr-4 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
           />
         </div>
       </div>
@@ -101,7 +101,7 @@ const RecoverPassword = () => {
       {/* Submit Button */}
       <Button
         type="submit"
-        className="w-full cursor-pointer rounded-xl bg-gray-900 py-3 text-lg font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+        className="w-full cursor-pointer rounded-lg bg-gray-900 py-6 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
       >
         {!loading ? (
           <p>Reset password</p>
