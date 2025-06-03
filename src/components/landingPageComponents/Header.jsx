@@ -13,7 +13,7 @@ import { Mail, Moon, MoreVertical, Sparkles, Sun } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { TextEffect } from "../ui/text-effect";
-import './header.css';
+import "./header.css";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
@@ -31,7 +31,7 @@ export function Header() {
   if (!mounted) {
     return (
       <header className="absolute top-0 right-0 left-0 z-50 bg-transparent">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
             <div className="text-2xl font-bold text-purple-600">
               <TextEffect per="char" preset="fade-in-blur" delay={300}>
@@ -49,8 +49,8 @@ export function Header() {
   }
 
   return (
-    <header className="absolute navbarComp top-0 right-0 left-0 z-50 bg-transparent">
-      <div className="mx-auto navbarInner_box px-4 sm:px-6 lg:px-8">
+    <header className="navbarComp absolute top-0 right-0 left-0 z-50 bg-transparent">
+      <div className="navbarInner_box mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <div className="flex items-center">
             <div

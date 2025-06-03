@@ -19,6 +19,7 @@ const SignupForm = () => {
     organization_name: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -132,14 +133,17 @@ const SignupForm = () => {
         <div className="relative mt-2">
           <Input
             id="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             placeholder={"Set up a password"}
             value={formData.password}
             onChange={handleChange}
             className="rounded-lg border-gray-200 py-5 pr-12 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
           />
-          <Lock className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
+          <Lock
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-gray-400"
+          />
         </div>
       </div>
 

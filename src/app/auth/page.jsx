@@ -3,10 +3,10 @@
 import LoginForm from "@/components/authComponents/authForms/login";
 import RecoverPassword from "@/components/authComponents/authForms/recoverPass";
 import SignupForm from "@/components/authComponents/authForms/signupForm";
-import { GlowEffect } from "@/components/landingPageComponents/GlowEffect";
 import { Header } from "@/components/landingPageComponents/Header";
 import Link from "next/link";
 import { useState } from "react";
+import GlowEffect from "@/components/landingPageComponents/GlowEffect";
 import "./auth.css";
 
 export default function Auth() {

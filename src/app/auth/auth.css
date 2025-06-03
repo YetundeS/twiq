@@ -1,4 +1,5 @@
-h1 {
+h1,
+h3 {
   font-family: "New Spirit", serif;
 }
 
@@ -7,7 +8,7 @@ h1 {
   overflow: hidden;
   box-sizing: border-box;
   display: flex;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
   height: 100vh;
   position: relative;
@@ -148,17 +149,14 @@ h1 {
   }
 }
 
-
-
 /* Dark theme */
-
 
 .dark .authPage {
   width: 100vw;
   overflow: hidden;
   box-sizing: border-box;
   display: flex;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
   height: 100vh;
   position: relative;
