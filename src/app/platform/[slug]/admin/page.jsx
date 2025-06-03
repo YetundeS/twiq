@@ -3,8 +3,6 @@
 import "@/styles/platformStyles.css";
 import { Construction } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-// import "./admin.css";
-import "@/styles/platformStyles.css";
 
 const Admin = () => {
 
