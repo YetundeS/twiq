@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function GlowEffect({ children }) {
+export default function GlowEffect({ children, blurAmount = 30 }) {
   return (
     <div className="relative inline-block">
       <motion.div
@@ -19,6 +19,7 @@ export default function GlowEffect({ children }) {
             )
           `,
           backgroundSize: "300% 100%",
+          filter: `blur(${blurAmount}px)`,
         }}
         animate={{
           backgroundPosition: [
@@ -31,7 +32,7 @@ export default function GlowEffect({ children }) {
           opacity: [0.3, 0.5, 0.3], // pulsing
         }}
         transition={{
-          duration: 8,
+          duration: 4,
           ease: "easeInOut",
           repeat: Infinity,
         }}
