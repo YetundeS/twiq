@@ -6,8 +6,8 @@ import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import ModelName from "@/components/modelsComponent/modelName";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
+import "@/styles/platformStyles.css";
 import { PanelRightOpen } from "lucide-react";
-import "../caption.css";
 
 const CaptionChat = () => {
   const isMobile = useIsMobile();
