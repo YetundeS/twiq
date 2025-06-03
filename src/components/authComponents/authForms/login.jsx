@@ -1,17 +1,16 @@
 "use client";
-import { useState } from "react";
-import "./authForms.css";
-import CircularProgress from "@mui/material/CircularProgress";
-import { toast } from "sonner";
 import { loginUser } from "@/apiCalls/authAPI";
-import useAuthStore from "@/store/authStore";
-import { useRouter } from "next/navigation";
-import { generateSignString } from "@/lib/utils";
-import SocialButtons from "@/components/authComponents/authForms/socialButtons";
-import { Lock } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { generateSignString } from "@/lib/utils";
+import useAuthStore from "@/store/authStore";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Lock } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import "./authForms.css";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -103,7 +102,7 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="authForm space-y-6">
       {/* Email */}
       <div>
         <Label

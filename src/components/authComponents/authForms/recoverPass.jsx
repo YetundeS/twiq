@@ -1,14 +1,14 @@
 "use client";
-import { useState } from "react";
-import "./authForms.css";
-import CircularProgress from "@mui/material/CircularProgress";
-import { toast } from "sonner";
-import useAuthStore from "@/store/authStore";
-import { useRouter } from "next/navigation";
 import { sendResetMail } from "@/apiCalls/authAPI";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import useAuthStore from "@/store/authStore";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import "./authForms.css";
 
 const RecoverPassword = () => {
   const [formData, setFormData] = useState({
@@ -77,7 +77,7 @@ const RecoverPassword = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="authForm space-y-6">
       {/* Email */}
       <div>
         <Label

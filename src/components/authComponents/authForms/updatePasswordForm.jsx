@@ -1,14 +1,13 @@
 "use client";
-import { useState } from "react";
-import "./authForms.css";
-import CircularProgress from "@mui/material/CircularProgress";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { Lock } from "lucide-react";
-import { Eye, EyeClosed } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Lock } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import "./authForms.css";
 
 const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
   const [formData, setFormData] = useState({
@@ -81,7 +80,7 @@ const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="authForm space-y-6">
       {/* Password */}
       <div>
         <Label

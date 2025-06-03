@@ -10,8 +10,15 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Basic Sans";
+  src: url("/fonts/basic-sans/basic-sans.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
-  font-family: "Inter", "Lato", "Source Sans 3", Arial, Helvetica, sans-serif;
+  font-family: "Basic Sans", "New Spirit", "Inter", "Lato", Arial, Helvetica, sans-serif;
   width: 100vw;
   box-sizing: border-box;
   min-height: 100vh;
