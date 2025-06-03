@@ -1,19 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { Header } from "@/components/landingPageComponents/Header";
-import SignupForm from "@/components/authComponents/authForms/signupForm";
 import LoginForm from "@/components/authComponents/authForms/login";
 import RecoverPassword from "@/components/authComponents/authForms/recoverPass";
+import SignupForm from "@/components/authComponents/authForms/signupForm";
+import { Header } from "@/components/landingPageComponents/Header";
 import Link from "next/link";
-import { GlowEffect } from "@/components/landingPageComponents/GlowEffect";
+import { useState } from "react";
+import GlowEffect from "@/components/landingPageComponents/GlowEffect";
 import "./auth.css";
 
 export default function Auth() {
   const [activeForm, setActiveForm] = useState("signup");
 
   return (
-    <div className="animate-fade-in-up min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 transition-colors duration-300 dark:from-purple-900/20 dark:via-pink-900/10 dark:to-blue-900/20">
+    <div className="authPage animate-fade-in-up min-h-screen transition-colors duration-300">
       <Header />
 
       <div className="flex min-h-screen items-start justify-center pt-40 pb-8 md:pt-24">

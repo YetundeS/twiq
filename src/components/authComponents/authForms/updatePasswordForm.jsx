@@ -4,7 +4,11 @@ import "./authForms.css";
 import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Lock } from "lucide-react";
 import { Eye, EyeClosed } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
   const [formData, setFormData] = useState({
@@ -77,50 +81,69 @@ const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="authForm">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {/* Password */}
-      <div className="authForm_field">
-        <input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          className="formInput"
-          placeholder="password"
-        />
-        {showPassword ? (
-          <EyeClosed
-            onClick={() => setShowPassword(!showPassword)}
-            className="passwordIcon"
+      <div>
+        <Label
+          htmlFor="password"
+          className="font-medium text-gray-700 dark:text-gray-300"
+        >
+          Password
+        </Label>
+        <div className="relative mt-2">
+          <Input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder={"Set up a password"}
+            value={formData.password}
+            onChange={handleChange}
+            className="rounded-lg border-gray-200 py-5 pr-12 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
           />
-        ) : (
-          <Eye
+          <Lock
             onClick={() => setShowPassword(!showPassword)}
-            className="passwordIcon"
+            className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-gray-400"
           />
-        )}
+        </div>
       </div>
 
       {/* Confirm Password */}
-      <div className="authForm_field">
-        <input
-          type={showPassword ? "text" : "password"}
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          className="formInput"
-          placeholder="Confirm password"
-        />
+
+      <div>
+        <Label
+          htmlFor="password"
+          className="font-medium text-gray-700 dark:text-gray-300"
+        >
+          Confirm Password
+        </Label>
+        <div className="relative mt-2">
+          <Input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            name="confirmPassword"
+            placeholder={"Confirm password"}
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            className="rounded-lg border-gray-200 py-5 pr-12 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
+          />
+          <Lock
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-gray-400"
+          />
+        </div>
       </div>
 
       {/* Submit Button */}
-      <button type="submit" className="formBtn">
+      <Button
+        type="submit"
+        className="w-full cursor-pointer rounded-lg bg-gray-900 py-6 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+      >
         {!loading ? (
           <p>Update Password</p>
         ) : (
           <CircularProgress color="white" size="17px" />
         )}
-      </button>
+      </Button>
       {errors?.password && <p className="textError">{errors?.password}</p>}
     </form>
   );

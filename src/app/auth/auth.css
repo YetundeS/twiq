@@ -1,4 +1,5 @@
-h1 {
+h1,
+h3 {
   font-family: "New Spirit", serif;
 }
 
@@ -11,8 +12,8 @@ h1 {
   justify-content: center;
   height: 100vh;
   position: relative;
-  background: var(--auth-bg);
-  font-family: "SF Pro", "Blinker", "Poppins", Arial, Helvetica, sans-serif;
+  background: var(--page-bg);
+  font-family: "New Spirit", serif, "Poppins", Arial, Helvetica, sans-serif;
 }
 
 .form_component {
@@ -146,4 +147,19 @@ h1 {
   .formTitle {
     font-size: 32px;
   }
+}
+
+/* Dark theme */
+
+.dark .authPage {
+  width: 100vw;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  position: relative;
+  background: var(--page-bg-dark);
+  font-family: "New Spirit", serif, "Poppins", Arial, Helvetica, sans-serif;
 }
