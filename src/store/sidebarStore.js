@@ -2,7 +2,7 @@
 import { create } from "zustand";
 
 export const useSideBar = create((set) => ({
-  isSidebarOpen: true,
+  isSidebarOpen: false,
   sidebarSessions: [],
   currentAssistantSlug: '',
 

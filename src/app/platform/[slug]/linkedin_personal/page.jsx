@@ -3,11 +3,11 @@
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
-import ModelName from "@/components/modelsComponent/modelName";
+import PlatformTop from "@/components/dashboardComponent/platformTop";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
+import "@/styles/platformStyles.css";
 import { PanelRightOpen } from "lucide-react";
-import "./lp.css";
 
 const LinkedInPersonalModel = () => {
   const isMobile = useIsMobile();
@@ -30,20 +30,20 @@ const LinkedInPersonalModel = () => {
   } = useAssistantChat('LinkedIn Personal', 'linkedin_personal');
 
   return (
-    <div className="lp-page_content">
-      <div className="lp-pageTop">
+    <div className="page_content">
+      <div className="pageTop">
         {(!isSidebarOpen || isMobile) && (
           <>
-            <div onClick={toggleSidebar} className="lp-pageTop_iconWrapper">
-              <PanelRightOpen size="22px" />
+            <div onClick={toggleSidebar} className="pageTop_iconWrapper">
+              <PanelRightOpen className="pageIcon" size="22px" />
             </div>
             <NewChatBtn alt />
           </>
         )}
-        <ModelName name={'LinkedIn Personal'} content={modelDescription} />
+        <PlatformTop />
       </div>
-      <div className="lp-pageBody">
-        <div className="lp-pageBody_innerBox">
+      <div className="pageBody">
+        <div className="pageBody_innerBox">
           <ChatMessageWindow
             chats={chats}
             streamingData={streamingData}

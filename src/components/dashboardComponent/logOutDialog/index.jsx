@@ -1,18 +1,18 @@
 "use client";
 
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
-import "./lod.css";
-import useAuthStore from "@/store/authStore";
-import { useRouter } from "next/navigation";
 import { logOutUser } from "@/apiCalls/authAPI";
-import useLogOutDialogStore from "@/store/useLogOutDialogStore";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import useAuthStore from "@/store/authStore";
+import useLogOutDialogStore from "@/store/useLogOutDialogStore";
+import { useRouter } from "next/navigation";
+import "./lod.css";
 
 
 const LogOutDialog = () => {
@@ -41,8 +41,8 @@ const LogOutDialog = () => {
             </div>
         </DialogHeader>
         <DialogFooter className="dialogFooter">
-          <Button className="dialogBtn black" variant="outline" onClick={closeDialog}>Not yet</Button>
-          <Button className="dialogBtn" onClick={logOut}>
+          <Button className="dialogBtn" onClick={closeDialog}>Not yet</Button>
+          <Button className="dialogBtn black" onClick={logOut}>
             Yep, log me out
           </Button>
         </DialogFooter>

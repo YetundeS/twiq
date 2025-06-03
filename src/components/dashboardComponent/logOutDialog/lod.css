@@ -16,11 +16,14 @@
 .dialogBtn {
     font-size: 12px;
     width: max-content;
-    color: white;
+    color: rgb(0, 0, 0);
+    background-color: white;
+    cursor: pointer;
 }
 
 .dialogBtn.black {
-    color: black;
+    color: rgb(255, 255, 255);
+    background-color: #0E0E0E;
 }
 
 

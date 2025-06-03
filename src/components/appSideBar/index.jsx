@@ -70,7 +70,7 @@ export function AppSidebar() {
           <SidebarGroupLabel className="h-max">
             <div className="topAction_box">
               <div onClick={toggleSidebar} className="sidebar_pageTop_iconWrapper">
-                <PanelRightOpen size="22px" />
+                <PanelRightOpen className="pageIcon" size="22px" />
               </div>
               <NewChatBtn />
             </div>
@@ -113,7 +113,9 @@ export function AppSidebar() {
                           </div>
                         </MenubarTrigger>
                       </SidebarMenuButton>
-                      <MenubarContent className="menubarContent">
+                      <MenubarContent
+                        align="start"
+                        side="right" className="menubarContent">
                         {models?.map((item, i) => (
                           <MenubarItem key={i} className="menubarItem">
                             <a
@@ -168,7 +170,7 @@ export function AppSidebar() {
           </div>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="sidebarFooter">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="upgradeBar">
@@ -183,10 +185,10 @@ export function AppSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem onClick={openDialog}>
             <SidebarMenuButton className="upgradeBar logout">
-              <LogOut /> <span className="txtHead">Log Out</span>
+              <LogOut className="logout_icon" /> <span className="txtHead">Log Out</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarMenu>
+        </SidebarMenu> 
       </SidebarFooter>
       <LogOutDialog />
     </Sidebar>

@@ -1,6 +1,6 @@
+import { motion } from "framer-motion";
 import Image from "next/image";
 import "./modelOverview.css";
-import { motion } from "framer-motion";
 
 const ModelOverview = ({ model, organizationName }) => {
   return (
@@ -17,9 +17,9 @@ const ModelOverview = ({ model, organizationName }) => {
         className="icon_container"
       >
         <Image
-          src={`/images/model_icons/${model?.icon}.png`}
-          width={500}
-          height={500}
+          src={`/images/model_icons/${model?.icon}`}
+          width={300}
+          height={300}
           alt="model icon"
           className="modelImg"
         />

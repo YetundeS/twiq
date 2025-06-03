@@ -61,7 +61,7 @@ const config = {
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
-        cormorant: ["var(--font-cormorant)", "serif"],
+        newSpirit: ['"New Spirit"', "serif"],
       },
       animation: {
         "fade-in-up": "fadeInUp 1.2s ease-in forwards",

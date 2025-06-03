@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import "./dashboard.css";
 
 export default function DashboardLayout({ children }) {
-  const { setIsSidebarOpen } = useSideBar();
+  const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
   const { user } = useAuthStore();
     const isMobile = useIsMobile();
 
@@ -24,18 +24,10 @@ export default function DashboardLayout({ children }) {
       router.push("/auth");
     }
   }, [user, isHydrated]);
-
-  useEffect(() => {
-    if(isMobile) {
-      setIsSidebarOpen(false)
-    } else {
-      setIsSidebarOpen(true)
-    }
-  }, [isMobile])
   
 
   return (
-    <SidebarProvider >
+    <SidebarProvider open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
       <div className="dashboard_wrapper">
         <AppSidebar />
         {children}
