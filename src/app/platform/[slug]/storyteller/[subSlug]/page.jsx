@@ -3,11 +3,11 @@
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
-import ModelName from "@/components/modelsComponent/modelName";
+import PlatformTop from "@/components/dashboardComponent/platformTop";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
+import "@/styles/platformStyles.css";
 import { PanelRightOpen } from "lucide-react";
-import "../storyteller.css";
 
 const StorytellerChat = () => {
   const isMobile = useIsMobile();
@@ -30,23 +30,23 @@ const StorytellerChat = () => {
   } = useAssistantChat('Storyteller', 'storyteller');
 
   return (
-    <div className="storytelling-page_content">
-      <div className="storytelling-pageTop">
+    <div className="page_content">
+      <div className="pageTop">
         {(!isSidebarOpen || isMobile) && (
           <>
             <div
               onClick={toggleSidebar}
-              className="storytelling-pageTop_iconWrapper"
+              className="pageTop_iconWrapper"
             >
-              <PanelRightOpen size="22px" />
+              <PanelRightOpen className="pageIcon" size="22px" />
             </div>
             <NewChatBtn alt />
           </>
         )}
-        <ModelName name={'storyteller'} content={modelDescription} />
+        <PlatformTop />
       </div>
-      <div className="storytelling-pageBody">
-        <div className="storytelling-pageBody_innerBox">
+      <div className="pageBody">
+        <div className="pageBody_innerBox">
           <ChatMessageWindow
             chats={chats}
             streamingData={streamingData}

@@ -9,6 +9,9 @@
   height: 100%;
   overflow: hidden;
   box-sizing: border-box;
+  background: var(--sidebar-bg-light);
+
+  color: var(--page-text);
 }
 
 .topAction_box {
@@ -16,7 +19,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--sidebar-toggle-btn);
 }
 
 .sidebar_pageTop_iconWrapper {
@@ -32,6 +34,10 @@
 
 .sidebar_pageTop_iconWrapper:hover {
     background-color: #393939;
+}
+
+.pageIcon {
+  color: black;
 }
 
 .newchat_hoverCardContent {
@@ -92,8 +98,12 @@
   border: none;
 }
 
+.menuBar.platformTop {
+  width: max-content;
+}
+
 .sidebarMenuBtn {
-  color: white;
+  /* color: white; */
   cursor: pointer;
 }
 
@@ -102,9 +112,17 @@
 }
 
 .menubarTrigger {
-  color: white;
+  /* color: white; */
   height: max-content;
   padding: 0;
+}
+
+.menubarTrigger.platformTop {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menubarTrigger:focus {
@@ -115,9 +133,17 @@
   background-color: var(--active-sidebar-item);
 }
 
+.menubarTrigger.platformTop:focus {
+  background-color: transparent;
+}
+
+.menubarTrigger.platformTop[data-state="open"] {
+  background-color: transparent;
+}
+
 .chatsLabel {
   width: 100%;
-  color: rgb(172, 172, 172);
+  color: var(--page-text);
   padding: .5rem;
   font-size: 12.8px;
   font-weight: 600;
@@ -125,7 +151,7 @@
 }
 
 .sideBarItem {
-  color: white;
+  color: var(--page-text);
   width: 100%;
   display: flex;
   align-items: center;
@@ -147,30 +173,34 @@
   background-color: var(--active-sidebar-item);
 }
 
+
 .menubarContent {
-  background-color: var(--sidebar);
   border: 1px solid #303030;
   min-width: max-content;
-  padding: 0.6rem;
+  padding: 0.6rem 0;
 }
 
 .menubarItem {
   width: 100%;
   height: max-content;
   padding: 0;
-  color: white;
+  color: var(--page-text);
   border-radius: 8px;
   background-color: transparent;
+  flex: 1;
 }
 
+
 .menu_sideBarItem {
-  color: white;
+  color: var(--page-text);
   width: 100%;
   display: flex;
   align-items: center;
   gap: 1.4rem;
   padding: .8rem;
   border-radius: 8px;
+  min-width: 164px;
+  background-color: #fff;
 }
 
 .menu_sideBarItem:hover {
@@ -178,19 +208,26 @@
 }
 
 
+.sidebarFooter {
+    background: var(--sidebar-bg-dark);
+    color: var(--page-text-dark);
+}
 
 .upgradeBar {
-  color: white;
-  background-color: #30303089;
   cursor: pointer;
   height: 56px;
   display: flex;
   align-items: center;
   gap: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.189);
+  transition: border 0.3s ease-in;
+  background: transparent;
 }
 
 .upgradeBar:hover {
-  background-color: #303030ef;
+  background: transparent;
+  border: 2px solid white;
+  color: inherit;
 }
 
 .upgradeBar.logout {
@@ -210,8 +247,12 @@
 .sparkles_icon {
   width: 15px;
   height: 15px;
+    color: var(--page-text-dark);
 }
 
+.logout_icon {
+    color: var(--page-text-dark);
+}
 
 .logOutTxt {
   display: flex;
@@ -236,7 +277,7 @@
 .home-icon {
   width: 16px;
   height: 16px;
-  color: white;
+  color: var(--page-text);
 }
 
 
@@ -278,3 +319,128 @@
     font-size: 20px;
     gap: .8rem;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* Dark Theme */
+
+.dark .fixedHeight_area {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--sidebar-bg-dark);
+
+  color: var(--page-text-dark);
+}
+
+
+.dark .chatsLabel {
+  width: 100%;
+  color: var(--page-text-dark);
+  padding: .5rem;
+  font-size: 12.8px;
+  font-weight: 600;
+  margin-top: 1.2rem;
+}
+
+.dark .sideBarItem {
+  color: var(--page-text-dark);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: 1.32rem .5rem;
+}
+
+
+.dark .sideBarItem.models {
+  gap: .8rem;
+  padding: .8rem .5rem;
+}
+
+
+
+.dark .pageIcon {
+  color: rgb(255, 255, 255);
+}
+
+
+.dark .home-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--page-text-dark);
+}
+
+
+.dark .sideBarItem:hover {
+  background-color: var(--active-sidebar-item-dark);
+}
+
+
+
+
+
+
+
+
+
+
+.dark .sidebarFooter {
+    background: var(--sidebar-bg-light);
+    color: var(--page-text);
+}
+
+.dark .upgradeBar {
+  cursor: pointer;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.189);
+  transition: border 0.3s ease-in;
+  background: transparent;
+}
+
+.dark .upgradeBar:hover {
+  background: transparent;
+  border: 2px solid black;
+  color: inherit;
+}
+
+.dark .upgradeBar.logout {
+  height: max-content;
+  padding: .5rem;
+}
+
+.dark .sideBar_iconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .4rem;
+  border-radius: 50%;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.dark .sparkles_icon {
+  width: 15px;
+  height: 15px;
+    color: var(--page-text);
+}
+
+.dark .logout_icon {
+    color: var(--page-text);
+}
+
+
+

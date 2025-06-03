@@ -1,0 +1,41 @@
+.platformTop {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .8rem;
+    padding: 0 1rem;
+}
+
+.pt_imageBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 2px solid rgb(20, 14, 14);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+}
+
+.pt_imageBox:hover {
+    transform: scale(1.06);
+}
+
+.profileImg {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+
+.dark .pt_imageBox {
+  border: 2px solid white;
+}

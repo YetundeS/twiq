@@ -61,8 +61,8 @@ function MenubarTrigger({
 
 function MenubarContent({
   className,
-  align = "start",
-  side="right",
+  align = "end",
+  side="bottom",
   alignOffset = -4,
   sideOffset = 8,
   ...props
@@ -234,20 +234,8 @@ function MenubarSubContent({
 }
 
 export {
-  Menubar,
-  MenubarPortal,
-  MenubarMenu,
-  MenubarTrigger,
-  MenubarContent,
-  MenubarGroup,
-  MenubarSeparator,
-  MenubarLabel,
-  MenubarItem,
-  MenubarShortcut,
-  MenubarCheckboxItem,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  MenubarSub,
-  MenubarSubTrigger,
-  MenubarSubContent,
-}
+  Menubar, MenubarCheckboxItem, MenubarContent,
+  MenubarGroup, MenubarItem, MenubarLabel, MenubarMenu, MenubarPortal, MenubarRadioGroup,
+  MenubarRadioItem, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubContent, MenubarSubTrigger, MenubarTrigger
+};
+

@@ -5,6 +5,7 @@ import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } fro
 import { models } from '@/constants/sidebar';
 import { generateSignString } from '@/lib/utils';
 import useAuthStore from '@/store/authStore';
+import "@/styles/platformStyles.css";
 import { SquarePen } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import '../../appSideBar/appSideBar.css';
@@ -29,7 +30,7 @@ const NewChatBtn = ({ alt }) => {
                     <HoverCard>
                         <HoverCardTrigger>
                             <div className="sidebar_pageTop_iconWrapper">
-                                <SquarePen size="22px" />
+                                <SquarePen className="pageIcon" size="22px" />
                             </div>
                         </HoverCardTrigger>
                         <HoverCardContent className={`newchat_hoverCardContent ${alt && 'alt'}`}>
@@ -37,7 +38,11 @@ const NewChatBtn = ({ alt }) => {
                         </HoverCardContent>
                     </HoverCard>
                     </MenubarTrigger>
-                    <MenubarContent className="menubarContent">
+                    <MenubarContent
+                        align="start"
+                        side="right"
+                        alignOffset={4}
+                        sideOffset={8} className="menubarContent">
                         {models?.map((item, i) => (
                             <MenubarItem key={i} className="menubarItem">
                                 <a

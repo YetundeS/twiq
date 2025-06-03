@@ -229,19 +229,62 @@ input:focus-visible,
 :root {
   /* colors set */
 
+  /* Light Theme */
+  --page-bg: radial-gradient(circle at top left,
+            #fff5f5,
+            #fbecec,
+            #f3e3e3,
+            #ffffff);
+  --sidebar-bg-light: radial-gradient(circle at top left,
+  #f0d0d0,
+  #f0d0d0,
+  #bc9999,
+  #bc9999);
+
+  --page-text: rgb(0, 0, 0);
+  --active-sidebar-item: #c99999ec;
+
+  --chat-input-bg: #303030;
+  
+  /* Dark Theme */
+  
+  --page-bg-dark: radial-gradient(circle at top left, #1a0000, #0d0d0d);
+  --sidebar-bg-dark: radial-gradient(circle at top left,
+  #1c0b0b,
+  #100909,
+  #100909,
+  #0a0505);
+  --page-text-dark: rgb(255, 255, 255);
+
+  --active-sidebar-item-dark: #a6a6a62d;
+
+
+
+
+
+
+
+
+
+
+
+
   --page-content-bg: #212121;
   --sidebar-toggle-btn: #ffffff;
 
   /* sidebar */
-  --active-sidebar-item: #30303091;
 
   /* model content */
   --model-name-box: #303030b2;
   --model-name-box-hover: #383838;
 
---chat-input-bg: #303030;
 
 --chat-message-bg: #303030;
+
+--red-brand-color: #5A0001;
+
+
+
 
   /* colors set end*/
 
