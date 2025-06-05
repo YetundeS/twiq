@@ -24,7 +24,7 @@ const ModelTemplates = ({ setInputValue, assistantSlug }) => {
 
   return (
     <div className="modelTemplates">
-      <h3 className="templatesTitle">{assSlug} Templates</h3>
+      <h3 className="templatesTitle">{assSlug}</h3>
       <div className="modelCard_wrapper">
         {templates.length > 0 &&
           templates.map((template, index) => (
