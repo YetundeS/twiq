@@ -55,14 +55,13 @@
 
 .db_pageBody {
     width: 100%;
-    height: 90%;
+    height: max-content;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     padding: 1rem 3rem;
     gap: 2rem;
 }
-
 .db_aboveTheFold {
     display: flex;
     align-items: center;
@@ -73,13 +72,13 @@
 
 .db_modelsOverview {
     width: 100%;
-    display: grid;
-    grid-template-columns: 280px 280px 280px 280px;
+    display: flex;
+    flex-wrap: wrap;
     flex: 1;
     gap: 2.4rem;
     box-sizing: border-box;
     padding: 1.5rem 0;
-    place-items: center;
+    height: max-content;
 }
 
 
@@ -95,8 +94,7 @@
     }
 
     .db_modelsOverview {
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
+        gap: 4rem;
     }
 }
 
@@ -124,8 +122,8 @@
     }
 
     .db_modelsOverview {
-        grid-template-columns: 1fr;
         gap: 2rem;
+        justify-content: center;
         padding: 1.5rem 0;
     }
 

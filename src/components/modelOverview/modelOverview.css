@@ -9,6 +9,7 @@
     transition: all 0.25s ease-in;
     padding: 1rem 0;
     gap: .8rem;
+    width: max-content;
     max-width: 280px;
 
     background-color: var(--red-brand-color);
