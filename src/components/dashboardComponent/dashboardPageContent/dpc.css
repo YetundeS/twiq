@@ -60,7 +60,7 @@
     flex-direction: column;
     box-sizing: border-box;
     padding: 1rem 3rem;
-    gap: 2rem;
+    gap: 6.4rem;
 }
 .db_aboveTheFold {
     display: flex;
@@ -79,6 +79,7 @@
     box-sizing: border-box;
     padding: 1.5rem 0;
     height: max-content;
+    align-items: stretch;
 }
 
 
