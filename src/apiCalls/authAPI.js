@@ -2,7 +2,7 @@ import { addAuthHeader } from "@/lib/utils";
 import axios from "axios";
 import { toast } from "sonner";
 
-const API = axios.create({
+export const API = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_URI,
   withCredentials: true, // 🔥 Ensures cookies are sent & received
 });

@@ -47,7 +47,7 @@ export const fetchChats = async (user, slug, updateSideBarSessions, setIsFetchin
 
 export const fetchChat = async (sessionId) => {
     try {
-        console.log('sessionID: ', sessionId)
+        // console.log('sessionID: ', sessionId)
         if (!sessionId) return;
         
         // 🔹 Get auth headers
@@ -75,7 +75,7 @@ export const fetchChat = async (sessionId) => {
         }
 
         const data = await response.json();
-        console.log('data: ', data)
+        // console.log('data: ', data)
 
         return null
 

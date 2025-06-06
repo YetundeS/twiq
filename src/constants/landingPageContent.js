@@ -1,5 +1,5 @@
-import userAvatar from "../../public/images/user-avatar.png";
 import post from "../../public/images/placeholder-image.webp";
+import userAvatar from "../../public/images/user-avatar.png";
 
 export const SITE_CONTENT = {
   brand: "TWIQ AI",
@@ -58,6 +58,7 @@ export const SITE_CONTENT = {
       description:
         "Perfect for solopreneurs & creative rebels just getting started",
       price: "$399",
+      priceId: 'prod_SLfSE6oRt80Mu7',
       period: "/year",
       bots: "3+ TWIQ Bots",
       botBadges: ["V", "C", "H"],
@@ -76,6 +77,7 @@ export const SITE_CONTENT = {
       description:
         "For creators, marketers & educators ready to scale without burnout",
       price: "$799",
+      priceId: 'prod_SLfTLYmEto0mP5',
       period: "/year",
       bots: "All 7 TWIQ Bots",
       botBadges: ["V", "C", "L", "B"],
@@ -97,6 +99,7 @@ export const SITE_CONTENT = {
       description:
         "For agencies, coaching programs, & growing brands ready to scale content ops",
       price: "$2,999",
+      priceId: 'prod_SLfX1eCT161Yxe',
       period: "/year",
       bots: "10+ Team Seats",
       botBadges: ["T", "A", "B", "C"],
