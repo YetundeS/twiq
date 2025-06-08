@@ -1,18 +1,17 @@
 "use client";
 import { loginUser } from "@/apiCalls/authAPI";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { generateSignString } from "@/lib/utils";
 import useAuthStore from "@/store/authStore";
-import CircularProgress from "@mui/material/CircularProgress";
 import { Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import AuhVisitBtn from "./auhVisitBtn";
 import "./authForms.css";
 
-const LoginForm = () => {
+const LoginForm = ({ setActiveForm }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -102,12 +101,12 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="authForm space-y-6">
+    <form className="authForm space-y-6">
       {/* Email */}
       <div>
         <Label
           htmlFor="email"
-          className="font-medium text-gray-700 dark:text-gray-300"
+          className="font-medium text-gray-700 "
         >
           Email
         </Label>
@@ -119,8 +118,8 @@ const LoginForm = () => {
             placeholder="your@email.com"
             value={formData.email}
             onChange={handleChange}
-            className="rounded-lg border-gray-200 py-5 pr-4 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
-          />
+            className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
+            />
         </div>
       </div>
 
@@ -128,7 +127,7 @@ const LoginForm = () => {
       <div>
         <Label
           htmlFor="password"
-          className="font-medium text-gray-700 dark:text-gray-300"
+          className="font-medium text-gray-700 "
         >
           Password
         </Label>
@@ -140,26 +139,21 @@ const LoginForm = () => {
             placeholder={"Enter your password"}
             value={formData.password}
             onChange={handleChange}
-            className="rounded-lg border-gray-200 py-5 pr-12 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
+            className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
           />
           <Lock
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-gray-400"
+            className="cursor-pointer absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-white"
           />
         </div>
       </div>
 
+      <p onClick={() => setActiveForm("password")} className="forgotPass mt-4 flex gap-1 align-self-center text-align-center border text-sm text-gray-500 dark:text-gray-400">
+        Forgot your password?
+      </p>
+
       {/* Submit Button */}
-      <Button
-        type="submit"
-        className="w-full cursor-pointer rounded-lg bg-gray-900 py-6 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
-      >
-        {!loading ? (
-          <p>Log in</p>
-        ) : (
-          <CircularProgress color="white" size="17px" />
-        )}
-      </Button>
+      <AuhVisitBtn loading={loading} black onClick={handleSubmit} text="Sign In" />
 
       {(errors?.email || errors?.password) && (
         <p className="textError">{errors?.email || errors?.password}</p>

@@ -1,105 +1,94 @@
 "use client";
 
+import AuthVisit from "@/components/authComponents/authForms/authVisit";
+import "@/components/authComponents/authForms/authVisit.css";
 import LoginForm from "@/components/authComponents/authForms/login";
 import RecoverPassword from "@/components/authComponents/authForms/recoverPass";
 import SignupForm from "@/components/authComponents/authForms/signupForm";
-import { Header } from "@/components/landingPageComponents/Header";
-import Link from "next/link";
-import { useState } from "react";
 import GlowEffect from "@/components/landingPageComponents/GlowEffect";
+import { Header } from "@/components/landingPageComponents/Header";
+import { useState } from "react";
 import "./auth.css";
 
 export default function Auth() {
-  const [activeForm, setActiveForm] = useState("signup");
+  const [activeForm, setActiveForm] = useState("visit");
 
   return (
     <div className="authPage animate-fade-in-up min-h-screen transition-colors duration-300">
       <Header />
 
-      <div className="flex min-h-screen items-start justify-center pt-40 pb-8 md:pt-24">
-        <div className="w-full max-w-md px-4">
-          <GlowEffect>
-            <div className="rounded-3xl border border-gray-200/50 bg-white p-8 shadow-2xl backdrop-blur-sm dark:border-gray-600/50 dark:bg-gray-800">
-              {/* Header */}
-              <div className="mb-8">
-                {activeForm === "password" ? (
-                  <h1 className="mb-2 text-2xl leading-tight font-medium text-gray-900 md:text-3xl dark:text-gray-100">
-                    Reset your password
-                  </h1>
-                ) : (
-                  <h1 className="mb-2 text-2xl leading-tight font-medium text-gray-900 md:text-3xl dark:text-gray-100">
-                    {activeForm === "signup"
-                      ? "Sign up to create your first script 💫"
-                      : "Let's get you signed in"}
-                  </h1>
-                )}
-                <p className="text-gray-600 dark:text-gray-400">
-                  {activeForm === "signup" && (
-                    <>
-                      Already have an account{" "}
-                      <button
-                        onClick={() => setActiveForm("signin")}
-                        className="cursor-pointer font-medium text-purple-600 hover:underline dark:text-purple-400"
-                      >
-                        Sign in
-                      </button>
-                    </>
+      {activeForm == 'visit' ? (
+        <>
+          <AuthVisit setActiveForm={setActiveForm} />
+        </>
+      ) : (
+        <div className="flex min-h-screen items-start justify-center pt-40 pb-8 md:pt-24">
+          <div className="w-full max-w-md px-4">
+            <GlowEffect>
+              <div className="authFormTopWrapper rounded-3xl border border-gray-200/50 p-8 shadow-2xl backdrop-blur-sm dark:border-gray-600/50 dark:bg-gray-800">
+                {/* Header */}
+                <div className="mb-8">
+                  {activeForm === "password" ? (
+                    <h1 className="formTitle mb-2 text-2xl leading-tight font-medium text-gray-900 md:text-3xl dark:text-gray-100">
+                      Reset your password
+                    </h1>
+                  ) : (
+                    <h1 className="formTitle mb-2 text-2xl leading-tight font-medium text-gray-900 md:text-3xl dark:text-gray-100">
+                      {activeForm === "signup"
+                        ? "Create New Account"
+                        : "Let's get you signed in"}
+                    </h1>
                   )}
-                  {activeForm === "signin" && (
-                    <>
-                      Don't have an account?{" "}
-                      <button
-                        onClick={() => setActiveForm("signup")}
-                        className="cursor-pointer font-medium text-purple-600 hover:underline dark:text-purple-400"
-                      >
-                        Sign up
-                      </button>
-                    </>
-                  )}
-                  {activeForm === "password" && (
-                    <>
-                      Go back to{" "}
-                      <button
-                        onClick={() => setActiveForm("signin")}
-                        className="cursor-pointer font-medium text-purple-600 hover:underline dark:text-purple-400"
-                      >
-                        Sign in
-                      </button>
-                    </>
-                  )}
-                </p>
+                  <p className="subFormTitle text-sm text-gray-600 dark:text-gray-400">
+                    {activeForm === "signup" && (
+                      <>
+                        Already registered{" "}
+                        <button
+                          onClick={() => setActiveForm("signin")}
+                          className="cursor-pointer font-medium text-purple-600 hover:underline dark:text-purple-400"
+                        >
+                          Log in
+                        </button>
+                      </>
+                    )}
+                    {activeForm === "signin" && (
+                      <>
+                        Don't have an account?{" "}
+                        <button
+                          onClick={() => setActiveForm("signup")}
+                          className="cursor-pointer font-medium text-purple-600 hover:underline dark:text-purple-400"
+                        >
+                          Sign up
+                        </button>
+                      </>
+                    )}
+                    {activeForm === "password" && (
+                      <>
+                        Go back to{" "}
+                        <button
+                          onClick={() => setActiveForm("signin")}
+                          className="cursor-pointer font-medium text-purple-600 hover:underline dark:text-purple-400"
+                        >
+                          Sign in
+                        </button>
+                      </>
+                    )}
+                  </p>
+                </div>
+
+                {activeForm === "signup" && <SignupForm />}
+                {activeForm === "signin" && <LoginForm setActiveForm={setActiveForm} />}
+                {activeForm === "password" && <RecoverPassword />}
+
+                  {/* Terms */}
+                  <div className="mt-8 text-center text-sm">
+                    <p className="needHelp">need help?</p>
+                  </div>
               </div>
-
-              {activeForm === "signup" && <SignupForm />}
-              {activeForm === "signin" && <LoginForm />}
-              {activeForm === "password" && <RecoverPassword />}
-
-              {activeForm === "signin" && (
-                <p className="mt-4 flex gap-1 justify-self-center text-sm text-gray-500 dark:text-gray-400">
-                  Forgot your password?
-                  <button
-                    onClick={() => setActiveForm("password")}
-                    className="cursor-pointer text-purple-600 hover:underline dark:text-purple-400"
-                  >
-                    recover it
-                  </button>
-                </p>
-              )}
-
-              {/* Terms */}
-              <p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-                By signing up you agree to the{" "}
-                <Link
-                  href="/terms-of-service"
-                  className="text-purple-600 hover:underline dark:text-purple-400"
-                >
-                  Terms & Privacy
-                </Link>
-              </p>
-            </div>
-          </GlowEffect>
-        </div>
-      </div>
-    </div>
+            </GlowEffect >
+          </div >
+        </div >
+      )}
+    </div >
   );
 }

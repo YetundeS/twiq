@@ -1,13 +1,10 @@
 "use client";
 import { sendResetMail } from "@/apiCalls/authAPI";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import useAuthStore from "@/store/authStore";
-import CircularProgress from "@mui/material/CircularProgress";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import AuhVisitBtn from "./auhVisitBtn";
 import "./authForms.css";
 
 const RecoverPassword = () => {
@@ -15,12 +12,9 @@ const RecoverPassword = () => {
     email: "",
   });
 
-  const router = useRouter();
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
-  const updateUser = useAuthStore((state) => state.updateUser);
 
   const handleChange = (e) => {
     setFormData({ email: e.target.value });
@@ -77,12 +71,12 @@ const RecoverPassword = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="authForm space-y-6">
+    <form className="authForm space-y-6">
       {/* Email */}
       <div>
         <Label
           htmlFor="email"
-          className="font-medium text-gray-700 dark:text-gray-300"
+          className="font-medium text-gray-700"
         >
           Email
         </Label>
@@ -93,22 +87,13 @@ const RecoverPassword = () => {
             placeholder="your@email.com"
             value={formData.email}
             onChange={handleChange}
-            className="rounded-lg border-gray-200 py-5 pr-4 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
+            className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
           />
         </div>
       </div>
 
       {/* Submit Button */}
-      <Button
-        type="submit"
-        className="w-full cursor-pointer rounded-lg bg-gray-900 py-6 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
-      >
-        {!loading ? (
-          <p>Reset password</p>
-        ) : (
-          <CircularProgress color="white" size="17px" />
-        )}
-      </Button>
+      <AuhVisitBtn loading={loading} black onClick={handleSubmit} text="Reset"  />
 
       {errors?.email && <p className="textError">{errors?.email}</p>}
     </form>

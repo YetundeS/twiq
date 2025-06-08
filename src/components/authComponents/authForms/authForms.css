@@ -1,5 +1,7 @@
 .authForm {
     font-family: "Basic Sans", "New Spirit", "Inter", "Lato", Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 
 .authForm_field {
@@ -11,13 +13,17 @@
 }
 
 .formInput {
-    padding: .8rem;
-    width: 85%;
-    border-radius: 8px;
-    background-color: #1f2b459f;
+    background-color: #C8969F;
+    border: none;
     color: white;
-    font-size: 14px;
-    outline: none;
+}
+
+.formInput::placeholder {
+  color: #fff; /* Tailwind gray-400 */
+  opacity: 1; /* Make sure it's not semi-transparent */
+}
+
+.formInput:focus {
     border: none;
 }
 
@@ -29,6 +35,12 @@
     top: 50%;
     right: 0;
     transform: translateY(-50%);
+}
+
+.forgotPass {
+    color: #7f0000;
+    align-self: center;
+    cursor: pointer;
 }
 
 .formBtn {
