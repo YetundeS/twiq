@@ -27,13 +27,25 @@ const ModelTemplates = ({ setInputValue, assistantSlug }) => {
     <div className="modelTemplates">
 
       <div className="dashboardLogo">
-        <Image
-          src={"/images/logo/twiq_method_logo_black.png"}
-          width={600}
-          height={600}
-          alt="twiq logo"
-          className="dl_logo"
-        />
+        <>
+          {/* Light mode logo (visible only in light mode) */}
+          <Image
+            src="/images/logo/twiq_method_logo_black.png"
+            width={600}
+            height={600}
+            alt="TWIQ Logo Light"
+            className="dl_logo block dark:hidden"
+          />
+
+          {/* Dark mode logo (visible only in dark mode) */}
+          <Image
+            src="/images/logo/twiq_method_logo_white.png"
+            width={600}
+            height={600}
+            alt="TWIQ Logo Dark"
+            className="dl_logo hidden dark:block"
+          />
+        </>
       </div>
       <h3 className="templatesTitle">{assSlug}</h3>
       <div className="modelCard_wrapper">

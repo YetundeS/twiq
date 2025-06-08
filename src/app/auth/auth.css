@@ -164,7 +164,7 @@ h3 {
   justify-content: center;
   height: 100vh;
   position: relative;
-  /* background: var(--page-bg-dark); */
-  background: radial-gradient(circle at top left, #562525, #2b0505, #1a0101);
+  background: var(--page-bg-dark);
+  /* background: radial-gradient(circle at top left, #562525, #2b0505, #1a0101); */
   font-family: "New Spirit", serif, "Poppins", Arial, Helvetica, sans-serif;
 }

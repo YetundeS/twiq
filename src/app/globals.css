@@ -248,7 +248,7 @@ input:focus-visible,
   
   /* Dark Theme */
   
-  --page-bg-dark: radial-gradient(circle at top left, #1a0000, #0d0d0d);
+  --page-bg-dark: radial-gradient(circle at top left, #562525, #2b0505, #1a0101);
   --sidebar-bg-dark: radial-gradient(circle at top left,
   #1c0b0b,
   #1c0b0b,

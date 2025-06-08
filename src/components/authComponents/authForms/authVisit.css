@@ -131,7 +131,18 @@
 }
 
 .copyright {
-    font-size: 16px;
+    font-size: 14.8px;
     text-align: center;
     width: 100%;
+}
+
+.dark .needHelp {
+    color: rgb(255, 255, 255);
+}
+
+.dark .authVisitBtn {
+    
+    box-shadow: 3px 15px 10px -11px rgba(255, 255, 255, 0.15);
+    -webkit-box-shadow: 3px 15px 10px -11px rgba(255, 255, 255, 0.15);
+    -moz-box-shadow: 3px 15px 10px -11px rgba(255, 255, 255, 0.15);
 }

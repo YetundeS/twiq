@@ -40,17 +40,29 @@ const handleDownload = () => {
       <div className="db_pageBody">
         <div className="db_aboveTheFold">
           <div className="dashboardLogo">
-            <Image
-              src={"/images/logo/twiq_method_logo_black.png"}
-              width={600}
-              height={600}
-              alt="twiq logo"
-              className="dl_logo"
-            />
+            <>
+              {/* Light mode logo (visible only in light mode) */}
+              <Image
+                src="/images/logo/twiq_method_logo_black.png"
+                width={600}
+                height={600}
+                alt="TWIQ Logo Light"
+                className="dl_logo block dark:hidden"
+              />
+
+              {/* Dark mode logo (visible only in dark mode) */}
+              <Image
+                src="/images/logo/twiq_method_logo_white.png"
+                width={600}
+                height={600}
+                alt="TWIQ Logo Dark"
+                className="dl_logo hidden dark:block"
+              />
+            </>
           </div>
           {twiqDefinition && (
             <div className="twiqDef_title">
-            <h2 className="title">What is <span>T.W.I.Q.</span> Method</h2>
+              <h2 className="title">What is <span>T.W.I.Q.</span> Method</h2>
           </div>
           )}
         </div>

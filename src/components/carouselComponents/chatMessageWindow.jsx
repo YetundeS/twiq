@@ -19,7 +19,7 @@ const ChatMessageWindow = ({
           <SpinnerLoader />
         </div>
       ) : (
-        <>
+        <div className="chats_area_container">
           {chats?.length > 0 ? (
             <>
               {chats?.map((chat, i) => (
@@ -37,7 +37,7 @@ const ChatMessageWindow = ({
               <div className="messagesEnd" ref={messagesEndRef} />
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import { MarkdownComponents } from "../markdown";
 import "./cm.css";
 
 const ChatMessage = ({ chat }) => {
@@ -13,7 +14,13 @@ const ChatMessage = ({ chat }) => {
     >
       <div className="aitextMessageBlock">
         {chat?.sender !== "user" ? (
-          <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{chat?.content}</Markdown>
+          <Markdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+            components={MarkdownComponents}
+          >
+            {chat?.content}
+          </Markdown>
         ) : (
           <p>{chat?.content}</p>
         )}

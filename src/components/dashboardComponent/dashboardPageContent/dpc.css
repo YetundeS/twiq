@@ -172,7 +172,7 @@
     padding: 1.5rem 0;
     height: max-content;
     align-items: center;
-    /* justify-content: center; */
+    justify-content: center;
     max-width: 2026px;
     align-self: center;
 }
@@ -259,4 +259,12 @@
 
     color: var(--page-text-dark);
 
+}
+
+.dark .descTxt, .dark .tfd_letter, .dark .twiqDef_title .title span {
+    color: var(--active-sidebar-item);
+}
+
+.dark .twiqDef_title .title {
+    color: white;
 }

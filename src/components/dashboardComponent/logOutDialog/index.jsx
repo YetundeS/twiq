@@ -24,7 +24,7 @@ const LogOutDialog = () => {
     updateUser(null);
 
     logOutUser();
-    router.push("/auth");
+    router.push("/sign-off");
     closeDialog()
   };
 
