@@ -57,6 +57,7 @@ const StorytellerModel = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            assistantSlug={'storyteller'}
           />
           <ChatInputArea
             inputValue={inputValue}

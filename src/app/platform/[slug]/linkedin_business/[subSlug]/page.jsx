@@ -53,7 +53,7 @@ const LBChat = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
-            assistantSlug={'storyteller'}
+            assistantSlug={'linkedin_business'}
             isFetchingChats={isFetchingChats}
           />
           <ChatInputArea

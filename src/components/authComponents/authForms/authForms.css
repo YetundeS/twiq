@@ -19,8 +19,8 @@
 }
 
 .formInput::placeholder {
-  color: #fff; /* Tailwind gray-400 */
-  opacity: 1; /* Make sure it's not semi-transparent */
+  color: #fff;
+  opacity: .6; 
 }
 
 .formInput:focus {

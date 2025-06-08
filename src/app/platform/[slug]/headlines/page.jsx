@@ -50,6 +50,7 @@ const HeadlinesModel = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            assistantSlug={'headlines'}
           />
           <ChatInputArea
             inputValue={inputValue}

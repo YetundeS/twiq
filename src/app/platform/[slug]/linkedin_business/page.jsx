@@ -51,6 +51,7 @@ const LinkedInBusinessModel = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            assistantSlug={'linkedin_business'}
           />
           <ChatInputArea
             inputValue={inputValue}

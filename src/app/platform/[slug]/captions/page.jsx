@@ -3,6 +3,7 @@
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
+import PlatformTop from "@/components/dashboardComponent/platformTop";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import "@/styles/platformStyles.css";
@@ -49,6 +50,7 @@ const CaptionModel = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            assistantSlug={'captions'}
           />
           <ChatInputArea
             inputValue={inputValue}

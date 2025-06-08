@@ -50,6 +50,7 @@ const VideoScriptsModel = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            assistantSlug={'video_scripts'}
           />
           <ChatInputArea
             inputValue={inputValue}

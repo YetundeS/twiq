@@ -9,8 +9,23 @@
     gap: 2rem;
 }
 
+
+.dashboardLogo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid black; */
+    width: 100%;
+}
+
+.dl_logo {
+    width: 320px;
+    height: max-content;
+}
+
+
 .templatesTitle {
-    font-size: 32px;
+    font-size: 40px;
     font-weight: 600;
     text-transform: capitalize;
 }

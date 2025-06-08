@@ -50,6 +50,7 @@ const LinkedInPersonalModel = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            assistantSlug={'linkedin_personal'}
           />
           <ChatInputArea
             inputValue={inputValue}

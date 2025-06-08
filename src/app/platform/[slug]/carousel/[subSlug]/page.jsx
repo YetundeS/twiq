@@ -53,7 +53,7 @@ const CarouselChat = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
-            assistantSlug={'storyteller'}
+            assistantSlug={'carousel'}
             isFetchingChats={isFetchingChats}
           />
           <ChatInputArea

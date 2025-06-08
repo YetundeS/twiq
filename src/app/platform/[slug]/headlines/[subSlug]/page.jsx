@@ -4,11 +4,14 @@ import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import PlatformTop from "@/components/dashboardComponent/platformTop";
+import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import "@/styles/platformStyles.css";
 import { PanelRightOpen } from "lucide-react";
 
 const CarouselChat = () => {
+  const isMobile = useIsMobile();
+
   const {
     isSidebarOpen,
     toggleSidebar,
@@ -51,7 +54,7 @@ const CarouselChat = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
-            assistantSlug={'storyteller'}
+            assistantSlug={'headlines'}
             isFetchingChats={isFetchingChats}
           />
           <ChatInputArea

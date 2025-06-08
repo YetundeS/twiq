@@ -61,6 +61,15 @@ export const assistantPromptTemplates = {
   ],
 };
 
+export const assistantDisplayNames = {
+  carousel: "Carousel",
+  storyteller: "Storyteller",
+  headlines: "Headlines",
+  linkedin_business: "LinkedIn Business",
+  linkedin_personal: "LinkedIn Personal",
+  captions: "Captions",
+  video_scripts: "Video Scripts",
+};
 
 export const COACH_ASSISTANTS = {
   carousel: 'asst_v8lwEKfUhwbCjj31zW3QWJL9',
