@@ -5,7 +5,8 @@
 
     color: var(--page-text);
     overflow-x: hidden;
-    transition: background 0.2s linear;;
+    transition: background 0.2s linear;
+    ;
 }
 
 
@@ -60,15 +61,106 @@
     flex-direction: column;
     box-sizing: border-box;
     padding: 1rem 3rem;
-    gap: 6.4rem;
+    gap: 2.4rem;
 }
+
 .db_aboveTheFold {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     align-self: flex-start;
+    /* border: 1px solid black; */
+    width: 100%;
 }
 
+.dashboardLogo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid black; */
+    width: 100%;
+}
+
+.dl_logo {
+    width: 400px;
+    height: max-content;
+}
+
+.twiqDef_title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid black; */
+    width: 100%;
+}
+
+.twiqDef_title .title {
+    font-size: 40px;
+    font-weight: 800;
+    color: black;
+}
+
+.twiqDef_title .title span {
+    color: #510003;
+}
+
+.twiq_description_container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid black; */
+    box-sizing: border-box;
+    padding: 0 2rem;
+}
+
+.descTxt {
+    width: 70%;
+    text-align: center;
+    font-size: 18px;
+    color: #6c0101;
+    font-weight: 600;
+    max-width: 1026px;
+    /* border: 1px solid black; */
+}
+
+.twiq_furtherDescription_container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 3.2rem;
+    box-sizing: border-box;
+    align-items: stretch;
+    padding: 0 2rem;
+    max-width: 2026px;
+    align-self: center;
+}
+
+.tfd_wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+}
+
+.tfd_letter {
+    font-size: 48px;
+    font-weight: bolder;
+    color: #510003;
+}
+
+.tfd_header {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.tfd_desc {
+    font-size: 14px;
+    font-weight: 500;
+}
 
 .db_modelsOverview {
     width: 100%;
@@ -79,10 +171,18 @@
     box-sizing: border-box;
     padding: 1.5rem 0;
     height: max-content;
-    align-items: stretch;
+    align-items: center;
+    /* justify-content: center; */
+    max-width: 2026px;
+    align-self: center;
 }
 
-
+.downloadPDF_box {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 @media (max-width: 1026px) {
 
@@ -97,9 +197,24 @@
     .db_modelsOverview {
         gap: 4rem;
     }
+
+
+    .twiq_furtherDescription_container {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1.4rem;
+        padding: 0 1.4rem;
+    }
+
 }
 
 
+
+@media (max-width: 800px) {
+    .twiq_furtherDescription_container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
 
 @media (max-width: 575px) {
 
@@ -126,6 +241,10 @@
         gap: 2rem;
         justify-content: center;
         padding: 1.5rem 0;
+    }
+
+    .twiq_furtherDescription_container {
+        grid-template-columns: 1fr;
     }
 
 }

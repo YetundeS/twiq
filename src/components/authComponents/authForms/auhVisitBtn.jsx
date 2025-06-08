@@ -1,9 +1,9 @@
 import { CircularProgress } from '@mui/material';
 import './authVisit.css';
 
-const AuhVisitBtn = ({ text = "Sign In", black, onClick, loading }) => {
+const AuhVisitBtn = ({ text = "Sign In", black, red, onClick, loading }) => {
     return (
-        <div onClick={onClick} className={`authVisitBtn ${black ? 'black' : ''}`}>
+        <div onClick={onClick} className={`authVisitBtn ${black ? 'black' : ''} ${red ? 'red' : ''}`}>
             {!loading ? (
                 <p>{text}</p>
             ) : (

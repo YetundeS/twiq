@@ -139,3 +139,27 @@ export const accountPopMenu = [
     icon: () => <LogOut className="home-icon" />,
   },
 ];
+
+
+export const TWIQ_FURTHER_DESC = [
+  {
+    letter: 'T',
+    header: 'THOUGHT LEADERSHIP CONTENT',
+    desc: 'The TWIQ Method™ is a content strategy framework developed by Yetunde Shorters to help coaches, creators, and C-suite executives create content that connects, converts, and actually sounds like you. 10X your know, like and trust factor, so you can focus on being the visionary you are made to be and leave the content creation to TOPE your TWIQ BOT.'
+  },
+  {
+    letter: 'W',
+    header: 'WHAT-TO-DO',
+    desc: 'This type of content showcases your expertise and builds trust in the fact that you can help. It’s your expertise on display. It is what you’re probably already doing. Teach something useful your audience can apply right now. Think step-by-step insights, tools, or strategies that make their lives easier (and make you unforgettable).'
+  },
+  {
+    letter: 'I',
+    header: 'IDEAL IDENTITY CONTENT',
+    desc: 'What is the identity you have in common with those you support. Ideal Identity content is about building and maintaining a connection/relationship with those you serve. You have to connect with them personally. This content reflects their lived experience. It taps into shared values, joys, or struggles so your people feel deeply seen and ready to lean in.'
+  },
+  {
+    letter: 'Q',
+    header: 'QUICK WIN',
+    desc: 'Quick help content is about proving as quickly as possible that you can get them from Point A to B. A simple way to convert them to paying customers is by helping them have quick wins with your content.⠀These include hot takes, or hacks they didn’t know they needed. This is the “save-worthy” stuff that builds instant trust and keeps your content top-of-mind.'
+  },
+]

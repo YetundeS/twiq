@@ -1,3 +1,4 @@
+import CopyrightTxt from '@/components/dashboardComponent/copyrightTxt';
 import Image from 'next/image';
 import AuhVisitBtn from './auhVisitBtn';
 import './authVisit.css';
@@ -30,7 +31,7 @@ const AuthVisit = ({ setActiveForm }) => {
                 </div>
                 <p className="needHelp">need help?</p>
             </div>
-            <p className="copyright">Copyright © 2025, TWIQ METHOD™ All Rights Reserved ICY COACHING & CONSULTING</p>
+            <CopyrightTxt />
         </div>
     )
 }

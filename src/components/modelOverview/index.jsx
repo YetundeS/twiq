@@ -4,9 +4,36 @@ import Image from "next/image";
 import "./modelOverview.css";
 
 
-const ModelOverview = ({ model, organizationName }) => {
+const ModelOverview = ({ specialModel, onClick, model, organizationName }) => {
+  if (specialModel) {
+    return (
+      <GlowEffect blurAmount={6}>
+        <div onClick={onClick} className="modelOverview special">
+          <h3 className="specialModel_title">
+            What is the T.W.I.Q Method
+          </h3>
+          <motion.div
+            whileHover={{
+              scale: 1.2,
+              rotate: 5,
+              transition: { duration: 0.3, type: "spring", stiffness: 300 },
+            }}
+            className="icon_container"
+          >
+            <Image
+              src={`/images/start_here.png`}
+              width={300}
+              height={300}
+              alt="start here icon"
+              className="start_here_img"
+            />
+          </motion.div>
+        </div>
+      </GlowEffect>
+    )
+  }
   return (
-    <GlowEffect  blurAmount={6}>
+    <GlowEffect blurAmount={6}>
       <a
         href={`/platform/${organizationName}/${model?.link}`}
         className="modelOverview"

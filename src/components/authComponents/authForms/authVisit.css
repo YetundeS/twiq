@@ -73,14 +73,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: .8rem 3.6rem;
+    padding: 1rem 3.6rem;
     color: black;
     cursor: pointer;
     max-width: 200px;
     align-self: center;
+    
     box-shadow: 3px 15px 10px -11px rgba(0,0,0,0.55);
--webkit-box-shadow: 3px 15px 10px -11px rgba(0,0,0,0.55);
--moz-box-shadow: 3px 15px 10px -11px rgba(0,0,0,0.55);
+    -webkit-box-shadow: 3px 15px 10px -11px rgba(0,0,0,0.55);
+    -moz-box-shadow: 3px 15px 10px -11px rgba(0,0,0,0.55);
+}
+
+.authVisitBtn.red {
+  background: linear-gradient(to bottom, #7F0000, #370000);
+  color: white;
+  padding: 1.32rem 3.2rem;
+  max-width: 300px;
+    width: max-content;
 }
 
 .authVisitBtn.black {
@@ -122,5 +131,7 @@
 }
 
 .copyright {
-    font-size: 14px;
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
 }
