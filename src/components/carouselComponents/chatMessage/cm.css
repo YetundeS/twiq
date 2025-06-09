@@ -37,8 +37,7 @@
     align-items: center;
     display: flex;
     justify-content: center;
-    /* background-color: var(--chat-message-bg); */
-  background-color: var(--active-sidebar-item);
+    background-color: var(--active-sidebar-item);
 }
 
 
@@ -135,9 +134,3 @@
     color: rgb(255, 255, 255);
 }
 
-/* .dark .chatMessage_message.user {
-    align-self: flex-end;
-    max-width: 70%;
-    color: white;
-    background-color: var(--chat-message-bg);
-} */
