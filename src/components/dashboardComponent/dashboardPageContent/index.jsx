@@ -38,7 +38,7 @@ const handleDownload = () => {
         <PlatformTop twiqDefinition={twiqDefinition} setTwiqDefinition={setTwiqDefinition} />
       </div>
       <div className="db_pageBody">
-        <div className="db_aboveTheFold">
+        <div className="db_aboveTheFold dashboard">
           <div className="dashboardLogo">
             <>
               {/* Light mode logo (visible only in light mode) */}

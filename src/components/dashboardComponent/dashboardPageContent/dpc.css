@@ -69,7 +69,6 @@
     align-items: center;
     justify-content: flex-start;
     align-self: flex-start;
-    /* border: 1px solid black; */
     width: 100%;
 }
 
@@ -98,6 +97,7 @@
     font-size: 40px;
     font-weight: 800;
     color: black;
+    text-align: center;
 }
 
 .twiqDef_title .title span {
@@ -145,9 +145,9 @@
 }
 
 .tfd_letter {
-    font-size: 48px;
+    font-size: 64px;
     font-weight: bolder;
-    color: #510003;
+    color: #9E1C1C;
 }
 
 .tfd_header {
@@ -243,9 +243,12 @@
         justify-content: space-between;
         flex-direction: column-reverse;
         gap: 1.5rem;
-
     }
 
+
+    .db_aboveTheFold.dashboard {
+        flex-direction: column;
+    }
 
     .dashboardTitle {
         font-size: 7vw;
@@ -263,7 +266,7 @@
 
     .db_modelsOverview {
         grid-template-columns: minmax(max-content, 280px);
-        grid-template-rows: minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px);
+        grid-template-rows: minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px);
     }
 
 
