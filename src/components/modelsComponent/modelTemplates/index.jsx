@@ -47,7 +47,29 @@ const ModelTemplates = ({ setInputValue, assistantSlug }) => {
           />
         </>
       </div>
-      <h3 className="templatesTitle">{assSlug}</h3>
+      <div className="assSlugIcon">
+        <>
+          {/* Light mode logo (visible only in light mode) */}
+          <Image
+            src="/images/model_icons/lp_red.png"
+            width={500}
+            height={500}
+            alt="model icon Light"
+            className="modelImg block dark:hidden"
+          />
+
+          {/* Dark mode logo (visible only in dark mode) */}
+          <Image
+            src="/images/model_icons/lp_light.png"
+            width={500}
+            height={500}
+            alt="model icon dark"
+            className="modelImg hidden dark:block"
+          />
+        </>
+          <h3 className="templatesTitle">{assSlug}</h3>
+      </div>
+      <h2 className="shallWeBegin">Shall We Begin?</h2>
       <div className="modelCard_wrapper">
         {templates.length > 0 &&
           templates.slice(0, 6).map((template, index) => (

@@ -6,7 +6,7 @@
     justify-content: center;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.4rem;
 }
 
 
@@ -23,11 +23,30 @@
     height: max-content;
 }
 
+.assSlugIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4rem;
+}
+
+.modelImg {
+    width: 80px;
+    height: max-content;
+}
 
 .templatesTitle {
     font-size: 40px;
     font-weight: 600;
     text-transform: capitalize;
+}
+
+.shallWeBegin {
+    font-size: 32px;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 100%;
+    color: #510003;
 }
 
 .modelCard_wrapper {
