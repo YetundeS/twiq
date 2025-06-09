@@ -62,8 +62,8 @@ export const assistantPromptTemplates = {
 };
 
 export const assistantDisplayNames = {
-  carousel: "Carousel",
-  storyteller: "Storyteller",
+  carousel: "Carousels",
+  storyteller: "Storyteller Scripts",
   headlines: "Headlines",
   linkedin_business: "LinkedIn Business",
   linkedin_personal: "LinkedIn Personal",
