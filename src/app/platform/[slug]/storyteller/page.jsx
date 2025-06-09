@@ -8,6 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import { PanelRightOpen } from "lucide-react";
 
+import TwiqBg from "@/components/dashboardComponent/twiqBg";
 import "@/styles/platformStyles.css";
 
 const StorytellerModel = () => {
@@ -47,6 +48,7 @@ const StorytellerModel = () => {
             <NewChatBtn alt />
           </>
         )}
+        <TwiqBg />
         <PlatformTop />
       </div>
       <div className="pageBody">

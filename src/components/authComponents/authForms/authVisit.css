@@ -8,6 +8,8 @@
     padding-top: 3.2rem;
     padding-bottom: 1rem;
     gap: 2rem;
+    position: relative;
+    z-index: 35;
 }
 
 .authVisit_top {

@@ -34,7 +34,8 @@
     width: 100%;
     align-self: center;
     align-items: center;
-    /* border: 1px solid black; */
+    z-index: 14;
+    position: relative;
 }
 
 .settingsTab {

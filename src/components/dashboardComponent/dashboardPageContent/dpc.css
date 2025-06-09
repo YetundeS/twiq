@@ -34,10 +34,9 @@
     width: 100%;
     gap: .4rem;
     color: var(--sidebar-toggle-btn);
-    overflow: hidden;
-    /* border: 1px solid white; */
+    position: relative;
+    overflow-y: visible;
 }
-
 .db_pageTop_iconWrapper {
     display: flex;
     align-items: center;
@@ -61,6 +60,8 @@
     box-sizing: border-box;
     padding: 1rem 3rem;
     gap: 2.4rem;
+    position: relative;
+    z-index: 14;
 }
 
 .db_aboveTheFold {
@@ -177,17 +178,18 @@
 
 .downloadPDF_box {
     width: 100%;
-    display: flex;
+    display: flex; 
     align-items: center;
     justify-content: center;
 }
 
 @media (max-width: 1200px) {
-    
+
     .db_modelsOverview {
         grid-template-columns: minmax(max-content, 280px) minmax(max-content, 280px) minmax(max-content, 280px);
         grid-template-rows: minmax(360px, 250px) minmax(360px, 250px) minmax(360px, 250px);
     }
+
 }
 
 @media (max-width: 1026px) {

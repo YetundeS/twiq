@@ -71,6 +71,16 @@ export const assistantDisplayNames = {
   video_scripts: "Video Scripts",
 };
 
+export const assistantDisplayIcons = {
+  carousel: "carousel",
+  storyteller: "storyteller",
+  headlines: "headlines",
+  linkedin_business: "lyb",
+  linkedin_personal: "lp",
+  captions: "captions",
+  video_scripts: "video-script",
+};
+
 export const COACH_ASSISTANTS = {
   carousel: 'asst_v8lwEKfUhwbCjj31zW3QWJL9',
   storyteller: 'asst_25Mfs5oHUVkcp8EoCSTabyRg',

@@ -107,7 +107,7 @@ export const modelsOverview = [
       "Create scroll-stopping captions full of personality in seconds.",
       "Craft witty, relatable, and engaging captions that connect with your audience.",
     ],
-    icon: "caption_light.png",
+    icon: "captions_light.png",
     link: "captions",
   },
   {

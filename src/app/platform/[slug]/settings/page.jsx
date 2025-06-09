@@ -4,6 +4,7 @@
 import NewChatBtn from '@/components/dashboardComponent/newChatBtn';
 import PlatformTop from '@/components/dashboardComponent/platformTop';
 import SubscriptionDialog from '@/components/dashboardComponent/subscriptionDialog';
+import TwiqBg from '@/components/dashboardComponent/twiqBg';
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -53,6 +54,7 @@ const Settings = () => {
             <NewChatBtn alt />
           </>
         )}
+        <TwiqBg />
         <PlatformTop />
       </div>
       <div className="settings_content">

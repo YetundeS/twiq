@@ -3,7 +3,7 @@ import { API } from "./authAPI";
 
 export const handleSubscribe = async (priceId, user, updateIsSubscribing) => {
     if (!user) {
-        router.push(`/auth`);
+        router.push(`/sign-off`);
         return
     }
 

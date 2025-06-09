@@ -1,6 +1,6 @@
 "use client";
 
-import { assistantDisplayNames, assistantPromptTemplates } from "@/constants/model";
+import { assistantDisplayIcons, assistantDisplayNames, assistantPromptTemplates } from "@/constants/model";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,11 +9,13 @@ import "./mt.css";
 const ModelTemplates = ({ setInputValue, assistantSlug }) => {
   const pathname = usePathname();
   const [templates, setTemplates] = useState([]);
-  const [assSlug, setAssSlug] = useState();
+  const [assSlug, setAssSlug] = useState('');
+  const [assIcon, setAssIcon] = useState('');
 
   useEffect(() => {
     const key = assistantSlug ? assistantSlug : pathname?.split("/").pop();
     setAssSlug(assistantDisplayNames[key])
+    setAssIcon(assistantDisplayIcons[key])
     const matchedTemplates = assistantPromptTemplates[key];
 
     if (matchedTemplates) {
@@ -51,7 +53,7 @@ const ModelTemplates = ({ setInputValue, assistantSlug }) => {
         <>
           {/* Light mode logo (visible only in light mode) */}
           <Image
-            src="/images/model_icons/lp_red.png"
+            src={`/images/model_icons/${assIcon}_red.png`}
             width={500}
             height={500}
             alt="model icon Light"
@@ -60,7 +62,7 @@ const ModelTemplates = ({ setInputValue, assistantSlug }) => {
 
           {/* Dark mode logo (visible only in dark mode) */}
           <Image
-            src="/images/model_icons/lp_light.png"
+            src={`/images/model_icons/${assIcon}_light.png`}
             width={500}
             height={500}
             alt="model icon dark"

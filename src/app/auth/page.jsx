@@ -5,6 +5,7 @@ import "@/components/authComponents/authForms/authVisit.css";
 import LoginForm from "@/components/authComponents/authForms/login";
 import RecoverPassword from "@/components/authComponents/authForms/recoverPass";
 import SignupForm from "@/components/authComponents/authForms/signupForm";
+import TwiqBg from "@/components/dashboardComponent/twiqBg";
 import GlowEffect from "@/components/landingPageComponents/GlowEffect";
 import { Header } from "@/components/landingPageComponents/Header";
 import { useState } from "react";
@@ -16,6 +17,7 @@ export default function Auth() {
   return (
     <div className="authPage animate-fade-in-up min-h-screen transition-colors duration-300">
       <Header />
+      <TwiqBg />
 
       {activeForm == 'visit' ? (
         <>

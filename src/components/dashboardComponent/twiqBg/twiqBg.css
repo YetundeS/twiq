@@ -1,0 +1,30 @@
+
+
+.twiqBg {
+    position: absolute;
+    top: -16rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: max-content;
+    z-index: 10;
+    opacity: .6;
+    max-width: 1600px;
+}
+
+
+
+
+@media (max-width: 1200px) {
+
+
+    .twiqBg {
+        top: 0;
+    }
+
+}
+
+.dark .twiqBg {
+    opacity: .18;
+}
+

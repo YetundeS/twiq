@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }) {
 
   useEffect(() => {
     if (isHydrated && !user) {
-      router.push("/auth");
+      router.push("/sign-off");
     }
   }, [user, isHydrated]);
   
