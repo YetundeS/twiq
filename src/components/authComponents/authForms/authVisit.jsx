@@ -29,7 +29,7 @@ const AuthVisit = ({ setActiveForm }) => {
                     <AuhVisitBtn onClick={() => setActiveForm('signin')} black text="Sign In"  />
                     <AuhVisitBtn onClick={() => setActiveForm('signup')} text="Sign Up"  />
                 </div>
-                <p className="needHelp">need help?</p>
+                <p className="needHelp out">need help?</p>
             </div>
             <CopyrightTxt />
         </div>

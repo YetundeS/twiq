@@ -7,7 +7,7 @@ function isValidPrompt(input) {
 }
 
 export function usePromptSuggestions(input, model, modelDescription) {
-  const shouldFetch = isValidPrompt(input) && !!model;
+  // const shouldFetch = isValidPrompt(input) && !!model;
 
   // const { data, error, isLoading } = useSWR(
   //   shouldFetch

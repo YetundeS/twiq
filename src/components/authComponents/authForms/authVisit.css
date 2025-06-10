@@ -138,7 +138,7 @@
     width: 100%;
 }
 
-.dark .needHelp {
+.dark .needHelp.out {
     color: rgb(255, 255, 255);
 }
 

@@ -156,7 +156,7 @@ export default function useAssistantChat( modelName, assistantSlug) {
 
 
   const handleNewChatSession = async (newChatSession) => {
-      console.log('newChatSession: ', newChatSession)
+      // console.log('newChatSession: ', newChatSession)
       addToSideBarSessions(newChatSession);
       updateActiveSessionID(newChatSession?.id);
   };

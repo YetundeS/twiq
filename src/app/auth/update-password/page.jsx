@@ -1,10 +1,11 @@
 "use client";
 
 import UpdatePasswordForm from "@/components/authComponents/authForms/updatePasswordForm";
+import TwiqBg from "@/components/dashboardComponent/twiqBg";
 import GlowEffect from "@/components/landingPageComponents/GlowEffect";
 import { Header } from "@/components/landingPageComponents/Header";
 import { createClient } from "@supabase/supabase-js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../auth.css";
 
 const supabase = createClient(
@@ -16,36 +17,36 @@ const UpdatePassword = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   const getSessionFromURL = async () => {
-  //     if (typeof window !== "undefined") {
-  //       const hashParams = new URLSearchParams(
-  //         window.location.hash.substring(1),
-  //       );
-  //       const accessToken = hashParams.get("access_token");
-  //       const refreshToken = hashParams.get("refresh_token");
+  useEffect(() => {
+    const getSessionFromURL = async () => {
+      if (typeof window !== "undefined") {
+        const hashParams = new URLSearchParams(
+          window.location.hash.substring(1),
+        );
+        const accessToken = hashParams.get("access_token");
+        const refreshToken = hashParams.get("refresh_token");
 
-  //       if (accessToken && refreshToken) {
-  //         const { error } = await supabase.auth.setSession({
-  //           access_token: accessToken,
-  //           refresh_token: refreshToken,
-  //         });
+        if (accessToken && refreshToken) {
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
 
-  //         if (error) {
-  //           setError("Invalid or expired link.");
-  //         } else {
-  //           setError(null);
-  //         }
-  //       } else {
-  //         setError("Access and Refresh Tokens Needed.");
-  //       }
+          if (error) {
+            setError("Invalid or expired link.");
+          } else {
+            setError(null);
+          }
+        } else {
+          setError("Access and Refresh Tokens Needed.");
+        }
 
-  //       setLoading(false);
-  //     }
-  //   };
+        setLoading(false);
+      }
+    };
 
-  //   getSessionFromURL();
-  // }, []);
+    getSessionFromURL();
+  }, []);
 
   const handlePasswordUpdate = async (newPassword) => {
     try {
@@ -68,7 +69,8 @@ const UpdatePassword = () => {
   return (
     <div className="authPage min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 transition-colors duration-300 dark:from-purple-900/20 dark:via-pink-900/10 dark:to-blue-900/20">
       <Header />
-      <div className="flex min-h-screen items-start justify-center pt-40 pb-8 md:pt-24">
+      <TwiqBg />
+      <div className="z[35] relative flex min-h-screen items-start justify-center pt-40 pb-8 md:pt-24">
         <div className="w-full max-w-md px-4">
           <GlowEffect>
             <div className="authFormTopWrapper rounded-3xl border border-gray-200/50 bg-white p-8 shadow-2xl backdrop-blur-sm dark:border-gray-600/50 dark:bg-gray-800">
