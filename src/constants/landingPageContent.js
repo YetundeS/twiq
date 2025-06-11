@@ -72,6 +72,10 @@ export const SITE_CONTENT = {
       buttonText: "Choose Starter Plan →",
       popular: false,
       theme: "light",
+      style: {
+        bg: '#F2F2F2',
+        color: 'black'
+      }
     },
     {
       name: "Pro Creator Plan",
@@ -96,6 +100,10 @@ export const SITE_CONTENT = {
       buttonText: "Get Pro Plan →",
       popular: true,
       theme: "dark",
+      style: {
+        bg: '#693D3D',
+        color: 'white'
+      }
     },
     {
       name: "Enterprise & Teams",
@@ -119,6 +127,10 @@ export const SITE_CONTENT = {
       buttonText: "Book a Demo →",
       popular: false,
       theme: "enterprise",
+      style: {
+        bg: '#5A0001',
+        color: 'white'
+      }
     },
   ],
 

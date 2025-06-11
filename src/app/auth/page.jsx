@@ -47,7 +47,7 @@ export default function Auth() {
                         Already registered{" "}
                         <button
                           onClick={() => setActiveForm("signin")}
-                          className="cursor-pointer font-medium text-purple-600 hover:underline dark:text-purple-400"
+                          className="cursor-pointer font-medium underline"
                         >
                           Log in
                         </button>
@@ -58,7 +58,7 @@ export default function Auth() {
                         Don't have an account?{" "}
                         <button
                           onClick={() => setActiveForm("signup")}
-                          className="cursor-pointer font-medium text-purple-600 hover:underline dark:text-purple-400"
+                          className="cursor-pointer font-medium underline"
                         >
                           Sign up
                         </button>
@@ -69,7 +69,7 @@ export default function Auth() {
                         Go back to{" "}
                         <button
                           onClick={() => setActiveForm("signin")}
-                          className="cursor-pointer font-medium text-purple-600 hover:underline dark:text-purple-400"
+                          className="cursor-pointer font-medium underline"
                         >
                           Sign in
                         </button>
