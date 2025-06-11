@@ -78,8 +78,8 @@ export const SITE_CONTENT = {
       description:
         "For creators, marketers & educators ready to scale without burnout",
       price: "$799",
-      priceId: "price_1RYlqzEttljLjongZXWPlrTF",
-      // priceId: 'price_1RQy8iEttljLjong2DuStyZk',
+      // priceId: "price_1RYlqzEttljLjongZXWPlrTF", // for test
+      priceId: 'price_1RQy8iEttljLjong2DuStyZk',
       productId: 'prod_SLfTLYmEto0mP5',
       period: "/year",
       bots: "All 7 TWIQ Bots",
@@ -102,8 +102,8 @@ export const SITE_CONTENT = {
       description:
         "For agencies, coaching programs, & growing brands ready to scale content ops",
       price: "$2,999",
-      priceId: 'price_1RYlNbEttljLjongToyLbU5T',
-      // priceId: 'price_1RQyC5EttljLjongT85sjVDc',
+      // priceId: 'price_1RYlNbEttljLjongToyLbU5T', // for test
+      priceId: 'price_1RQyC5EttljLjongT85sjVDc',
       productId: 'prod_SLfX1eCT161Yxe',
       period: "/year",
       bots: "10+ Team Seats",
