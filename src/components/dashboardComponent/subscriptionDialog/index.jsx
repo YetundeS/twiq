@@ -12,10 +12,16 @@ import "./sd.css";
 
 
 const SubscriptionDialog = () => {
-    const { isSubOpen, closeSubDialog } = useSusbcriptionDialogStore();
+    const { isSubOpen, subscribingPlanId, closeSubDialog } = useSusbcriptionDialogStore();
 
     return (
-        <Dialog onOpenChange={closeSubDialog} open={isSubOpen}>
+        <Dialog onOpenChange={() => {
+            if(!!subscribingPlanId) {
+                return
+            } else {
+                closeSubDialog()
+            }
+        }} open={isSubOpen}>
             <DialogContent
                 aria-describedby="dialog-description"
                 className="flex flex-col sm:max-w-[500px] sd_dialogBody"

@@ -33,7 +33,7 @@ const Settings = () => {
     const { openSubDialog } = useSusbcriptionDialogStore();
 
   const { toggleSidebar: mainToggle } = useSidebar();
-  const { user } = useAuthStore()
+  const { user } = useAuthStore();
 
   const toggleSidebar = () => {
     mainToggle()

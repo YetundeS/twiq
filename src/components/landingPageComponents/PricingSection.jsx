@@ -19,7 +19,8 @@ export function PricingSection({ platform }) {
   const sectionRef = useRef(null);
   const router = useRouter();
   const { user } = useAuthStore()
-  const { isSubscribing, updateIsSubscribing } = useSusbcriptionDialogStore()
+  const { subscribingPlanId, setSubscribingPlanId } = useSusbcriptionDialogStore()
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -189,18 +190,18 @@ export function PricingSection({ platform }) {
                 <Button
                   onClick={() => {
                     if (platform) {
-                      updateIsSubscribing(true)
-                      handleSubscribe(plan?.priceId, user, updateIsSubscribing)
+                      setSubscribingPlanId(plan?.priceId);
+                      handleSubscribe(plan?.priceId, user, () => setSubscribingPlanId(null));
                     } else {
                       router.push(`/auth`);
                     }
                   }}
                   className={`w-full cursor-pointer rounded-xl py-3 text-lg font-semibold transition-all duration-200 hover:scale-105 ${getButtonStyle(plan.theme)}`}
                 >
-                  {!isSubscribing ? (
+                  {subscribingPlanId !== plan.priceId ? (
                     <p>{plan.buttonText}</p>
                   ) : (
-                    <CircularProgress color="white" size="17px" />
+                    <CircularProgress color="inherit" size="17px" />
                   )}
                 </Button>
               </div>

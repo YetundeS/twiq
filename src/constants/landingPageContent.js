@@ -58,7 +58,8 @@ export const SITE_CONTENT = {
       description:
         "Perfect for solopreneurs & creative rebels just getting started",
       price: "$399",
-      priceId: 'prod_SLfSE6oRt80Mu7',
+      priceId: 'price_1RQy76EttljLjong8JTYhW7u',
+      productId: 'prod_SLfSE6oRt80Mu7',
       period: "/year",
       bots: "3+ TWIQ Bots",
       botBadges: ["V", "C", "H"],
@@ -77,7 +78,9 @@ export const SITE_CONTENT = {
       description:
         "For creators, marketers & educators ready to scale without burnout",
       price: "$799",
-      priceId: 'prod_SLfTLYmEto0mP5',
+      priceId: "price_1RYlqzEttljLjongZXWPlrTF",
+      // priceId: 'price_1RQy8iEttljLjong2DuStyZk',
+      productId: 'prod_SLfTLYmEto0mP5',
       period: "/year",
       bots: "All 7 TWIQ Bots",
       botBadges: ["V", "C", "L", "B"],
@@ -99,7 +102,9 @@ export const SITE_CONTENT = {
       description:
         "For agencies, coaching programs, & growing brands ready to scale content ops",
       price: "$2,999",
-      priceId: 'prod_SLfX1eCT161Yxe',
+      priceId: 'price_1RYlNbEttljLjongToyLbU5T',
+      // priceId: 'price_1RQyC5EttljLjongT85sjVDc',
+      productId: 'prod_SLfX1eCT161Yxe',
       period: "/year",
       bots: "10+ Team Seats",
       botBadges: ["T", "A", "B", "C"],

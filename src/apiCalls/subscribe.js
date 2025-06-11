@@ -23,7 +23,7 @@ async function openBillingPortal(stripeCustomerId, updateIsSubscribing) {
         // Get token from localStorage
         const token = localStorage.getItem("access_token");
 
-        const response = await axios.post('/api/stripe/billing-portal', { stripeCustomerId },
+        const response = await API.post('/stripe/billing-portal', { stripeCustomerId },
             {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -59,7 +59,7 @@ const callPlanSubscribe = async (priceId, updateIsSubscribing) => {
         if (url) {
             window.location.href = url;
         } else {
-            console.error('No redirect URL returned from API');
+            throw new Error("Stripe didn't return a url - try again.")
         }
 
     } catch (err) {
