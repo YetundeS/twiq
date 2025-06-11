@@ -7,7 +7,7 @@ export const handleSubscribe = async (priceId, user, updateIsSubscribing) => {
         return
     }
 
-    if (user?.is_active) {
+    if (user?.stripe_customer_id) {
         openBillingPortal(user?.stripe_customer_id, updateIsSubscribing)
     } else {
         callPlanSubscribe(priceId, updateIsSubscribing)
