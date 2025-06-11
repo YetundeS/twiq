@@ -23,6 +23,7 @@ const PlatformTop = ({ twiqDefinition, setTwiqDefinition }) => {
     useEffect(() => {
         if (!user) return;
         const signString = generateSignString(user?.organization_name);
+        console.log('sign: ', signString)
         setOrganization(signString);
     }, [user]);
 
