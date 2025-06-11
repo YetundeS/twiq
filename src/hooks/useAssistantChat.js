@@ -61,6 +61,12 @@ export default function useAssistantChat( modelName, assistantSlug) {
     setSendBtnActive(inputValue && !streaming);
   }, [inputValue, streaming]);
 
+  function getErrorMessage(error = '') {
+    if (error.includes('Unauthorized')) return 'Unauthorized - Please login';
+    if (error.includes('Quota exceeded')) return 'Quota exceeded - Please upgrade your plan';
+    return 'Server Error - Please try again.';
+  }
+
 
   const sendMessage = async () => {
     if (!inputValue || streaming) return;
@@ -72,7 +78,7 @@ export default function useAssistantChat( modelName, assistantSlug) {
       created_at: new Date(),
     };
 
-    // Update local state 
+  // Update local state 
     updateActiveChatMessages(userChat);
 
     setStreaming(true);
@@ -112,9 +118,7 @@ export default function useAssistantChat( modelName, assistantSlug) {
         const assistantErrorChat = {
           sender: "assistant",
           status: "error",
-          content: error?.includes("Unauthorized")
-            ? "Unauthorized - Please login"
-            : "Server Error - Please try again.",
+          content:  getErrorMessage(error),
           sessionID: activeSessionID || 'newChat',
           created_at: new Date(),
         };
