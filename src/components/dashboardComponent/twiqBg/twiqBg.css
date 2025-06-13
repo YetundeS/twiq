@@ -2,14 +2,15 @@
 
 .twiqBg {
     position: absolute;
-    top: -16rem;
+    top: -15.2rem;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
+    width: 100vw;
     height: max-content;
     z-index: 10;
-    opacity: .6;
+    opacity: .72;
     max-width: 1600px;
+    object-fit: cover;
 }
 
 
@@ -25,6 +26,6 @@
 }
 
 .dark .twiqBg {
-    opacity: .18;
+    opacity: 1;
 }
 

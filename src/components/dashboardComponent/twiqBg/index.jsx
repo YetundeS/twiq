@@ -4,9 +4,9 @@ import './twiqBg.css'
 const TwiqBg = () => {
     return (
         <Image
-            src={"/images/twiq_background.png"}
-            width={1400}
-            height={700}
+            src={"/images/twiq_background.svg"}
+            width={2000}
+            height={2000}
             alt="twiq background"
             className="twiqBg"
         />
