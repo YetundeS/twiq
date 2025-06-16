@@ -34,13 +34,14 @@
     width: 100%;
     align-self: center;
     align-items: center;
-    /* border: 1px solid black; */
+    z-index: 14;
+    position: relative;
 }
 
 .settingsTab {
     width: 64%;
     /* border: 1px solid black; */
-    
+
 }
 
 .tabsList {
@@ -64,8 +65,8 @@
 
 .settings_cardContent {
     display: flex;
-    align-items: center;
     gap: 2rem;
+    flex-direction: column;
 }
 
 .settings_cardRow {
@@ -90,6 +91,17 @@
     box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.12);
     -webkit-box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.12);
     -moz-box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.settings_cardRow_content.gray {
+    color: rgb(87, 87, 87);
+    font-size: 12px;
+}
+
+.settings_cardRow_content span {
+    margin: 0 1rem;
+    color: black;
+    font-size: 13.2px;
 }
 
 .tabCardContent {
@@ -145,7 +157,14 @@
     }
 }
 
+@media (max-width: 525px) {
 
+    .settings_cardRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+    }
+}
 
 /* Dark Theme */
 

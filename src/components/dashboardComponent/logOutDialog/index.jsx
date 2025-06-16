@@ -17,14 +17,14 @@ import "./lod.css";
 
 const LogOutDialog = () => {
   const { isOpen, closeDialog } = useLogOutDialogStore();
-    const updateUser = useAuthStore((state) => state.updateUser);
+  const updateUser = useAuthStore((state) => state.updateUser);
   const router = useRouter();
 
-    const logOut = () => {
+  const logOut = () => {
     updateUser(null);
 
     logOutUser();
-    router.push("/auth");
+    router.push("/sign-off");
     closeDialog()
   };
 
@@ -38,7 +38,7 @@ const LogOutDialog = () => {
           <DialogTitle>Done already?</DialogTitle>
           <div className="dialogDescription">
             <p>We’ll miss you! Ready to log out for real?</p>
-            </div>
+          </div>
         </DialogHeader>
         <DialogFooter className="dialogFooter">
           <Button className="dialogBtn" onClick={closeDialog}>Not yet</Button>

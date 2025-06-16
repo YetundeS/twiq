@@ -52,7 +52,7 @@ const ChatInputArea = ({
           </div>
         ) : (
           <div onClick={closeStreaming} className="stopBtn">
-            <SquareIcon fill="#000000" size={16} />
+            <SquareIcon size={16} />
           </div>
         )}
         </div>

@@ -22,18 +22,18 @@
 }
 
 .sidebar_pageTop_iconWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    background-color: transparent;
-    cursor: pointer;
-    transition: all 0.3s ease-in;
-    padding: .6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease-in;
+  padding: .6rem;
 }
 
 .sidebar_pageTop_iconWrapper:hover {
-    background-color: #393939;
+  background-color: var(--active-sidebar-item);
 }
 
 .pageIcon {
@@ -44,9 +44,9 @@
   width: max-content;
   padding: .5rem;
   font-size: 12.8px;
-    background-color: var(--active-sidebar-item);
-    border: none;
-    color: white;
+  background-color: var(--active-sidebar-item);
+  border: none;
+  color: white;
 }
 
 .newchat_hoverCardContent {
@@ -67,18 +67,18 @@
 
 /* Define the scrollbar width first */
 .scrollableArea::-webkit-scrollbar {
-  width: 10px; /* or whatever width you want */
+  width: 10px;
+  /* or whatever width you want */
 }
 
 /* Style the scrollbar track */
 .scrollableArea::-webkit-scrollbar-track {
-    background-color: var(--sidebar);
+  background-color: transparent;
 }
 
 /* Optional: style the thumb (the draggable part) */
 .scrollableArea::-webkit-scrollbar-thumb {
   background-color: rgb(146, 146, 146);
-  border: 2px solid var(--sidebar); 
   border-radius: 12px;
 }
 
@@ -206,8 +206,8 @@
 
 
 .sidebarFooter {
-    background: var(--sidebar-bg-dark);
-    color: var(--page-text-dark);
+  background: var(--sidebar-bg-dark);
+  color: var(--page-text-dark);
 }
 
 .upgradeBar {
@@ -244,11 +244,11 @@
 .sparkles_icon {
   width: 15px;
   height: 15px;
-    color: var(--page-text-dark);
+  color: var(--page-text-dark);
 }
 
 .logout_icon {
-    color: var(--page-text-dark);
+  color: var(--page-text-dark);
 }
 
 .logOutTxt {
@@ -286,6 +286,7 @@
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(5px);
   }
@@ -300,6 +301,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(180deg);
   }
@@ -307,14 +309,14 @@
 
 
 .loadingIndicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 100%;
-    font-size: 20px;
-    gap: .8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  width: 100%;
+  font-size: 20px;
+  gap: .8rem;
 }
 
 
@@ -394,8 +396,8 @@
 
 
 .dark .sidebarFooter {
-    background: var(--sidebar-bg-light);
-    color: var(--page-text);
+  background: var(--sidebar-bg-light);
+  color: var(--page-text);
 }
 
 .dark .upgradeBar {
@@ -432,11 +434,11 @@
 .dark .sparkles_icon {
   width: 15px;
   height: 15px;
-    color: var(--page-text);
+  color: var(--page-text);
 }
 
 .dark .logout_icon {
-    color: var(--page-text);
+  color: var(--page-text);
 }
 
 
@@ -446,13 +448,12 @@
 
 
 .dark .loadingIndicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 100%;
-    font-size: 20px;
-    gap: .8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  width: 100%;
+  font-size: 20px;
+  gap: .8rem;
 }
-

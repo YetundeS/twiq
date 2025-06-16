@@ -1,9 +1,9 @@
 // dashboard/[slug]/layout.jsx
 "use client";
 
+import { fetchUser } from "@/apiCalls/authAPI";
 import { AppSidebar } from "@/components/appSideBar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { useIsMobile } from "@/hooks/use-mobile";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
 import { useHydrationZustand } from "@codebayu/use-hydration-zustand";
@@ -13,17 +13,29 @@ import "./dashboard.css";
 
 export default function DashboardLayout({ children }) {
   const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
-  const { user } = useAuthStore();
-    const isMobile = useIsMobile();
+  // const { user } = useAuthStore();
+  //   const isMobile = useIsMobile();
 
   const isHydrated = useHydrationZustand(useAuthStore);
   const router = useRouter();
+  const { updateUser } = useAuthStore();
 
   useEffect(() => {
-    if (isHydrated && !user) {
-      router.push("/auth");
-    }
-  }, [user, isHydrated]);
+    if (!isHydrated) return;
+
+    fetchUser({
+      updateUser,
+      onUnauthorized: () => router.push("/sign-off"),
+    })
+  }, [isHydrated]);
+
+
+
+  // useEffect(() => {
+  //   if (isHydrated && !user) {
+  //     router.push("/sign-off");
+  //   }
+  // }, [user, isHydrated]);
   
 
   return (

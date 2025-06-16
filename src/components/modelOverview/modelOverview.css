@@ -9,7 +9,11 @@
     transition: all 0.25s ease-in;
     padding: 1rem 0;
     gap: .8rem;
+    width: max-content;
     max-width: 280px;
+    min-height: 360px;
+    max-height: 250px;
+    position: relative;
 
     background-color: var(--red-brand-color);
     color: white;
@@ -19,8 +23,18 @@
 
     -webkit-box-shadow: 2px 1px 36px 5px rgba(133, 133, 133, 0.0);
     -moz-box-shadow: 2px 1px 36px 5px rgba(133, 133, 133, 0.0);
-    box-shadow: 2px 1px 20px 2px rgba(133, 133, 133, 0.0);
+    box-shadow: 2px 1px 36px 5px rgba(133, 133, 133, 0.0);
 }
+
+.modelOverview.special {
+    background-color: #B46B70;
+    border-color: var(--red-brand-color);
+    padding: 0 .6rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
 
 .modelOverview.action {
     height: max-content;
@@ -44,6 +58,26 @@
     align-items: center;
     justify-content: center;
     min-height: 140px;
+}
+
+.crownBox {
+    position: absolute;
+    top: .6rem;
+    right: 1rem;
+}
+
+.specialModel_title {
+    font-size: 32px;
+    /* border: 1px solid black; */
+    line-height: 110%;
+    font-weight: 600;
+}
+
+.start_here_img {
+    width: 120px;
+    height: 180px;
+    /* border: 1px solid black; */
+    transform: scale(.8);
 }
 
 .modelImg {
@@ -116,4 +150,10 @@
 
 .dark .modelOverview {
     background-color: #5A0001;
+}
+
+
+.dark .modelOverview.special {
+    background-color: #B46B70;
+    border-color: var(--red-brand-color);
 }

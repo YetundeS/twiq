@@ -13,3 +13,21 @@
   max-width: 1800px;
   margin: 0 auto;
 }
+
+
+.headerLogo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid black; */
+    width: 100%;
+}
+
+.hl_logo {
+    width: 240px;
+    height: max-content;
+}
+
+.bgRed {
+  background-color: #5A0001;
+}

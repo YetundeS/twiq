@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/ui/theme-provider";
 import { SITE_CONTENT } from "@/constants/landingPageContent";
-import { Mail, Moon, MoreVertical, Sparkles, Sun } from "lucide-react";
-import Link from "next/link";
+import { Mail, Moon, MoreVertical, Sun } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { TextEffect } from "../ui/text-effect";
 import "./header.css";
@@ -53,7 +53,7 @@ export function Header() {
       <div className="navbarInner_box mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <div className="flex items-center">
-            <div
+            {/* <div
               className="group flex cursor-pointer items-center space-x-2"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
@@ -72,6 +72,28 @@ export function Header() {
                     : "scale-75 rotate-0 opacity-0"
                 }`}
               />
+            </div> */}
+
+            <div className="headerLogo">
+              <>
+                {/* Light mode logo (visible only in light mode) */}
+                <Image
+                  src="/images/logo/twiq_method_logo_black.png"
+                  width={600}
+                  height={600}
+                  alt="TWIQ Logo Light"
+                  className="hl_logo block dark:hidden"
+                />
+
+                {/* Dark mode logo (visible only in dark mode) */}
+                <Image
+                  src="/images/logo/twiq_method_logo_white.png"
+                  width={600}
+                  height={600}
+                  alt="TWIQ Logo Dark"
+                  className="hl_logo hidden dark:block"
+                />
+              </>
             </div>
           </div>
 

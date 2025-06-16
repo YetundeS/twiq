@@ -5,11 +5,11 @@ import {
   Geist_Mono,
   Inter,
   Lato,
-  Source_Sans_3,
 } from "next/font/google";
 import Head from "next/head";
 import { Toaster } from "sonner";
 import "./globals.css";
+
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,11 +23,6 @@ const lato = Lato({
   variable: "--font-lato",
 });
 
-const sourceSans3 = Source_Sans_3({
-  subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-source-sans",
-});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -133,7 +128,7 @@ export default function RootLayout({ children }) {
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lato.variable} ${sourceSans3.variable} ${cormorant.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lato.variable} ${cormorant.variable} antialiased`}
       >
         <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
         <Toaster />

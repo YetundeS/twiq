@@ -16,6 +16,12 @@ h3 {
   font-family: "New Spirit", serif, "Poppins", Arial, Helvetica, sans-serif;
 }
 
+.authFormTopWrapper {
+  background: var(--page-bg);
+  text-align: center;
+}
+
+
 .form_component {
   width: 80%;
   height: 80%;
@@ -76,10 +82,8 @@ h3 {
   border-radius: 14px;
 }
 
-.formTitle {
-  font-size: 38px;
-  font-weight: 600;
-  color: white;
+.formTitle, .subFormTitle {
+  color: #7f0000;
   text-align: center;
 }
 
@@ -161,5 +165,6 @@ h3 {
   height: 100vh;
   position: relative;
   background: var(--page-bg-dark);
+  /* background: radial-gradient(circle at top left, #562525, #2b0505, #1a0101); */
   font-family: "New Spirit", serif, "Poppins", Arial, Helvetica, sans-serif;
 }

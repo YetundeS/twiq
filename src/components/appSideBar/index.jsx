@@ -1,4 +1,4 @@
-import { Home, LogOut, MessagesSquare, Package, PanelRightOpen, Settings, SlidersHorizontal, Sparkles } from "lucide-react";
+import { BadgeHelp, Home, LogOut, MessagesSquare, Package, PanelRightOpen, Settings, Sparkles } from "lucide-react";
 
 import {
   Sidebar,
@@ -24,7 +24,7 @@ import {
   MenubarItem,
   MenubarMenu, MenubarTrigger
 } from "@/components/ui/menubar";
-import { models, ORGANIZATIONAL_ROLES } from "@/constants/sidebar";
+import { models } from "@/constants/sidebar";
 import { useSidebarChats } from "@/hooks/useSideBarHook";
 import useLogOutDialogStore from "@/store/useLogOutDialogStore";
 import useModelsStore from "@/store/useModelsStore";
@@ -35,7 +35,7 @@ import SpinnerLoader from "../dashboardComponent/spinnerLoader";
 
 export function AppSidebar() {
   const { sidebarSessions, isSidebarOpen, setIsSidebarOpen } = useSideBar();
-  const [sessions, setSession ] = useState([]);
+  const [sessions, setSession] = useState([]);
   const [organization, setOrganization] = useState("");
   const { user } = useAuthStore();
   const { openDialog } = useLogOutDialogStore();
@@ -47,7 +47,7 @@ export function AppSidebar() {
   useEffect(() => {
     setSession([...sidebarSessions]);
   }, [sidebarSessions])
-  
+
 
   useEffect(() => {
     if (!user) return;
@@ -78,7 +78,7 @@ export function AppSidebar() {
           <div className="scrollableArea">
             <SidebarGroupContent>
               <SidebarMenu className="sidebar_menu">
-                {ORGANIZATIONAL_ROLES.includes(user?.user_name) && (
+                {/* {ORGANIZATIONAL_ROLES.includes(user?.user_name) && (
                   <SidebarMenuItem className="sidebarMenuItem admin">
                     <SidebarMenuButton asChild>
                       <Link
@@ -90,7 +90,7 @@ export function AppSidebar() {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                )}
+                )} */}
                 <SidebarMenuItem className="sidebarMenuItem admin">
                   <SidebarMenuButton asChild>
                     <a
@@ -144,6 +144,18 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
 
+                <SidebarMenuItem className="sidebarMenuItem admin">
+                  <SidebarMenuButton asChild>
+                    <Link
+                      href={`/platform/${organization}/help/`}
+                      className="sideBarItem"
+                    >
+                      <BadgeHelp />
+                      <span>Help</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
                 <p className="chatsLabel"> - Chats</p>
                 {!isFetching ? (
                   <>
@@ -173,22 +185,24 @@ export function AppSidebar() {
       <SidebarFooter className="sidebarFooter">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="upgradeBar">
-              <div className="sideBar_iconBox">
-                <Sparkles className="sparkles_icon" />
-              </div>
-              <div className="logOutTxt">
-                <p className="txtHead">Upgrade plan</p>
-                <p className="txtsubHead">More access to best features</p>
-              </div>
-            </SidebarMenuButton>
+            <Link href={`/platform/${organization}/settings`}>
+              <SidebarMenuButton className="upgradeBar">
+                <div className="sideBar_iconBox">
+                  <Sparkles className="sparkles_icon" />
+                </div>
+                <div className="logOutTxt">
+                  <p className="txtHead">Upgrade plan</p>
+                  <p className="txtsubHead">More access to best features</p>
+                </div>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
           <SidebarMenuItem onClick={openDialog}>
             <SidebarMenuButton className="upgradeBar logout">
               <LogOut className="logout_icon" /> <span className="txtHead">Log Out</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarMenu> 
+        </SidebarMenu>
       </SidebarFooter>
       <LogOutDialog />
     </Sidebar>

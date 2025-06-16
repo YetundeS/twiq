@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SITE_CONTENT } from "@/constants/landingPageContent";
+import { AnimatePresence, motion } from "framer-motion";
+import { Send } from "lucide-react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export function StickyPrompt() {
   const [inputValue, setInputValue] = useState("");
@@ -48,7 +48,7 @@ export function StickyPrompt() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="fixed right-4 bottom-4 left-4 z-50"
         >
-          <Link href="/auth">
+          <Link href="/">
             <div className="mx-auto max-w-2xl">
               <div className="rounded-full border border-gray-200 bg-white bg-white/95 p-4 shadow-2xl backdrop-blur-md dark:border-gray-700 dark:bg-gray-800 dark:bg-gray-800/95">
                 <div className="flex items-center gap-2 border-none">

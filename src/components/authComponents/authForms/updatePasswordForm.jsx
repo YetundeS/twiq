@@ -1,14 +1,12 @@
 "use client";
-import { useState } from "react";
-import "./authForms.css";
-import CircularProgress from "@mui/material/CircularProgress";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { Lock } from "lucide-react";
-import { Eye, EyeClosed } from "lucide-react";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Lock } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import AuhVisitBtn from "./auhVisitBtn";
+import "./authForms.css";
 
 const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
   const [formData, setFormData] = useState({
@@ -72,7 +70,7 @@ const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
         });
 
         setTimeout(() => {
-          router.push("/auth");
+          router.push("/");
         }, 1500);
       }
     } else {
@@ -81,12 +79,12 @@ const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form className="authForm space-y-6">
       {/* Password */}
       <div>
         <Label
           htmlFor="password"
-          className="font-medium text-gray-700 dark:text-gray-300"
+          className="font-medium text-gray-700"
         >
           Password
         </Label>
@@ -98,11 +96,11 @@ const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
             placeholder={"Set up a password"}
             value={formData.password}
             onChange={handleChange}
-            className="rounded-lg border-gray-200 py-5 pr-12 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
+            className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
           />
           <Lock
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-gray-400"
+            className="cursor-pointer absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-white"
           />
         </div>
       </div>
@@ -112,7 +110,7 @@ const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
       <div>
         <Label
           htmlFor="password"
-          className="font-medium text-gray-700 dark:text-gray-300"
+          className="font-medium text-gray-700"
         >
           Confirm Password
         </Label>
@@ -124,26 +122,17 @@ const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
             placeholder={"Confirm password"}
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="rounded-lg border-gray-200 py-5 pr-12 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
+            className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
           />
           <Lock
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-gray-400"
+            className="cursor-pointer absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-white"
           />
         </div>
       </div>
 
       {/* Submit Button */}
-      <Button
-        type="submit"
-        className="w-full cursor-pointer rounded-lg bg-gray-900 py-6 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
-      >
-        {!loading ? (
-          <p>Update Password</p>
-        ) : (
-          <CircularProgress color="white" size="17px" />
-        )}
-      </Button>
+      <AuhVisitBtn loading={loading} black onClick={handleSubmit} text="Update"  />
       {errors?.password && <p className="textError">{errors?.password}</p>}
     </form>
   );

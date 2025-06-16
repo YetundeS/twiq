@@ -3,6 +3,8 @@
 
 import NewChatBtn from '@/components/dashboardComponent/newChatBtn';
 import PlatformTop from '@/components/dashboardComponent/platformTop';
+import SubscriptionDialog from '@/components/dashboardComponent/subscriptionDialog';
+import TwiqBg from '@/components/dashboardComponent/twiqBg';
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useIsMobile } from '@/hooks/use-mobile';
 import useAuthStore from '@/store/authStore';
 import { useSideBar } from '@/store/sidebarStore';
+import useSusbcriptionDialogStore from '@/store/useSusbcriptionDialogStore';
 import "@/styles/platformStyles.css";
 import { PanelRightOpen } from "lucide-react";
 import Image from "next/image";
@@ -27,9 +30,10 @@ import "./settings.css";
 const Settings = () => {
   const isMobile = useIsMobile();
    const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
+    const { openSubDialog } = useSusbcriptionDialogStore();
 
   const { toggleSidebar: mainToggle } = useSidebar();
-  const { user } = useAuthStore()
+  const { user } = useAuthStore();
 
   const toggleSidebar = () => {
     mainToggle()
@@ -50,6 +54,7 @@ const Settings = () => {
             <NewChatBtn alt />
           </>
         )}
+        <TwiqBg />
         <PlatformTop />
       </div>
       <div className="settings_content">
@@ -108,26 +113,30 @@ const Settings = () => {
                 <div className="settings_cardRow">
                   <Label htmlFor="current">Current Plan</Label>
                   <p className="settings_cardRow_content">
-                    {user?.subscription_status === "inactive"
-                      ? "Inactive"
+                    {!user?.is_active ?
+                      "Inactive"
                       : `${user?.subscription_plan} plan`}
-
+                  </p>
+                </div>
+                <div className="settings_cardRow">
+                  <Label htmlFor="current">Current Plan Quota</Label>
+                  <p className="settings_cardRow_content gray">
+                    Input tokens: <span>{user?.subscription_quota?.input_tokens}</span> Output tokens: <span>{user?.subscription_quota?.output_tokens}</span>
+                  </p>
+                </div>
+                <div className="settings_cardRow">
+                  <Label htmlFor="current">Your Quota Usage</Label>
+                  <p className="settings_cardRow_content gray">
+                    Input used: <span>{user?.subscription_usage?.input_tokens_used || 0}</span> Output used: <span>{user?.subscription_usage?.output_tokens_used || 0}</span>
                   </p>
                 </div>
               </CardContent>
               <CardFooter>
-                {user?.subscription_status == "inactive" ? (
-                  <Button className="fogBtn">Subscribe</Button>
+                {!user?.is_active ? (
+                  <Button onClick={openSubDialog} className="fogBtn">Subscribe</Button>
                 ) : (
-                  <Button className="fogBtn">
-                    {user?.subscription_plan === "starter"
-                      ? "Upgrade"
-                      : "Downgrade"}{" "}
-                    to{" "}
-                    {user?.subscription_plan === "starter"
-                      ? "Starter"
-                      : "Creator"}{" "}
-                    plan
+                  <Button onClick={openSubDialog} className="fogBtn">
+                    Change plan
                   </Button>
                 )}
               </CardFooter>
@@ -135,6 +144,7 @@ const Settings = () => {
           </TabsContent>
         </Tabs>
       </div>
+      <SubscriptionDialog />
     </div>
   )
 }

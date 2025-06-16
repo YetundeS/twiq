@@ -1,5 +1,5 @@
-import userAvatar from "../../public/images/user-avatar.png";
 import post from "../../public/images/placeholder-image.webp";
+import userAvatar from "../../public/images/user-avatar.png";
 
 export const SITE_CONTENT = {
   brand: "TWIQ AI",
@@ -58,6 +58,8 @@ export const SITE_CONTENT = {
       description:
         "Perfect for solopreneurs & creative rebels just getting started",
       price: "$399",
+      priceId: 'price_1RQy76EttljLjong8JTYhW7u',
+      productId: 'prod_SLfSE6oRt80Mu7',
       period: "/year",
       bots: "3+ TWIQ Bots",
       botBadges: ["V", "C", "H"],
@@ -70,12 +72,19 @@ export const SITE_CONTENT = {
       buttonText: "Choose Starter Plan →",
       popular: false,
       theme: "light",
+      style: {
+        bg: '#F2F2F2',
+        color: 'black'
+      }
     },
     {
       name: "Pro Creator Plan",
       description:
         "For creators, marketers & educators ready to scale without burnout",
       price: "$799",
+      // priceId: "price_1RYlqzEttljLjongZXWPlrTF", // for test
+      priceId: 'price_1RQy8iEttljLjong2DuStyZk',
+      productId: 'prod_SLfTLYmEto0mP5',
       period: "/year",
       bots: "All 7 TWIQ Bots",
       botBadges: ["V", "C", "L", "B"],
@@ -91,12 +100,19 @@ export const SITE_CONTENT = {
       buttonText: "Get Pro Plan →",
       popular: true,
       theme: "dark",
+      style: {
+        bg: '#693D3D',
+        color: 'white'
+      }
     },
     {
       name: "Enterprise & Teams",
       description:
         "For agencies, coaching programs, & growing brands ready to scale content ops",
       price: "$2,999",
+      // priceId: 'price_1RYlNbEttljLjongToyLbU5T', // for test
+      priceId: 'price_1RQyC5EttljLjongT85sjVDc',
+      productId: 'prod_SLfX1eCT161Yxe',
       period: "/year",
       bots: "10+ Team Seats",
       botBadges: ["T", "A", "B", "C"],
@@ -111,6 +127,10 @@ export const SITE_CONTENT = {
       buttonText: "Book a Demo →",
       popular: false,
       theme: "enterprise",
+      style: {
+        bg: '#5A0001',
+        color: 'white'
+      }
     },
   ],
 

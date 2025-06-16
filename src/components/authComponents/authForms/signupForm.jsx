@@ -1,15 +1,13 @@
 "use client";
-import { useState } from "react";
-import "./authForms.css";
-import CircularProgress from "@mui/material/CircularProgress";
 import { createUser } from "@/apiCalls/authAPI";
-import { toast } from "sonner";
-import SocialButtons from "@/components/authComponents/authForms/socialButtons";
 import { Input } from "@/components/ui/input";
-import { Lock } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { validateForm } from "@/lib/utils";
+import { Lock } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import AuhVisitBtn from "./auhVisitBtn";
+import "./authForms.css";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -58,12 +56,12 @@ const SignupForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form className="authForm space-y-6">
       {/* Username */}
       <div>
         <Label
           htmlFor="username"
-          className="font-medium text-gray-700 dark:text-gray-300"
+          className="font-medium text-gray-700"
         >
           Username
         </Label>
@@ -75,7 +73,7 @@ const SignupForm = () => {
             placeholder="Username"
             value={formData.username}
             onChange={handleChange}
-            className="rounded-lg border-gray-200 py-5 pr-4 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
+            className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
           />
         </div>
       </div>
@@ -84,7 +82,7 @@ const SignupForm = () => {
       <div>
         <Label
           htmlFor="organization"
-          className="font-medium text-gray-700 dark:text-gray-300"
+          className="font-medium text-gray-700"
         >
           Organization
         </Label>
@@ -96,8 +94,8 @@ const SignupForm = () => {
             placeholder="Name of your organization"
             value={formData.organization_name}
             onChange={handleChange}
-            className="rounded-lg border-gray-200 py-5 pr-4 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
-          />
+            className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
+            />
         </div>
       </div>
 
@@ -105,7 +103,7 @@ const SignupForm = () => {
       <div>
         <Label
           htmlFor="email"
-          className="font-medium text-gray-700 dark:text-gray-300"
+          className="font-medium text-gray-700"
         >
           Email
         </Label>
@@ -117,8 +115,8 @@ const SignupForm = () => {
             placeholder="your@email.com"
             value={formData.email}
             onChange={handleChange}
-            className="rounded-lg border-gray-200 py-5 pr-4 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
-          />
+            className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
+            />
         </div>
       </div>
 
@@ -126,7 +124,7 @@ const SignupForm = () => {
       <div>
         <Label
           htmlFor="password"
-          className="font-medium text-gray-700 dark:text-gray-300"
+          className="font-medium text-gray-700"
         >
           Password
         </Label>
@@ -138,26 +136,17 @@ const SignupForm = () => {
             placeholder={"Set up a password"}
             value={formData.password}
             onChange={handleChange}
-            className="rounded-lg border-gray-200 py-5 pr-12 pl-4 text-lg focus:border-purple-500 dark:border-gray-600 dark:focus:border-purple-400"
-          />
+            className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
+            />
           <Lock
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-gray-400"
+            className="cursor-pointer absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-white"
           />
         </div>
       </div>
 
       {/* Submit Button */}
-      <Button
-        type="submit"
-        className="w-full cursor-pointer rounded-lg bg-gray-900 py-6 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
-      >
-        {!loading ? (
-          <p>Sign up</p>
-        ) : (
-          <CircularProgress color="white" size="17px" />
-        )}
-      </Button>
+      <AuhVisitBtn loading={loading} black onClick={handleSubmit} text="Sign Up"  />
 
       {(errors.username ||
         errors?.organization_name ||

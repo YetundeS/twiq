@@ -2,7 +2,7 @@ import { addAuthHeader } from "@/lib/utils";
 import axios from "axios";
 import { toast } from "sonner";
 
-const API = axios.create({
+export const API = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_URI,
   withCredentials: true, // 🔥 Ensures cookies are sent & received
 });
@@ -94,29 +94,73 @@ export const sendResetMail = async (email) => {
   }
 };
 
-export const fetchUser = async (updateUser) => {
-  try {
-    // Retrieve the access token from localStorage
-    const accessToken = localStorage.getItem("access_token");
+// export const fetchUser = async (updateUser) => {
+//   try {
+//     // Retrieve the access token from localStorage
+//     const accessToken = localStorage.getItem("access_token");
 
+//     if (!accessToken) {
+//       console.log("No access token found.");
+//       return;
+//     }
+
+//     // 🔹 Get auth headers
+//     const authHeader = addAuthHeader();
+
+//     // Send the access token to your backend to fetch the user
+//     const response = await API.get("/user/getUser", {
+//       headers: {
+//         "Content-Type": "application/json",
+//         ...authHeader, // 🔥 Spread token header dynamically
+//       },
+//     });
+
+//     updateUser(response?.data.user);
+//   } catch (error) {
+//     toast.error("Error fetching user", {
+//       description:
+//         error?.response?.data?.error || error?.message || "Something went wrong.",
+//       style: { border: "none", color: "red" },
+//     });
+//   }
+// };
+
+
+// utils/fetchUser.js or lib/fetchUser.js
+
+export const fetchUser = async ({ updateUser, onUnauthorized }) => {
+  try {
+    const accessToken = localStorage.getItem("access_token");
     if (!accessToken) {
-      console.log("No access token found.");
+      console.warn("No access token found.");
+      if (onUnauthorized) onUnauthorized();
       return;
     }
 
-    // 🔹 Get auth headers
     const authHeader = addAuthHeader();
 
-    // Send the access token to your backend to fetch the user
     const response = await API.get("/user/getUser", {
       headers: {
         "Content-Type": "application/json",
-        ...authHeader, // 🔥 Spread token header dynamically
+        ...authHeader,
       },
     });
 
-    updateUser(response?.data.user);
+
+    if (response?.data?.user) {
+      updateUser(response.data.user);
+    } else {
+      throw new Error("User object missing in response");
+    }
   } catch (error) {
+    const isUnauthorized =
+      error?.response?.status === 401 ||
+      error?.response?.data?.error?.toLowerCase().includes("unauthorized");
+
+    if (isUnauthorized && onUnauthorized) {
+      onUnauthorized();
+    }
+
     toast.error("Error fetching user", {
       description:
         error?.response?.data?.error || error?.message || "Something went wrong.",

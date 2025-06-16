@@ -2,15 +2,35 @@ import { fetchMessages } from "@/apiCalls/chatMessage";
 import { sendChatMessage } from "@/apiCalls/sendChatMessage";
 import { useSidebar } from "@/components/ui/sidebar";
 import { modelDetailsMap } from "@/constants/carousel";
+import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
 import useModelsStore from "@/store/useModelsStore";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { usePromptSuggestions } from "./usePromptSuggestion";
 
+const starterModels = ["LinkedIn Personal", "Headlines", "Storyteller"].map(m => m.toLowerCase());
+const proModels = ["LinkedIn Your Business", "Caption", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
+
+const hasAccess = (plan, title) => {
+  if (!plan || !title) return false;
+
+  const normalizedPlan = plan.toLowerCase();
+  const normalizedTitle = title.trim().toLowerCase();
+
+  if (normalizedPlan === "none") return false;
+  if (normalizedPlan === "starter") return starterModels.includes(normalizedTitle);
+  if (normalizedPlan === "pro") return starterModels.includes(normalizedTitle) || proModels.includes(normalizedTitle);
+  if (normalizedPlan === "enterprise") return true;
+
+  return false;
+};
 
 
-export default function useAssistantChat( modelName, assistantSlug) {
+
+
+export default function useAssistantChat(modelName, assistantSlug) {
   const [inputValue, setInputValue] = useState("");
   const [sendBtnActive, setSendBtnActive] = useState(false);
   const [streamingData, setStreamingData] = useState("");
@@ -20,6 +40,7 @@ export default function useAssistantChat( modelName, assistantSlug) {
   const eventSourceRef = useRef(null);
   const messagesEndRef = useRef(null);
   const { toggleSidebar: mainToggle } = useSidebar();
+  const { user } = useAuthStore()
 
   const pathname = usePathname();
   const [isFetchingChats, setIsFetchingChats] = useState(true);
@@ -41,7 +62,7 @@ export default function useAssistantChat( modelName, assistantSlug) {
   useEffect(() => {
     const match = pathname.match(/\/platform\/@[^/]+\/[^/]+\/([^/?#]+)/);
     const sessionId = match?.[1];
-    
+
     if (!sessionId) return;
 
     setIsFetchingChats(true);
@@ -61,9 +82,30 @@ export default function useAssistantChat( modelName, assistantSlug) {
     setSendBtnActive(inputValue && !streaming);
   }, [inputValue, streaming]);
 
+  function getErrorMessage(error = '') {
+    if (error.includes('Unauthorized')) return 'Unauthorized - Please login';
+    if (error.includes('Quota exceeded')) return 'Quota exceeded - Please upgrade your plan';
+    if (error.includes('Your current plan')) return error;
+    return 'Server Error - Please try again.';
+  }
+
 
   const sendMessage = async () => {
     if (!inputValue || streaming) return;
+
+    const hasModelAccess = hasAccess(user?.subscription_plan, modelName);
+
+    if (!hasModelAccess) {
+      toast.error(`Upgrade to access "${modelName}" model`, {
+        style: {
+          border: "none",
+          color: "red",
+        },
+      });
+
+      setInputValue("");
+      return; // stop execution
+    }
 
     const userChat = {
       sender: "user", // "user" || 'assistant'
@@ -112,9 +154,7 @@ export default function useAssistantChat( modelName, assistantSlug) {
         const assistantErrorChat = {
           sender: "assistant",
           status: "error",
-          content: error?.includes("Unauthorized")
-            ? "Unauthorized - Please login"
-            : "Server Error - Please try again.",
+          content: getErrorMessage(error),
           sessionID: activeSessionID || 'newChat',
           created_at: new Date(),
         };
@@ -123,7 +163,7 @@ export default function useAssistantChat( modelName, assistantSlug) {
       },
       abortController,
       (chatSession) => {
-        if(chatSession.id) {
+        if (chatSession.id) {
           // console.log('chatSession: ', chatSession)
           handleNewChatSession(chatSession);
         }
@@ -156,9 +196,9 @@ export default function useAssistantChat( modelName, assistantSlug) {
 
 
   const handleNewChatSession = async (newChatSession) => {
-      console.log('newChatSession: ', newChatSession)
-      addToSideBarSessions(newChatSession);
-      updateActiveSessionID(newChatSession?.id);
+    // console.log('newChatSession: ', newChatSession)
+    addToSideBarSessions(newChatSession);
+    updateActiveSessionID(newChatSession?.id);
   };
 
   // closes stream when component unmounts unexpectedly

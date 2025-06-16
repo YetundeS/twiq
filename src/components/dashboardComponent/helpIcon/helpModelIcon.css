@@ -1,0 +1,61 @@
+.helpModelIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding: .4rem 1rem;
+    border: 2px solid #510003;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+}
+
+.playIcon {
+    color: #510003;
+    transition: all 0.3s ease-in;
+}
+
+.helpModelIcon p {
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #510003;
+    transition: all 0.3s ease-in;
+}
+
+.helpModelIcon:hover {
+    background-color: #510003;
+    border: 2px solid #51000300;
+}
+
+.helpModelIcon:hover .playIcon {
+    color: white;
+}
+
+.helpModelIcon:hover p{
+    color: white;
+}
+
+.dark .helpModelIcon {
+    border: 1px solid #ffffff;
+}
+
+.dark .helpModelIcon p{
+    color: #ffffff;
+}
+
+.dark .playIcon {
+    color: #ffffff;
+}
+
+.dark .helpModelIcon:hover {
+    border: 1px solid #ffffff00;
+    background-color: #ffffff;
+}
+
+.dark .helpModelIcon:hover p{
+    color: #510003;
+}
+
+.dark .helpModelIcon:hover .playIcon {
+    color: #510003;
+}

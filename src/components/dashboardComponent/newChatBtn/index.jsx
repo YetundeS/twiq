@@ -23,7 +23,7 @@ const NewChatBtn = ({ alt }) => {
 
 
     return (
-        <div>
+        <div className='z-[12]'>
             <Menubar className="menuBar">
                 <MenubarMenu>
                       <MenubarTrigger className="menubarTrigger">

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/ui/theme-provider';
 import useAuthStore from '@/store/authStore';
-import { CircleUserRound, Moon, Sun } from 'lucide-react';
+import { ArrowLeft, CircleUserRound, Moon, Sun } from 'lucide-react';
 import Image from 'next/image';
 import './platformTop.css';
 
@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import LogOutDialog from '../logOutDialog';
 
-const PlatformTop = () => {
+const PlatformTop = ({ twiqDefinition, setTwiqDefinition }) => {
     const { theme, setTheme } = useTheme();
     const { user } = useAuthStore();
     const [organization, setOrganization] = useState("");
@@ -34,6 +34,17 @@ const PlatformTop = () => {
 
     return (
         <div className="platformTop">
+
+            {/* Header with Back Button */}
+            {twiqDefinition && (
+                <button
+                    onClick={() => setTwiqDefinition(false)}
+                    className="mr-auto flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:border-gray-400 hover:text-black dark:border-gray-700 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-white"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
+                </button>
+            )}
             <Button
                 variant="ghost"
                 size="icon"

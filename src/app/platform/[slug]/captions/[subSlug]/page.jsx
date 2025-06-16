@@ -3,7 +3,8 @@
 import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
-import ModelName from "@/components/modelsComponent/modelName";
+import PlatformTop from "@/components/dashboardComponent/platformTop";
+import TwiqBg from "@/components/dashboardComponent/twiqBg";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import "@/styles/platformStyles.css";
@@ -30,23 +31,24 @@ const CaptionChat = () => {
     } = useAssistantChat('Captions', 'captions');
 
   return (
-    <div className="carousel_page_content">
-      <div className="carousel_pageTop">
+    <div className="page_content">
+      <div className="pageTop">
         {(!isSidebarOpen || isMobile) && (
           <>
             <div
               onClick={toggleSidebar}
-              className="carousel_pageTop_iconWrapper"
+              className="pageTop_iconWrapper"
             >
-              <PanelRightOpen size="22px" />
+              <PanelRightOpen className="pageIcon" size="22px" />
             </div>
             <NewChatBtn alt />
           </>
         )}
-        <ModelName name={'captions'} content={modelDescription} />
+        <TwiqBg />
+        <PlatformTop />
       </div>
-      <div className="carousel_pageBody">
-        <div className="carousel_pageBody_innerBox">
+      <div className="pageBody">
+        <div className="pageBody_innerBox">
           <ChatMessageWindow
             chats={chats}
             streamingData={streamingData}

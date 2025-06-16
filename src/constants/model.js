@@ -61,6 +61,25 @@ export const assistantPromptTemplates = {
   ],
 };
 
+export const assistantDisplayNames = {
+  carousel: "Carousels",
+  storyteller: "Storyteller Scripts",
+  headlines: "Headlines",
+  linkedin_business: "LinkedIn Business",
+  linkedin_personal: "LinkedIn Personal",
+  captions: "Captions",
+  video_scripts: "Video Scripts",
+};
+
+export const assistantDisplayIcons = {
+  carousel: "carousel",
+  storyteller: "storyteller",
+  headlines: "headlines",
+  linkedin_business: "lyb",
+  linkedin_personal: "lp",
+  captions: "captions",
+  video_scripts: "video-script",
+};
 
 export const COACH_ASSISTANTS = {
   carousel: 'asst_v8lwEKfUhwbCjj31zW3QWJL9',
@@ -71,3 +90,23 @@ export const COACH_ASSISTANTS = {
   captions: 'asst_D6JhKrMPH46WPdzA0hmzI3LY',
   video_scripts: 'asst_RcxmUQDIacMEO0BzABwb6tsa',
 };
+
+export const helpVideoIDs = {
+  carousel: "k0oMa2jWXaM",
+  storyteller: "k0oMa2jWXaM",
+  headlines: "k0oMa2jWXaM",
+  linkedin_business: "k0oMa2jWXaM",
+  linkedin_personal: "k0oMa2jWXaM",
+  captions: "k0oMa2jWXaM",
+  video_scripts: "k0oMa2jWXaM",
+}
+
+export const helpVideos = [
+  "k0oMa2jWXaM",
+  "k0oMa2jWXaM",
+  "k0oMa2jWXaM",
+  "k0oMa2jWXaM",
+  "k0oMa2jWXaM",
+  "k0oMa2jWXaM",
+  "k0oMa2jWXaM",
+]

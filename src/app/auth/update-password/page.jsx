@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
 import UpdatePasswordForm from "@/components/authComponents/authForms/updatePasswordForm";
+import TwiqBg from "@/components/dashboardComponent/twiqBg";
 import GlowEffect from "@/components/landingPageComponents/GlowEffect";
-import "../auth.css";
 import { Header } from "@/components/landingPageComponents/Header";
-import Link from "next/link";
+import { createClient } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
+import "../auth.css";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -14,7 +14,7 @@ const supabase = createClient(
 );
 
 const UpdatePassword = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -67,12 +67,13 @@ const UpdatePassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 transition-colors duration-300 dark:from-purple-900/20 dark:via-pink-900/10 dark:to-blue-900/20">
+    <div className="authPage min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 transition-colors duration-300 dark:from-purple-900/20 dark:via-pink-900/10 dark:to-blue-900/20">
       <Header />
-      <div className="flex min-h-screen items-start justify-center pt-40 pb-8 md:pt-24">
+      <TwiqBg />
+      <div className="z[35] relative flex min-h-screen items-start justify-center pt-40 pb-8 md:pt-24">
         <div className="w-full max-w-md px-4">
           <GlowEffect>
-            <div className="rounded-3xl border border-gray-200/50 bg-white p-8 shadow-2xl backdrop-blur-sm dark:border-gray-600/50 dark:bg-gray-800">
+            <div className="authFormTopWrapper rounded-3xl border border-gray-200/50 bg-white p-8 shadow-2xl backdrop-blur-sm dark:border-gray-600/50 dark:bg-gray-800">
               {loading && (
                 <h3 className="align-self-center text-2xl font-medium text-gray-700 md:text-3xl dark:text-gray-200">
                   Verifying...
@@ -85,13 +86,13 @@ const UpdatePassword = () => {
               )}
               {!loading && !error && (
                 <>
-                  <h3 className="align-self-center mb-2 text-2xl font-medium text-gray-900 md:text-3xl dark:text-gray-100">
+                  <h3 className="formTitle align-self-center mb-2 text-2xl font-medium text-gray-900 md:text-3xl dark:text-gray-100">
                     Update password
                   </h3>
-                  <p className="align-self-center mb-6 text-gray-500 dark:text-gray-400">
+                  <p className="subFormTitle align-self-center mb-6 text-gray-500 dark:text-gray-400">
                     Go back to{" "}
                     <a
-                      href="/auth"
+                      href="/"
                       className="text-purple-600 hover:underline dark:text-purple-400"
                     >
                       login
@@ -104,15 +105,9 @@ const UpdatePassword = () => {
               )}
 
               {/* Terms */}
-              <p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-                By signing up you agree to the{" "}
-                <Link
-                  href="/terms-of-service"
-                  className="text-purple-600 hover:underline dark:text-purple-400"
-                >
-                  Terms & Privacy
-                </Link>
-              </p>
+                  <div className="mt-8 text-center text-sm">
+                    <p className="needHelp">need help?</p>
+                  </div>
             </div>
           </GlowEffect>
         </div>

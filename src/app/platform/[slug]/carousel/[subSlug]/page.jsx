@@ -4,6 +4,7 @@ import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import PlatformTop from "@/components/dashboardComponent/platformTop";
+import TwiqBg from "@/components/dashboardComponent/twiqBg";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import "@/styles/platformStyles.css";
@@ -43,6 +44,7 @@ const CarouselChat = () => {
             <NewChatBtn alt />
           </>
         )}
+        <TwiqBg />
         <PlatformTop />
       </div>
       <div className="pageBody">
@@ -53,7 +55,7 @@ const CarouselChat = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
-            assistantSlug={'storyteller'}
+            assistantSlug={'carousel'}
             isFetchingChats={isFetchingChats}
           />
           <ChatInputArea

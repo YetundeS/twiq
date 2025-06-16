@@ -1,0 +1,56 @@
+.help_content {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 4rem;
+    box-sizing: border-box;
+    width: 100%;
+    align-self: center;
+    align-items: center;
+    z-index: 14;
+    position: relative;
+    gap: 1.6rem;
+    height: max-content;
+}
+
+.helpTitle {
+    font-size: 3.2rem;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.helpVideosWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1.4rem;
+}
+
+
+
+.dark .helpTitle {
+    color: white;
+}
+
+
+@media (max-width: 768px) {
+
+    .help_content {
+        padding: 0 1rem;
+        padding-bottom: 1.2rem;
+    }
+
+}
+
+@media (max-width: 525px) {
+
+    .helpTitle {
+        font-size: 2.4rem;
+    }
+
+
+    .helpVideosWrapper {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+}
