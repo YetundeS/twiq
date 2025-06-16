@@ -1,4 +1,4 @@
-import { Gauge, LogOut, Sparkles } from "lucide-react";
+import { BadgeHelp, Gauge, LogOut, Sparkles } from "lucide-react";
 
 
 export const modelDetailsMap = {
@@ -132,6 +132,11 @@ export const accountPopMenu = [
     name: "Billing",
     url: "settings",
     icon: () => <Sparkles className="home-icon" />,
+  },
+  {
+    name: "Help",
+    url: "help",
+    icon: () => <BadgeHelp className="home-icon" />,
   },
   {
     name: "Log Out",

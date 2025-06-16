@@ -16,7 +16,7 @@ const SignOffPage = () => {
     const router = useRouter();
 
     const goToAuth = () => {
-        router.push('/auth');
+        router.push('/');
     };
 
     return (

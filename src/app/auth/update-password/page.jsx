@@ -92,7 +92,7 @@ const UpdatePassword = () => {
                   <p className="subFormTitle align-self-center mb-6 text-gray-500 dark:text-gray-400">
                     Go back to{" "}
                     <a
-                      href="/auth"
+                      href="/"
                       className="text-purple-600 hover:underline dark:text-purple-400"
                     >
                       login

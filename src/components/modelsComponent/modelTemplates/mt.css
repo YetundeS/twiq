@@ -41,6 +41,13 @@
     text-transform: capitalize;
 }
 
+.beginHelp_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+}
+
 .shallWeBegin {
     font-size: 32px;
     font-weight: 600;
@@ -99,6 +106,9 @@
         font-size: 26px;
     }
 
+    .beginHelp_box {
+        flex-direction: column;
+    }
 }
 
 .dark .modelCard {

@@ -158,7 +158,7 @@ export function PricingSection({ platform }) {
               setSubscribingPlanId(plan?.priceId);
               handleSubscribe(plan?.priceId, user, () => setSubscribingPlanId(null));
             } else {
-              router.push(`/auth`);
+              router.push(`/`);
             }
           }}
           className="w-full cursor-pointer rounded-xl py-3 text-lg font-semibold transition-all duration-200 hover:scale-105 bg-white text-black"

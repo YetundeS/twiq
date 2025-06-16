@@ -19,6 +19,7 @@
     background-color: #c51613dd;
     font-size: 12px;
     padding: .3rem .8rem;
+    color: white;
 }
 
 .chatMessage_message.loading {
@@ -37,7 +38,8 @@
     align-items: center;
     display: flex;
     justify-content: center;
-    background-color: var(--active-sidebar-item);
+    transition: all 0.3s ease-in;
+    background-color: #d99696;
 }
 
 
@@ -134,3 +136,7 @@
     color: rgb(255, 255, 255);
 }
 
+
+.dark .chatMessage_message.user {
+    background-color: var(--active-sidebar-item);
+}

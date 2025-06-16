@@ -1,4 +1,4 @@
-import { Home, LogOut, MessagesSquare, Package, PanelRightOpen, Settings, Sparkles } from "lucide-react";
+import { BadgeHelp, Home, LogOut, MessagesSquare, Package, PanelRightOpen, Settings, Sparkles } from "lucide-react";
 
 import {
   Sidebar,
@@ -140,6 +140,18 @@ export function AppSidebar() {
                     >
                       <Settings className="settings-icon" />
                       <span>Settings</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem className="sidebarMenuItem admin">
+                  <SidebarMenuButton asChild>
+                    <Link
+                      href={`/platform/${organization}/help/`}
+                      className="sideBarItem"
+                    >
+                      <BadgeHelp />
+                      <span>Help</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -1,13 +1,11 @@
-
-
 .twiqBg {
-    position: absolute;
-    top: -15.2rem;
+    position: fixed;
+    top: -8rem;
     left: 50%;
     transform: translateX(-50%);
-    width: 100vw;
+    margin: 0 auto;
+    width: 110vw;
     height: max-content;
-    z-index: 10;
     opacity: .72;
     max-width: 1600px;
     object-fit: cover;
@@ -17,15 +15,17 @@
 
 
 @media (max-width: 1200px) {
-
-
     .twiqBg {
         top: 0;
     }
+}
 
+@media (max-width: 525px) {
+    .twiqBg {
+        width: 160vw;
+    }
 }
 
 .dark .twiqBg {
     opacity: 1;
 }
-

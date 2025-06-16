@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TextEffect } from "@/components/ui/text-effect";
 import { Textarea } from "@/components/ui/textarea";
 import { SITE_CONTENT } from "@/constants/landingPageContent";
+import { Send } from "lucide-react";
 import Link from "next/link";
-import { TextEffect } from "@/components/ui/text-effect";
+import { useEffect, useState } from "react";
 
 export function HeroSection() {
   const [inputValue, setInputValue] = useState("");
@@ -41,7 +41,7 @@ export function HeroSection() {
           </div>
 
           {/* Large Input section with textarea */}
-          <Link href={"/auth"}>
+          <Link href={"/"}>
             <div className="relative">
               <div className="animate-fade-in-up animation-delay-400 mx-auto max-w-4xl">
                 <div className="hover:shadow-3xl relative rounded-3xl border border-gray-200 bg-white p-6 shadow-2xl transition-all duration-400 ease-in hover:scale-[1.02] dark:border-gray-700 dark:bg-gray-800">

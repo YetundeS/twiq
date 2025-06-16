@@ -70,7 +70,7 @@ const UpdatePasswordForm = ({ handlePasswordUpdate }) => {
         });
 
         setTimeout(() => {
-          router.push("/auth");
+          router.push("/");
         }, 1500);
       }
     } else {

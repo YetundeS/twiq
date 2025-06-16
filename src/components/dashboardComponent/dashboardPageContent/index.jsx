@@ -93,6 +93,7 @@ const DashboardPageContent = () => {
               model={model}
               key={i}
               organizationName={organization}
+              subscription_plan={user?.subscription_plan}
             />
           ))}
         </div>

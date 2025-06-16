@@ -1,6 +1,8 @@
 "use client";
 
-import { assistantDisplayIcons, assistantDisplayNames, assistantPromptTemplates } from "@/constants/model";
+import HelpModelIcon from "@/components/dashboardComponent/helpIcon";
+import HelpVidDialog from "@/components/dashboardComponent/helpVideoDialog";
+import { assistantDisplayIcons, assistantDisplayNames, assistantPromptTemplates, helpVideoIDs } from "@/constants/model";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,11 +13,13 @@ const ModelTemplates = ({ setInputValue, assistantSlug }) => {
   const [templates, setTemplates] = useState([]);
   const [assSlug, setAssSlug] = useState('');
   const [assIcon, setAssIcon] = useState('');
+  const [helpVideoID, setHelpVideoID] = useState('');
 
   useEffect(() => {
     const key = assistantSlug ? assistantSlug : pathname?.split("/").pop();
     setAssSlug(assistantDisplayNames[key])
     setAssIcon(assistantDisplayIcons[key])
+    setHelpVideoID(helpVideoIDs[key])
     const matchedTemplates = assistantPromptTemplates[key];
 
     if (matchedTemplates) {
@@ -69,9 +73,12 @@ const ModelTemplates = ({ setInputValue, assistantSlug }) => {
             className="modelImg hidden dark:block"
           />
         </>
-          <h3 className="templatesTitle">{assSlug}</h3>
+        <h3 className="templatesTitle">{assSlug}</h3>
       </div>
-      <h2 className="shallWeBegin">Shall We Begin?</h2>
+      <div className="beginHelp_box">
+        <h2 className="shallWeBegin">Shall We Begin?</h2>
+        <HelpModelIcon videoID={helpVideoID} />
+      </div>
       <div className="modelCard_wrapper">
         {templates.length > 0 &&
           templates.slice(0, 6).map((template, index) => (
@@ -80,6 +87,7 @@ const ModelTemplates = ({ setInputValue, assistantSlug }) => {
             </div>
           ))}
       </div>
+      <HelpVidDialog />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { generateSignString } from "@/lib/utils";
 import useAuthStore from "@/store/authStore";
+import useSusbcriptionDialogStore from "@/store/useSusbcriptionDialogStore";
 import { Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,6 +19,7 @@ const LoginForm = ({ setActiveForm }) => {
   });
 
   const router = useRouter();
+    const { openSubDialog } = useSusbcriptionDialogStore();
 
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
@@ -85,9 +87,10 @@ const LoginForm = ({ setActiveForm }) => {
           });
         }
 
-        if (response?.user.user_name === "admin") {
+        if (!response?.user.is_active) {
           setTimeout(() => {
-            router.push(`/platform/${signString}/admin`);
+            openSubDialog();
+            router.push(`/platform/${signString}/settings`);
           }, 1500);
         } else {
           setTimeout(() => {
