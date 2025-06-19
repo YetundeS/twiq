@@ -26,7 +26,7 @@ export default function Auth() {
           </>
         ) : (
           <div className="flex justify-center items-center">
-            <div className="w-full max-w-md px-4">
+            <div className="w-full mt-[64px] max-w-md px-4">
               <GlowEffect>
                 <div className="authFormTopWrapper rounded-3xl border border-gray-200/50 p-8 shadow-2xl backdrop-blur-sm dark:border-gray-600/50 dark:bg-gray-800">
                   {/* Header */}

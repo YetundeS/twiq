@@ -1,4 +1,3 @@
-
 .navbarComp {
   width: 100vw;
   max-width: 1800px;
@@ -8,6 +7,7 @@
   justify-content: center;
 }
 
+
 .navbarInner_box {
   width: 100vw;
   max-width: 1800px;
@@ -16,18 +16,33 @@
 
 
 .headerLogo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* border: 1px solid black; */
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid black; */
+  width: 100%;
 }
 
 .hl_logo {
-    width: 240px;
-    height: max-content;
+  width: 240px;
+  height: max-content;
 }
 
 .bgRed {
   background-color: #5A0001;
+}
+
+@media (max-width: 525px) {
+
+  .navbarComp.helpPage {
+    background-color: rgba(255, 255, 255, 0);
+    /* semi-transparent */
+    backdrop-filter: blur(10px);
+    /* blur background behind */
+    -webkit-backdrop-filter: blur(10px);
+    /* for Safari */
+  }
+
+
+
 }
