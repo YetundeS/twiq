@@ -54,9 +54,9 @@ const Settings = () => {
             <NewChatBtn alt />
           </>
         )}
-        <TwiqBg />
         <PlatformTop />
       </div>
+        <TwiqBg />
       <div className="settings_content">
         <Tabs defaultValue="profile" className="settingsTab">
           <TabsList className="grid w-full grid-cols-2 tabsList">

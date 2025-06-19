@@ -5,6 +5,7 @@ export const assistantPromptTemplates = {
     "I need a scroll-stopping 10-slide carousel for [specific niche or goal], The topic is [insert topic]. using the [T] of the TWIQ Method. Let’s break down [specific belief, lesson, or truth] into simple insights.",
     "Write a carousel that teaches 3 things to stop doing when it comes to [insert goal]. The topic is [insert topic]. Use the ‘What to Do’ pillar in the TWIQ Method.",
     "Help me build authority with a carousel that calls out something broken in [insert industry]. The topic is [insert topic]. Using the [T] from the TWIQ Method to structure it. Make it engaging and witty. I work in [your industry].",
+    "Write a thought leadership carousel using the [T] from the TWIQ Method My topic is [insert topic]. Open with a story about [insert story], challenging the belief that [insert old narrative], [insert solution or POV]."
   ],
 
   storyteller: [
@@ -41,6 +42,7 @@ export const assistantPromptTemplates = {
     "I want to share a relatable story about [insert personal experience] on LinkedIn. Based on [I] of the [T/W/I/Q] Method. Can you help me format it in the Top Voicer style on LinkedIn?",
     "Help me create a LinkedIn post that challenges conventional thinking based on [T] of the [T/W/I/Q] Method. [insert industry trend or idea]. I am in the [name of your industry].",
     "I need a concise yet impactful LinkedIn post about [insert topic] with a strong call-to-action. What can we create? Have it based on [W] of the [T/W/I/Q] Method.",
+    "Write a post I can use on [insert platform: LinkedIn, IG,]? Start with the story of [insert story or example], using the [I] from the TWIQ Method, challenging the norm that [insert industry misconception],  [insert solution or POV]."
   ],
 
   captions: [
@@ -58,6 +60,7 @@ export const assistantPromptTemplates = {
     "Generate a 1-2 minute TWIQ video script to connect with [audience type], with focus on [W] in [T/W/I/Q] method.",
     "Help me craft a video script based on the [I] of the [T/W/I/Q] Method that inspires action on [specific problem or topic].",
     "I need a scroll-stopping video script for [specific niche or goal] using the [W] of the [T/W/I/Q] Method. Let’s focus on [specific challenge or theme] to connect with my audience.",
+    "Prepare a script using the [W] from the TWIQ Method. Reflect a personal story about [insert story or struggle], call out the norm [insert outdated industry norm], here is why it’s a problem, [insert your POV]."
   ],
 };
 

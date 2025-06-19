@@ -1,12 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/ui/theme-provider';
 import useAuthStore from '@/store/authStore';
+import "@/styles/platformStyles.css";
 import { ArrowLeft, CircleUserRound, Moon, Sun } from 'lucide-react';
 import Image from 'next/image';
 import './platformTop.css';
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
-import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar';
+import { Menubar, MenubarContent, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar';
 import { accountPopMenu } from '@/constants/dahsboard';
 import { generateSignString } from '@/lib/utils';
 import useLogOutDialogStore from '@/store/useLogOutDialogStore';
@@ -14,7 +15,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import LogOutDialog from '../logOutDialog';
 
-const PlatformTop = ({ twiqDefinition, setTwiqDefinition }) => {
+const PlatformTop = ({ db, twiqDefinition, setTwiqDefinition }) => {
     const { theme, setTheme } = useTheme();
     const { user } = useAuthStore();
     const [organization, setOrganization] = useState("");
@@ -33,23 +34,23 @@ const PlatformTop = ({ twiqDefinition, setTwiqDefinition }) => {
     const FALLBACK_IMG = 'https://api.dicebear.com/7.x/identicon/svg?seed=mufutau'
 
     return (
-        <div className="platformTop">
+        <div className={`${db ? 'db' : ''} platformTop `}>
 
             {/* Header with Back Button */}
             {twiqDefinition && (
-                <button
+                <Button
                     onClick={() => setTwiqDefinition(false)}
                     className="mr-auto flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:border-gray-400 hover:text-black dark:border-gray-700 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-white"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     Back
-                </button>
+                </Button>
             )}
             <Button
                 variant="ghost"
                 size="icon"
                 onClick={toggleTheme}
-                className="cursor-pointer text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                className="cursor-pointer text-white hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
             >
                 {theme === "dark" ? (
                     <Sun className="size-6" />
@@ -58,9 +59,9 @@ const PlatformTop = ({ twiqDefinition, setTwiqDefinition }) => {
                 )}
             </Button>
 
-            <Menubar className="menuBar platformTop">
+            <Menubar className="menuBar platformMenu">
                 <MenubarMenu>
-                    <MenubarTrigger className="menubarTrigger platformTop">
+                    <MenubarTrigger className="menubarTrigger platformMenu">
                         <HoverCard>
                             <HoverCardTrigger>
                                 <div className="pt_imageBox">
@@ -77,32 +78,45 @@ const PlatformTop = ({ twiqDefinition, setTwiqDefinition }) => {
                                     )}
                                 </div>
                             </HoverCardTrigger>
-                            <HoverCardContent className={`newchat_hoverCardContent`}>
+                            <HoverCardContent className="newchat_hoverCardContent">
                                 <span>Account</span>
                             </HoverCardContent>
                         </HoverCard>
                     </MenubarTrigger>
                     <MenubarContent className="menubarContent">
-                        {accountPopMenu?.map((item, i) => (
-                            <MenubarItem key={i} className="menubarItem platformTop">
-                                {item?.name !== "Log Out" ?
-                                    (<Link
-                                        href={`/platform/${organization}/${item.url}/`}
-                                        className="menu_sideBarItem"
-                                    >
-                                        <item.icon />
-                                        <span>{item.name}</span>
-                                    </Link>
-                                    ) : (
+                        {accountPopMenu?.map((item, i) => {
+
+                            if (item?.name === "Log Out") {
+                                return (
                                         <div onClick={openDialog}
-                                            className="menu_sideBarItem"
+                                            className="menu_sideBarItem cursor-pointer"
                                         >
                                             <item.icon />
                                             <span>{item.name}</span>
                                         </div>
-                                    )}
-                            </MenubarItem>
-                        ))}
+                                )
+                            }
+                            else if (item?.name === "Help") {
+                                return (<Link
+                                    href={`/help`}
+                                    className="menu_sideBarItem"
+                                >
+                                    <item.icon />
+                                    <span>{item.name}</span>
+                                </Link>
+                                )
+                            }
+                            else {
+                                return (<Link
+                                    href={`/platform/${organization}/${item.url}/`}
+                                    className="menu_sideBarItem"
+                                >
+                                    <item.icon />
+                                    <span>{item.name}</span>
+                                </Link>
+                                )
+                            }
+                        })}
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>

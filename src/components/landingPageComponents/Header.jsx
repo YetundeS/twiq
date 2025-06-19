@@ -18,7 +18,6 @@ import "./header.css";
 export function Header() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -53,28 +52,8 @@ export function Header() {
       <div className="navbarInner_box mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <div className="flex items-center">
-            {/* <div
-              className="group flex cursor-pointer items-center space-x-2"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              <Link href={"/"}>
-                <div className="text-3xl font-bold text-purple-600 transition-all duration-300 group-hover:scale-105 dark:text-purple-400">
-                  <TextEffect per="char" preset="fade-in-blur">
-                    {SITE_CONTENT.brand}
-                  </TextEffect>
-                </div>
-              </Link>
-              <Sparkles
-                className={`size-6 text-purple-600 transition-all duration-500 dark:text-purple-400 ${
-                  isHovered
-                    ? "scale-110 rotate-12 animate-pulse opacity-100"
-                    : "scale-75 rotate-0 opacity-0"
-                }`}
-              />
-            </div> */}
 
-            <div className="headerLogo">
+            <a href="/" className="headerLogo">
               <>
                 {/* Light mode logo (visible only in light mode) */}
                 <Image
@@ -94,7 +73,7 @@ export function Header() {
                   className="hl_logo hidden dark:block"
                 />
               </>
-            </div>
+            </a>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -102,7 +81,7 @@ export function Header() {
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
-              className="cursor-pointer text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+              className="cursor-pointer text-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
             >
               {theme === "dark" ? (
                 <Sun className="size-6" />
@@ -116,7 +95,7 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="cursor-pointer text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                  className="cursor-pointer text-white hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
                 >
                   <MoreVertical className="size-6" />
                 </Button>

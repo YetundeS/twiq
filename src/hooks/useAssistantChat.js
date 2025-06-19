@@ -1,6 +1,5 @@
 import { fetchMessages } from "@/apiCalls/chatMessage";
 import { sendChatMessage } from "@/apiCalls/sendChatMessage";
-import { useSidebar } from "@/components/ui/sidebar";
 import { modelDetailsMap } from "@/constants/carousel";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
@@ -39,7 +38,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
   const streamingDataRef = useRef("");
   const eventSourceRef = useRef(null);
   const messagesEndRef = useRef(null);
-  const { toggleSidebar: mainToggle } = useSidebar();
+  // const { toggleSidebar: mainToggle } = useSidebar();
   const { user } = useAuthStore()
 
   const pathname = usePathname();
@@ -55,7 +54,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
 
 
   const toggleSidebar = () => {
-    mainToggle()
+    // mainToggle()
     setIsSidebarOpen(!isSidebarOpen);
   };
 

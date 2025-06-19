@@ -20,33 +20,35 @@ const SignOffPage = () => {
     };
 
     return (
-        <div className="authPage signOff animate-fade-in-up min-h-screen transition-colors duration-300">
-            <Header />
-            <TwiqBg />
-            <div className='authVisit_wrapper'>
-                <div className="authVisit_top">
+        <div className="authPage min-h-screen ">
+            <div className="innerauthPage animate-fade-in-up transition-colors duration-300">
+                <Header />
+                <TwiqBg />
+                <div className='authVisit_wrapper'>
+                    <div className="authVisit_top">
 
-                    <div className="logoBox">
-                        <Image
-                            src={"/images/logo/auth_visit_logo.png"}
-                            width={400}
-                            height={260}
-                            alt="twiq logo"
-                            className="authVisitLogo"
-                        />
+                        <div className="logoBox">
+                            <Image
+                                src={"/images/logo/auth_visit_logo.png"}
+                                width={400}
+                                height={260}
+                                alt="twiq logo"
+                                className="authVisitLogo"
+                            />
+                        </div>
+                        <div className="authVisitTitle">
+                            <h2 className='second'>SEE YOU <br /> SHORTLY</h2>
+                        </div>
                     </div>
-                    <div className="authVisitTitle">
-                        <h2 className='second'>SEE YOU <br /> SHORTLY</h2>
-                    </div>
-                </div>
 
-                <div className="authVisit_center">
-                    <div className="authButtons">
-                        <AuhVisitBtn onClick={goToAuth} black text="Sign On" />
+                    <div className="authVisit_center">
+                        <div className="authButtons">
+                            <AuhVisitBtn onClick={goToAuth} black text="Sign On" />
+                        </div>
+                        <p className="needHelp out">need help?</p>
                     </div>
-                    <p className="needHelp out">need help?</p>
+                    <CopyrightTxt />
                 </div>
-                <CopyrightTxt />
             </div>
         </div>
     )

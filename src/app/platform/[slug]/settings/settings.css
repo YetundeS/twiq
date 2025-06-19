@@ -54,9 +54,9 @@
 
 .tabsTrigger {
     padding: .6rem 0;
-    color: rgba(128, 128, 128, 0.542);
+    color: rgba(225, 225, 225, 0.903);
     cursor: pointer;
-    background-color: rgba(128, 128, 128, 0.142);
+    background-color: rgba(193, 193, 193, 0.385);
 }
 
 .tabsTrigger[data-state="active"] {
@@ -176,10 +176,11 @@
 
 .dark .tabsTrigger {
     padding: .6rem 0;
-    color: rgb(128, 128, 128);
     cursor: pointer;
-    background-color: rgba(128, 128, 128, 0.142);
     border: 1px solid rgba(128, 128, 128, 0.668);
+
+    color: rgba(225, 225, 225, 0.703);
+    background-color: rgba(193, 193, 193, 0.285);
 }
 
 .tabsTrigger[data-state="active"] {

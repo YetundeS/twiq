@@ -29,9 +29,32 @@ import { useSidebarChats } from "@/hooks/useSideBarHook";
 import useLogOutDialogStore from "@/store/useLogOutDialogStore";
 import useModelsStore from "@/store/useModelsStore";
 import Link from "next/link";
+import { toast } from "sonner";
+import CrownIcon from "../dashboardComponent/crown";
 import LogOutDialog from "../dashboardComponent/logOutDialog";
 import NewChatBtn from "../dashboardComponent/newChatBtn";
 import SpinnerLoader from "../dashboardComponent/spinnerLoader";
+
+
+
+const starterModels = ["LinkedIn Personal", "Headlines", "Storyteller"].map(m => m.toLowerCase());
+const proModels = ["LinkedIn Your Business", "Caption", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
+
+export const hasAccess = (plan, title) => {
+  if (!plan || !title) return false;
+
+  const normalizedPlan = plan.toLowerCase();
+  const normalizedTitle = title.trim().toLowerCase();
+
+  if (normalizedPlan === "none") return false;
+  if (normalizedPlan === "starter") return starterModels.includes(normalizedTitle);
+  if (normalizedPlan === "pro") return (
+    starterModels.includes(normalizedTitle) || proModels.includes(normalizedTitle)
+  );
+  if (normalizedPlan === "enterprise") return true;
+
+  return false;
+};
 
 export function AppSidebar() {
   const { sidebarSessions, isSidebarOpen, setIsSidebarOpen } = useSideBar();
@@ -62,6 +85,17 @@ export function AppSidebar() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleClick = (e, userHasAccess, title) => {
+    if (!userHasAccess) {
+      e.preventDefault();
+      toast.error(`Upgrade to access "${title}" model`, {
+        style: {
+          border: "none",
+          color: "red",
+        },
+      });
+    }
+  };
 
   return (
     <Sidebar className="sidebar">
@@ -116,17 +150,21 @@ export function AppSidebar() {
                       <MenubarContent
                         align="start"
                         side="right" className="menubarContent">
-                        {models?.map((item, i) => (
-                          <MenubarItem key={i} className="menubarItem">
-                            <a
-                              href={`/platform/${organization}/${item.url}/`}
-                              className="menu_sideBarItem"
-                            >
-                              <item.icon />
-                              <span>{item.name}</span>
-                            </a>
-                          </MenubarItem>
-                        ))}
+                        {models?.map((item, i) => {
+                          const userHasAccess = hasAccess(user?.subscription_plan, item.name);
+                          return (
+                            <MenubarItem key={i} className="menubarItem">
+                              <a
+                                href={`/platform/${organization}/${item.url}/`}
+                                className="menu_sideBarItem"
+                                onClick={(e) => handleClick(e, userHasAccess, item.name)}
+                              >
+                                {userHasAccess ? (<item.icon />) : (<CrownIcon fill="gold" stroke="gold" />)}
+                                <span>{item.name}</span>
+                              </a>
+                            </MenubarItem>
+                          )
+                        })}
                       </MenubarContent>
                     </MenubarMenu>
                   </Menubar>
@@ -147,7 +185,7 @@ export function AppSidebar() {
                 <SidebarMenuItem className="sidebarMenuItem admin">
                   <SidebarMenuButton asChild>
                     <Link
-                      href={`/platform/${organization}/help/`}
+                      href={`/help`}
                       className="sideBarItem"
                     >
                       <BadgeHelp />

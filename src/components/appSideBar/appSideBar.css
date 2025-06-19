@@ -90,7 +90,7 @@
 }
 
 .menuBar {
-  width: 100%;
+  width: max-content;
   background-color: transparent;
   color: inherit;
   height: max-content;
@@ -98,8 +98,9 @@
   border: none;
 }
 
-.menuBar.platformTop {
+.menuBar.platformMenu {
   width: max-content;
+  background-color: transparent;
 }
 
 .sidebarMenuBtn {
@@ -117,12 +118,13 @@
   padding: 0;
 }
 
-.menubarTrigger.platformTop {
+.menubarTrigger.platformMenu {
   width: 34px;
   height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: transparent;
 }
 
 .menubarTrigger:focus {
@@ -176,7 +178,7 @@
 
 .menubarContent {
   min-width: max-content;
-  padding: 0.6rem 0;
+  padding: 0.6rem;
   display: flex;
   flex-direction: column;
 }

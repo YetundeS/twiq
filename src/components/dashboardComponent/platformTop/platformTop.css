@@ -7,8 +7,11 @@
     justify-content: flex-end;
     gap: .8rem;
     padding: 0 1rem;
-    position: relative;
-    z-index: 12;
+}
+
+.platformTop.db {
+    max-width: 1800px;
+    margin: 0 auto;
 }
 
 .pt_imageBox {

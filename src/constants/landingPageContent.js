@@ -18,39 +18,60 @@ export const SITE_CONTENT = {
       "No more generic scripts. No more second-guessing what to say. TWIQ asks the right questions and helps you tell your story with clarity and heart.",
     videoTitle: "See how TWIQ brings your voice to life",
   },
-
+  
   faqs: [
-    {
-      question: "How does TWIQ preserve my authentic voice?",
-      answer:
-        "TWIQ uses advanced AI that analyzes your writing style, tone, and personality to enhance your content while maintaining your unique voice. It doesn't replace your authenticity—it amplifies it.",
-    },
-    {
-      question: "Can I use TWIQ for different types of content?",
-      answer:
-        "TWIQ works with various content types including social media posts, video scripts, blog articles, email campaigns, and more. Our AI adapts to different formats while keeping your voice consistent.",
-    },
-    {
-      question: "How quickly can I create content with TWIQ?",
-      answer:
-        "Most users create polished, viral-ready content in under 5 minutes. Simply input your story or idea, and TWIQ will enhance it into engaging content that resonates with your audience.",
-    },
-    {
-      question: "Is there a limit to how much content I can create?",
-      answer:
-        "It depends on your plan. Our Starter plan includes 10 scripts per month, while Pro and Enterprise plans offer unlimited content creation. You can upgrade anytime as your needs grow.",
-    },
-    {
-      question: "Can I collaborate with my team on TWIQ?",
-      answer:
-        "Yes! Our Enterprise plan includes team collaboration features, allowing multiple users to work together, share templates, and maintain consistent brand voice across all content.",
-    },
-    {
-      question: "What if I'm not satisfied with the results?",
-      answer:
-        "We offer a 30-day money-back guarantee. If TWIQ doesn't help you create better content, we'll refund your subscription—no questions asked.",
-    },
-  ],
+  {
+    question: "What even is TWIQ AI and how is it different from ChatGPT?",
+    answer:
+      "TWIQ AI is a specialized storytelling and content intelligence platform built for bold, purpose-driven brands. While ChatGPT is general-purpose, TWIQ AI is trained on our proprietary TWIQ Method to help you create emotionally intelligent content that builds trust, positions your expertise, and turns ideas into influence. Think of it as your personal brand strategist in bot form.",
+  },
+  {
+    question: "Who is this platform actually built for?",
+    answer:
+      "Coaches, c-suite executives, consultants, founders, service providers, content creators, and thought leaders who are tired of sounding like everyone else. If you’ve got something meaningful to say but need help saying it in a way that converts without the cringe, TWIQ AI was made for you.",
+  },
+  {
+    question: "What does the TWIQ Method stand for again?",
+    answer:
+      "TWIQ = T: Thought Leadership Content, W: What-To-Do Content (practical, tangible advice), I: Ideal Identity Connection Content, Q: Quick Help Content (actionable, immediate value). It’s the blueprint for content that connects, educates, and converts, without burning you out.",
+  },
+  {
+    question: "How do I actually use the TWIQ bots?",
+    answer:
+      "Each bot comes with easy conversation starters or prompt templates. You plug in your goal, tone, topic, and target audience. The bots generate high-impact content like carousels, captions, video scripts, storytelling scripts, blog posts etc. It’s structured to feel intuitive, fast, and fun, even if you “don’t do content.”",
+  },
+  {
+    question: "Can I still sound like me using AI?",
+    answer:
+      "Yes. That’s kind of the point. TWIQ AI is trained to pull out your lived experience, voice, values, and vibe, so your content still feels like you, but with more clarity and strategy behind it. No soulless templates here.",
+  },
+  {
+    question: "What kind of content can I create with TWIQ AI?",
+    answer:
+      "You can create: Carousels for IG or LinkedIn, Captions and microblogs, Email copy, Thought leadership articles, Video scripts for Reels, TikToks, and keynote intros, Press-ready bios and pitches. Basically, if it has words, we got you.",
+  },
+  {
+    question: "Do I need to be “techy” to use this?",
+    answer:
+      "Absolutely not. If you can send a voice note or type a DM, you can use this platform. It’s designed to feel like you’re chatting with a smart bestie who just happens to know marketing, brand psychology, and how to write copy that hits.",
+  },
+  {
+    question: "Will this work if I have multiple offers or niches?",
+    answer:
+      "Yes. TWIQ is built for multi-passionate humans who don’t fit neatly in one box. The bots help you clarify your content pillars so you can speak to different aspects of your brand without confusing your audience.",
+  },
+  {
+    question: "Is this just for social media content?",
+    answer:
+      "Nope. While it’s amazing for social, you can also use TWIQ for thought leadership, website copy, pitches, podcast planning, and even full brand messaging strategy. The platform grows with you.",
+  },
+  {
+    question: "What’s one thing I should do before using TWIQ AI?",
+    answer:
+      "Come with a clear intention. Whether it’s building visibility, launching a new offer, or clarifying your voice—when you know what you’re trying to say or achieve, the bots will help you get there faster and more powerfully.",
+  },
+],
+
 
   pricingPlans: [
     {

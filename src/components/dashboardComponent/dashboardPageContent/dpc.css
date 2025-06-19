@@ -36,7 +36,11 @@
     color: var(--sidebar-toggle-btn);
     position: relative;
     overflow-y: visible;
+    position: sticky;
+    top: 0;
+    z-index: 67;
 }
+
 .db_pageTop_iconWrapper {
     display: flex;
     align-items: center;

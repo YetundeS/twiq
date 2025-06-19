@@ -67,10 +67,12 @@ const UpdatePassword = () => {
   };
 
   return (
-    <div className="authPage min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 transition-colors duration-300 dark:from-purple-900/20 dark:via-pink-900/10 dark:to-blue-900/20">
-      <Header />
+    <div className="authPage min-h-screen">
+      
+      <div className="innerauthPage animate-fade-in-up transition-colors duration-300">
+        <Header />
       <TwiqBg />
-      <div className="z[35] relative flex min-h-screen items-start justify-center pt-40 pb-8 md:pt-24">
+          <div className="flex justify-center items-center">
         <div className="w-full max-w-md px-4">
           <GlowEffect>
             <div className="authFormTopWrapper rounded-3xl border border-gray-200/50 bg-white p-8 shadow-2xl backdrop-blur-sm dark:border-gray-600/50 dark:bg-gray-800">
@@ -112,6 +114,7 @@ const UpdatePassword = () => {
           </GlowEffect>
         </div>
       </div>
+    </div>
     </div>
   );
 };

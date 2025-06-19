@@ -1,13 +1,13 @@
 .twiqBg {
     position: fixed;
-    top: -8rem;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 0;
+    left: 0;
+    /* transform: translateX(-50%); */
     margin: 0 auto;
-    width: 110vw;
+    width: 100vw;
     height: max-content;
-    opacity: .72;
-    max-width: 1600px;
+    opacity: .64;
+    /* max-width: 4000px; */
     object-fit: cover;
 }
 
@@ -27,5 +27,5 @@
 }
 
 .dark .twiqBg {
-    opacity: 1;
+    opacity: .8;
 }

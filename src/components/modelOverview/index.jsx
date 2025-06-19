@@ -75,7 +75,7 @@ const ModelOverview = ({ specialModel, onClick, model, organizationName, subscri
       >
         {!userHasAccess && (
           <div className="crownBox">
-            <CrownIcon fill="gold" stroke="black" />
+            <CrownIcon fill="gold" stroke="gold" />
           </div>
         )}
         <motion.div

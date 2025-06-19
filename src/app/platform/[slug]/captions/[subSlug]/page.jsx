@@ -28,7 +28,7 @@ const CaptionChat = () => {
     chats,
     messagesEndRef,
     aiSuggestions
-    } = useAssistantChat('Captions', 'captions');
+  } = useAssistantChat('Captions', 'captions');
 
   return (
     <div className="page_content">
@@ -44,9 +44,9 @@ const CaptionChat = () => {
             <NewChatBtn alt />
           </>
         )}
-        <TwiqBg />
         <PlatformTop />
       </div>
+      <TwiqBg />
       <div className="pageBody">
         <div className="pageBody_innerBox">
           <ChatMessageWindow

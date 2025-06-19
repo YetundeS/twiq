@@ -45,9 +45,9 @@ const CarouselChat = () => {
             <NewChatBtn alt />
           </>
         )}
-        <TwiqBg />
         <PlatformTop />
       </div>
+        <TwiqBg />
       <div className="pageBody">
         <div className="pageBody_innerBox">
           <ChatMessageWindow

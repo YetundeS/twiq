@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { ChevronDown } from "lucide-react";
-import { TextEffect } from "../ui/text-effect";
-import { motion } from "framer-motion";
 import { SITE_CONTENT } from "@/constants/landingPageContent";
+import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { TextEffect } from "../ui/text-effect";
 
 const faqs = SITE_CONTENT.faqs;
 
@@ -26,7 +26,7 @@ export function FAQSection() {
           }
         });
       },
-      { threshold: 0.1 },
+      { threshold: 0.4 },
     );
 
     if (sectionRef.current) {
@@ -73,11 +73,12 @@ export function FAQSection() {
                 ease: "easeOut",
                 delay: index * 0.1,
               }}
-              className="overflow-hidden rounded-2xl border border-gray-200/50 bg-white/90 shadow-lg backdrop-blur-sm dark:border-gray-500/50 dark:bg-gray-700/90"
+              className="overflow-hidden rounded-2xl border border-gray-200/50 bg-[#F0D0D0]  shadow-lg backdrop-blur-sm dark:border-gray-500/50 dark:bg-[#6C363A]"
             >
+              {/* bg-white/90 */}
               <button
                 onClick={() => toggleItem(index)}
-                className="flex w-full cursor-pointer items-center justify-between px-6 py-6 text-left transition-colors duration-200 hover:bg-gray-50/50 dark:hover:bg-gray-600/50"
+                className="flex w-full cursor-pointer items-center justify-between px-6 py-6 text-left transition-colors duration-200 hover:bg-[#D3A5A5]/50 dark:hover:bg-[#440101]/50"
               >
                 <span className="pr-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
                   {faq.question}
@@ -95,7 +96,7 @@ export function FAQSection() {
                     : "max-h-0 opacity-0"
                 }`}
               >
-                <div className="px-6 pb-6">
+                <div className="px-6 pt-2 pb-6">
                   <p className="leading-relaxed text-gray-600 dark:text-gray-300">
                     {faq.answer}
                   </p>

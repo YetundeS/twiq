@@ -5,14 +5,24 @@ h3 {
 
 .authPage {
   width: 100vw;
+  height: 100vh;
+  background: var(--page-bg);
+  overflow: hidden;
+}
+
+.innerauthPage {
+  width: 100vw;
+  /* max-width: 4000px; */
   overflow: hidden;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
+  max-height: 2000px;
+  margin: 0 auto;
   position: relative;
-  background: var(--page-bg);
+  /* background: var(--page-bg); */
   font-family: "New Spirit", serif, "Poppins", Arial, Helvetica, sans-serif;
 }
 
@@ -156,15 +166,9 @@ h3 {
 /* Dark theme */
 
 .dark .authPage {
-  width: 100vw;
-  overflow: hidden;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  position: relative;
   background: var(--page-bg-dark);
-  /* background: radial-gradient(circle at top left, #562525, #2b0505, #1a0101); */
-  font-family: "New Spirit", serif, "Poppins", Arial, Helvetica, sans-serif;
+}
+
+.dark .innerauthPage {
+  /* background: var(--page-bg-dark); */
 }

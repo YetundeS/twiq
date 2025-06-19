@@ -1,5 +1,6 @@
 "use client";
 
+import { hasAccess } from '@/components/appSideBar';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar';
 import { models } from '@/constants/sidebar';
@@ -8,7 +9,9 @@ import useAuthStore from '@/store/authStore';
 import "@/styles/platformStyles.css";
 import { SquarePen } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import '../../appSideBar/appSideBar.css';
+import CrownIcon from '../crown';
 
 const NewChatBtn = ({ alt }) => {
   const [organization, setOrganization] = useState("");
@@ -21,6 +24,17 @@ const NewChatBtn = ({ alt }) => {
   }, [user]);
 
 
+  const handleClick = (e, userHasAccess, title) => {
+    if (!userHasAccess) {
+      e.preventDefault();
+      toast.error(`Upgrade to access "${title}" model`, {
+        style: {
+          border: "none",
+          color: "red",
+        },
+      });
+    }
+  };
 
     return (
         <div className='z-[12]'>
@@ -43,17 +57,21 @@ const NewChatBtn = ({ alt }) => {
                         side="right"
                         alignOffset={4}
                         sideOffset={8} className="menubarContent">
-                        {models?.map((item, i) => (
+                        {models?.map((item, i) => {
+                          const userHasAccess = hasAccess(user?.subscription_plan, item.name);
+                          return (
                             <MenubarItem key={i} className="menubarItem">
                                 <a
                                     href={`/platform/${organization}/${item.url}/`}
                                     className="menu_sideBarItem"
+                                    onClick={(e) => handleClick(e, userHasAccess, item.name)}
                                 >
-                                    <item.icon />
+                                {userHasAccess ? (<item.icon />) : (<CrownIcon fill="gold" stroke="gold" />)}
                                     <span>{item.name}</span>
                                 </a>
                             </MenubarItem>
-                        ))}
+                          )
+                        })}
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>

@@ -36,9 +36,9 @@ const DashboardPageContent = () => {
   return (
     <div className="db_page_content">
       <div className="db_pageTop">
-        <TwiqBg />
-        <PlatformTop twiqDefinition={twiqDefinition} setTwiqDefinition={setTwiqDefinition} />
+        <PlatformTop db={true} twiqDefinition={twiqDefinition} setTwiqDefinition={setTwiqDefinition} />
       </div>
+      <TwiqBg />
       <div className="db_pageBody">
         <div className="db_aboveTheFold dashboard">
           <div className="dashboardLogo">
