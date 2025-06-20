@@ -5,16 +5,13 @@ import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import PlatformTop from "@/components/dashboardComponent/platformTop";
 import TwiqBg from "@/components/dashboardComponent/twiqBg";
-import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import "@/styles/platformStyles.css";
 import { PanelRightOpen } from "lucide-react";
 
 const CarouselChat = () => {
-  const isMobile = useIsMobile();
 
   const {
-    isSidebarOpen,
     toggleSidebar,
     // modelName,
     // modelDescription,
@@ -28,13 +25,14 @@ const CarouselChat = () => {
     sendBtnActive,
     chats,
     messagesEndRef,
-    aiSuggestions
+    aiSuggestions,
+    showToggleChat
       } = useAssistantChat('Headlines', 'headlines');
 
   return (
     <div className="page_content">
       <div className="pageTop">
-        {(!isSidebarOpen || isMobile) && (
+        {(showToggleChat) && (
           <>
             <div
               onClick={toggleSidebar}

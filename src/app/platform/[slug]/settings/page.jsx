@@ -16,11 +16,10 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useSidebar } from '@/components/ui/sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useIsMobile } from '@/hooks/use-mobile';
+import useAssistantChat from '@/hooks/useAssistantChat';
 import useAuthStore from '@/store/authStore';
-import { useSideBar } from '@/store/sidebarStore';
+import { useResponsiveSidebarToggle } from '@/store/useResponsiveSidebarToggle';
 import useSusbcriptionDialogStore from '@/store/useSusbcriptionDialogStore';
 import "@/styles/platformStyles.css";
 import { PanelRightOpen } from "lucide-react";
@@ -28,27 +27,18 @@ import Image from "next/image";
 import "./settings.css";
 
 const Settings = () => {
-  const isMobile = useIsMobile();
-   const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
     const { openSubDialog } = useSusbcriptionDialogStore();
-
-  const { toggleSidebar: mainToggle } = useSidebar();
-  const { user } = useAuthStore();
-
-  const toggleSidebar = () => {
-    mainToggle()
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+    const { user } = useAuthStore();
+  
+    const toggleSidebar = useResponsiveSidebarToggle();
+    const { showToggleChat } = useAssistantChat();
 
   return (
     <div className="page_content">
       <div className="pageTop">
-        {(!isSidebarOpen || isMobile) && (
+        {(showToggleChat) && (
           <>
-            <div
-              onClick={toggleSidebar}
-              className="pageTop_iconWrapper"
-            >
+            <div onClick={toggleSidebar} className="pageTop_iconWrapper">
               <PanelRightOpen className="pageIcon" size="22px" />
             </div>
             <NewChatBtn alt />
@@ -56,7 +46,7 @@ const Settings = () => {
         )}
         <PlatformTop />
       </div>
-        <TwiqBg />
+      <TwiqBg />
       <div className="settings_content">
         <Tabs defaultValue="profile" className="settingsTab">
           <TabsList className="grid w-full grid-cols-2 tabsList">

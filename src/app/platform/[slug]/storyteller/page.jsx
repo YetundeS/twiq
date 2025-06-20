@@ -4,7 +4,6 @@ import ChatInputArea from "@/components/carouselComponents/chatInputArea";
 import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow";
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import PlatformTop from "@/components/dashboardComponent/platformTop";
-import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import { PanelRightOpen } from "lucide-react";
 
@@ -12,10 +11,8 @@ import TwiqBg from "@/components/dashboardComponent/twiqBg";
 import "@/styles/platformStyles.css";
 
 const StorytellerModel = () => {
-  const isMobile = useIsMobile();
 
   const {
-    isSidebarOpen,
     toggleSidebar,
     // modelName,
     // modelDescription,
@@ -29,15 +26,15 @@ const StorytellerModel = () => {
     sendBtnActive,
     chats,
     messagesEndRef,
-    aiSuggestions
+    aiSuggestions,
+    showToggleChat
   } = useAssistantChat('Storyteller', 'storyteller');
 
 
   return ( 
     <div className="page_content">
       <div className="pageTop">
-        
-        {(!isSidebarOpen || isMobile) && (
+        {(showToggleChat) && (
           <>
             <div
               onClick={toggleSidebar}

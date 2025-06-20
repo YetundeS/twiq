@@ -61,7 +61,7 @@ function MenubarTrigger({
 
 function MenubarContent({
   className,
-  align = "end",
+  align = "start",
   side="bottom",
   alignOffset = -4,
   sideOffset = 8,

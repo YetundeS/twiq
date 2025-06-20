@@ -4,9 +4,11 @@ import { modelDetailsMap } from "@/constants/carousel";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
 import useModelsStore from "@/store/useModelsStore";
+import { useResponsiveSidebarToggle } from "@/store/useResponsiveSidebarToggle";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { useIsMobile } from "./use-mobile";
 import { usePromptSuggestions } from "./usePromptSuggestion";
 
 const starterModels = ["LinkedIn Personal", "Headlines", "Storyteller"].map(m => m.toLowerCase());
@@ -35,28 +37,25 @@ export default function useAssistantChat(modelName, assistantSlug) {
   const [streamingData, setStreamingData] = useState("");
   const [streaming, setStreaming] = useState(false);
   const [aiSuggestions, setAISuggestions] = useState([]);
+  const [showToggleChat, setShowToggleChat] = useState(false);
   const streamingDataRef = useRef("");
   const eventSourceRef = useRef(null);
   const messagesEndRef = useRef(null);
-  // const { toggleSidebar: mainToggle } = useSidebar();
   const { user } = useAuthStore()
+    const isMobile = useIsMobile();
 
   const pathname = usePathname();
   const [isFetchingChats, setIsFetchingChats] = useState(true);
 
 
-  const { addToSideBarSessions, isSidebarOpen, setIsSidebarOpen } = useSideBar();
+  const { addToSideBarSessions, isSidebarOpen, isMobileSidebarOpen } = useSideBar();
   const { activeSessionID, activeChatMessages: chats, updateActiveSessionID, updateActiveChatMessages, setActiveChatMessages } = useModelsStore();
 
   const modelDescription = modelDetailsMap[assistantSlug]?.description;
 
   const { suggestions } = usePromptSuggestions(inputValue, modelName, modelDescription);
 
-
-  const toggleSidebar = () => {
-    // mainToggle()
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  const toggleSidebar = useResponsiveSidebarToggle();
 
   useEffect(() => {
     const match = pathname.match(/\/platform\/@[^/]+\/[^/]+\/([^/?#]+)/);
@@ -214,9 +213,17 @@ export default function useAssistantChat(modelName, assistantSlug) {
 
   }, [suggestions])
 
+  useEffect(() => {
+    if(!isSidebarOpen || isMobile) {
+      setShowToggleChat(true)
+    } else {
+      setShowToggleChat(false)
+    }
+  }, [isSidebarOpen, isMobileSidebarOpen, isMobile])
+  
+
 
   return {
-    isSidebarOpen,
     toggleSidebar,
     modelDescription,
     isFetchingChats,
@@ -230,5 +237,6 @@ export default function useAssistantChat(modelName, assistantSlug) {
     chats,
     messagesEndRef,
     aiSuggestions,
+    showToggleChat
   };
 }

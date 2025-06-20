@@ -5,18 +5,15 @@ import ChatMessageWindow from "@/components/carouselComponents/chatMessageWindow
 import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
 import PlatformTop from "@/components/dashboardComponent/platformTop";
 import TwiqBg from "@/components/dashboardComponent/twiqBg";
-import { useIsMobile } from "@/hooks/use-mobile";
 import useAssistantChat from "@/hooks/useAssistantChat";
 import "@/styles/platformStyles.css";
 import { PanelRightOpen } from "lucide-react";
 
 const LinkedInPersonalModel = () => {
-  const isMobile = useIsMobile();
 
   const {
-    isSidebarOpen,
     toggleSidebar,
-    modelDescription,
+    // modelDescription,
     // isFetchingChats,
     inputValue,
     setInputValue,
@@ -27,13 +24,14 @@ const LinkedInPersonalModel = () => {
     sendBtnActive,
     chats,
     messagesEndRef,
-    aiSuggestions
+    aiSuggestions,
+    showToggleChat
   } = useAssistantChat('LinkedIn Personal', 'linkedin_personal');
 
   return (
     <div className="page_content">
       <div className="pageTop">
-        {(!isSidebarOpen || isMobile) && (
+        {(showToggleChat) && (
           <>
             <div onClick={toggleSidebar} className="pageTop_iconWrapper">
               <PanelRightOpen className="pageIcon" size="22px" />

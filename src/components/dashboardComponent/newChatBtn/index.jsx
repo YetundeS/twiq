@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import '../../appSideBar/appSideBar.css';
 import CrownIcon from '../crown';
 
-const NewChatBtn = ({ alt }) => {
+const NewChatBtn = ({ alt, mobile }) => {
   const [organization, setOrganization] = useState("");
   const { user } = useAuthStore();
 
@@ -47,16 +47,16 @@ const NewChatBtn = ({ alt }) => {
                                 <SquarePen className="pageIcon" size="22px" />
                             </div>
                         </HoverCardTrigger>
-                        <HoverCardContent className={`newchat_hoverCardContent ${alt && 'alt'}`}>
+                        <HoverCardContent className={`newchat_hoverCardContent z-[999999999] ${alt && 'alt'}`}>
                             <span>New chat</span>
                         </HoverCardContent>
                     </HoverCard>
                     </MenubarTrigger>
                     <MenubarContent
                         align="start"
-                        side="right"
+                        side={mobile ? "bottom" : "right"}
                         alignOffset={4}
-                        sideOffset={8} className="menubarContent">
+                        sideOffset={8} className="menubarContent z-[999999999]">
                         {models?.map((item, i) => {
                           const userHasAccess = hasAccess(user?.subscription_plan, item.name);
                           return (

@@ -2,19 +2,20 @@
 "use client";
 
 import { fetchUser } from "@/apiCalls/authAPI";
-import { AppSidebar } from "@/components/appSideBar";
+import { AppSidebar } from "@/components/appSideBar/appSideBarResponsive";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
 import { useHydrationZustand } from "@codebayu/use-hydration-zustand";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useMediaQuery } from "usehooks-ts";
 import "./dashboard.css";
 
 export default function DashboardLayout({ children }) {
-  const { isSidebarOpen, setIsSidebarOpen } = useSideBar();
-  // const { user } = useAuthStore();
-  //   const isMobile = useIsMobile();
+  const { isSidebarOpen } = useSideBar();
+
+  const isDesktop = useMediaQuery('(min-width: 768px)', { initializeWithValue: false });
 
   const isHydrated = useHydrationZustand(useAuthStore);
   const router = useRouter();
@@ -30,16 +31,8 @@ export default function DashboardLayout({ children }) {
   }, [isHydrated]);
 
 
-
-  // useEffect(() => {
-  //   if (isHydrated && !user) {
-  //     router.push("/sign-off");
-  //   }
-  // }, [user, isHydrated]);
-  
-
   return (
-    <SidebarProvider open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+    <SidebarProvider open={isSidebarOpen}>
       <div className="dashboard_wrapper">
         <AppSidebar />
         {children}

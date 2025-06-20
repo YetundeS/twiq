@@ -26,9 +26,19 @@
     background-color: #0E0E0E;
 }
 
+.dialogFooter {
+    display: flex;
+    align-items: center;
+}
 
 @media (max-width: 575px) {
     .dialogBody {
         max-width: 90vw;
     }
+
+    .dialogFooter {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
 }

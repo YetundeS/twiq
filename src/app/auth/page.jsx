@@ -85,7 +85,7 @@ export default function Auth() {
 
                   {/* Terms */}
                   <div className="mt-8 text-center text-sm">
-                    <p className="needHelp">need help?</p>
+                    <a href="/help" className="needHelp">need help?</a>
                   </div>
                 </div>
               </GlowEffect >

@@ -32,7 +32,7 @@ const LogOutDialog = () => {
     <Dialog onOpenChange={closeDialog} open={isOpen}>
       <DialogContent
         aria-describedby="dialog-description"
-        className="flex flex-col sm:max-w-[500px] dialogBody"
+        className="flex flex-col sm:max-w-[500px] dialogBody z-[9999999999999999999999]"
       >
         <DialogHeader>
           <DialogTitle>Done already?</DialogTitle>

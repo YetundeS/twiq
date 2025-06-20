@@ -12,20 +12,6 @@
 }
 
 
-
-
-@media (max-width: 1200px) {
-    .twiqBg {
-        top: 0;
-    }
-}
-
-@media (max-width: 525px) {
-    .twiqBg {
-        width: 160vw;
-    }
-}
-
 .dark .twiqBg {
     opacity: .8;
 }

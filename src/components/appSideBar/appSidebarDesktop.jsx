@@ -56,10 +56,7 @@ export const hasAccess = (plan, title) => {
   return false;
 };
 
-
-
-
-export function AppSidebar() {
+export function AppSidebarDesktop() {
   const { sidebarSessions } = useSideBar();
   const [sessions, setSession] = useState([]);
   const [organization, setOrganization] = useState("");
@@ -67,7 +64,8 @@ export function AppSidebar() {
   const { openDialog } = useLogOutDialogStore();
   const { isFetching } = useSidebarChats();
   const { activeSessionID } = useModelsStore();
-  const toggleSidebar = useResponsiveSidebarToggle();
+
+    const toggleSidebar = useResponsiveSidebarToggle();
 
   useEffect(() => {
     setSession([...sidebarSessions]);

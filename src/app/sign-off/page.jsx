@@ -45,7 +45,7 @@ const SignOffPage = () => {
                         <div className="authButtons">
                             <AuhVisitBtn onClick={goToAuth} black text="Sign On" />
                         </div>
-                        <p className="needHelp out">need help?</p>
+                        <a href="/help" className="needHelp out">need help?</a>
                     </div>
                     <CopyrightTxt />
                 </div>
