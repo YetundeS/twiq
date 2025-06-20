@@ -87,7 +87,7 @@ export function AppSidebarDesktopStatic({ mobile }) {
                     <div className="scrollableArea mobile">
                         <div className="sidebar_menu">
                             <div className="sidebarMenuItem admin">
-                                <a href={`/platform/${organization}/`} className="sideBarItem mobile">
+                                <a href={`/platform/${organization}/`} className="sideBarItem">
                                     <Home className="home-icon" />
                                     <span>Home</span>
                                 </a>
@@ -97,7 +97,7 @@ export function AppSidebarDesktopStatic({ mobile }) {
                                 <Menubar className="menuBar">
                                     <MenubarMenu>
                                         <MenubarTrigger className="menubarTrigger">
-                                            <div className="sideBarItem mobile">
+                                            <div className="sideBarItem">
                                                 <Package className="home-icon" />
                                                 <span>Models</span>
                                             </div>
@@ -125,14 +125,14 @@ export function AppSidebarDesktopStatic({ mobile }) {
                             </div>
 
                             <div className="sidebarMenuItem admin">
-                                <Link href={`/platform/${organization}/settings/`} className="sideBarItem mobile">
+                                <Link href={`/platform/${organization}/settings/`} className="sideBarItem">
                                     <Settings className="settings-icon" />
                                     <span>Settings</span>
                                 </Link>
                             </div>
 
                             <div className="sidebarMenuItem admin">
-                                <Link href={`/help`} className="sideBarItem mobile">
+                                <Link href={`/help`} className="sideBarItem">
                                     <BadgeHelp />
                                     <span>Help</span>
                                 </Link>
