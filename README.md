@@ -78,8 +78,3 @@ yarn dev
 | npm run dev    | Build production bundle    |
 | npm run start    | Start production server    | 
 | npm run lint    | Run linter checks    | 
-
-
-
-# Contact
-Project Maintainer: Muftau - muftau201@gmail.com
