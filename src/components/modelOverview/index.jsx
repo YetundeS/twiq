@@ -2,27 +2,11 @@ import GlowEffect from "@/components/landingPageComponents/GlowEffect";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { toast } from "sonner";
+import { hasAccess } from "../appSideBar";
 import CrownIcon from "../dashboardComponent/crown";
 import "./modelOverview.css";
 
-const starterModels = ["LinkedIn Personal", "Headlines", "Storyteller"].map(m => m.toLowerCase());
-const proModels = ["LinkedIn Your Business", "Captions", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
 
-const hasAccess = (plan, title) => {
-  if (!plan || !title) return false;
-
-  const normalizedPlan = plan.toLowerCase();
-  const normalizedTitle = title.trim().toLowerCase();
-
-  if (normalizedPlan === "none") return false;
-  if (normalizedPlan === "starter") return starterModels.includes(normalizedTitle);
-  if (normalizedPlan === "pro") return (
-    starterModels.includes(normalizedTitle) || proModels.includes(normalizedTitle)
-  );
-  if (normalizedPlan === "enterprise") return true;
-
-  return false;
-};
 const ModelOverview = ({ specialModel, onClick, model, organizationName, subscription_plan }) => {
   const title = model?.title;
 

@@ -27,22 +27,8 @@ import CrownIcon from "../dashboardComponent/crown";
 import LogOutDialog from "../dashboardComponent/logOutDialog";
 import NewChatBtn from "../dashboardComponent/newChatBtn";
 import SpinnerLoader from "../dashboardComponent/spinnerLoader";
+import { hasAccess } from './index';
 
-const starterModels = ["LinkedIn Personal", "Headlines", "Storyteller"].map(m => m.toLowerCase());
-const proModels = ["LinkedIn Your Business", "Captions", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
-
-export const hasAccess = (plan, title) => {
-    if (!plan || !title) return false;
-    const normalizedPlan = plan.toLowerCase();
-    const normalizedTitle = title.trim().toLowerCase();
-
-    if (normalizedPlan === "none") return false;
-    if (normalizedPlan === "starter") return starterModels.includes(normalizedTitle);
-    if (normalizedPlan === "pro") return starterModels.includes(normalizedTitle) || proModels.includes(normalizedTitle);
-    if (normalizedPlan === "enterprise") return true;
-
-    return false;
-};
 
 export function AppSidebarDesktopStatic() {
     const { sidebarSessions } = useSideBar();
@@ -108,7 +94,7 @@ export function AppSidebarDesktopStatic() {
                                             <div className="sideBarItem">
                                                 <Package className="home-icon" />
                                                 <span>Models</span>
-                                            </div>
+                                            </div> 
                                         </MenubarTrigger>
                                         <MenubarContent align="start"
                                             side="bottom" className="menubarContent z-[999999999999]">

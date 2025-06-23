@@ -1,5 +1,6 @@
 import { fetchMessages } from "@/apiCalls/chatMessage";
 import { sendChatMessage } from "@/apiCalls/sendChatMessage";
+import { hasAccess } from "@/components/appSideBar";
 import { modelDetailsMap } from "@/constants/carousel";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
@@ -11,22 +12,7 @@ import { toast } from "sonner";
 import { useIsMobile } from "./use-mobile";
 import { usePromptSuggestions } from "./usePromptSuggestion";
 
-const starterModels = ["LinkedIn Personal", "Headlines", "Storyteller"].map(m => m.toLowerCase());
-const proModels = ["LinkedIn Your Business", "Captions", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
 
-const hasAccess = (plan, title) => {
-  if (!plan || !title) return false;
-
-  const normalizedPlan = plan.toLowerCase();
-  const normalizedTitle = title.trim().toLowerCase();
-
-  if (normalizedPlan === "none") return false;
-  if (normalizedPlan === "starter") return starterModels.includes(normalizedTitle);
-  if (normalizedPlan === "pro") return starterModels.includes(normalizedTitle) || proModels.includes(normalizedTitle);
-  if (normalizedPlan === "enterprise") return true;
-
-  return false;
-};
 
 
 
