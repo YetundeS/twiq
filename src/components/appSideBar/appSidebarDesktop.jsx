@@ -40,7 +40,7 @@ import SpinnerLoader from "../dashboardComponent/spinnerLoader";
 
 
 const starterModels = ["LinkedIn Personal", "Headlines", "Storyteller"].map(m => m.toLowerCase());
-const proModels = ["LinkedIn Your Business", "Caption", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
+const proModels = ["LinkedIn Your Business", "Captions", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
 
 export const hasAccess = (plan, title) => {
   if (!plan || !title) return false;
@@ -70,6 +70,7 @@ export function AppSidebarDesktop() {
     const toggleSidebar = useResponsiveSidebarToggle();
     const { openSubDialog } = useSusbcriptionDialogStore();
     const router = useRouter();
+    
 
   useEffect(() => {
     setSession([...sidebarSessions]);
@@ -96,6 +97,7 @@ export function AppSidebarDesktop() {
 
   const handleUpgradeClick = () => {
     openSubDialog();
+    const signString = generateSignString(user?.organization_name);
     router.push(`/platform/${signString}/settings`);
   }
 

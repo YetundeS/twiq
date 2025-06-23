@@ -102,7 +102,7 @@ export const modelsOverview = [
     link: "linkedin_personal",
   },
   {
-    title: "Caption",
+    title: "Captions",
     description: [
       "Create scroll-stopping captions full of personality in seconds.",
       "Craft witty, relatable, and engaging captions that connect with your audience.",

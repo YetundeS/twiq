@@ -12,7 +12,7 @@ import { useIsMobile } from "./use-mobile";
 import { usePromptSuggestions } from "./usePromptSuggestion";
 
 const starterModels = ["LinkedIn Personal", "Headlines", "Storyteller"].map(m => m.toLowerCase());
-const proModels = ["LinkedIn Your Business", "Caption", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
+const proModels = ["LinkedIn Your Business", "Captions", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
 
 const hasAccess = (plan, title) => {
   if (!plan || !title) return false;

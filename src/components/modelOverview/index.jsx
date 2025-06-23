@@ -6,7 +6,7 @@ import CrownIcon from "../dashboardComponent/crown";
 import "./modelOverview.css";
 
 const starterModels = ["LinkedIn Personal", "Headlines", "Storyteller"].map(m => m.toLowerCase());
-const proModels = ["LinkedIn Your Business", "Caption", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
+const proModels = ["LinkedIn Your Business", "Captions", "Video Scripts", "Carousel"].map(m => m.toLowerCase());
 
 const hasAccess = (plan, title) => {
   if (!plan || !title) return false;

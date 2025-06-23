@@ -2,7 +2,7 @@
 "use client";
 
 import { fetchUser } from "@/apiCalls/authAPI";
-import { AppSidebar } from "@/components/appSideBar/appSideBarResponsive";
+import { AppSidebar } from "@/components/appSideBar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
