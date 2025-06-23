@@ -9,7 +9,7 @@ const useAuthStore = create()(
       updateUser: (user) => set({ user }),
     }),
     {
-      name: "auth-storage",
+      name: "twiq-auth-storage",
     }
   )
 );

@@ -83,7 +83,7 @@ export const SITE_CONTENT = {
       productId: 'prod_SLfSE6oRt80Mu7',
       period: "/year",
       bots: "3+ TWIQ Bots",
-      botBadges: ["V", "C", "H"],
+      botBadges: ["L", "H", "S"],
       features: [
         "Access Through TWIQ AI",
         "Access to any 3 TWIQ Bots of your choice",
@@ -108,7 +108,7 @@ export const SITE_CONTENT = {
       productId: 'prod_SLfTLYmEto0mP5',
       period: "/year",
       bots: "All 7 TWIQ Bots",
-      botBadges: ["V", "C", "L", "B"],
+      botBadges: ["L", "C", "V", "C"],
       features: [
         "Access Through TWIQ AI",
         "Unlimited access to all 7 TWIQ Bots",

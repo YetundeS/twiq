@@ -1,0 +1,44 @@
+.dialogBody {
+    background-color: var(--page-content-bg);
+    border-radius: 12px;
+    border: none;
+    color: white;
+}
+
+.dialogDescription {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 1rem 0;
+    gap: 1rem;
+}
+
+.dialogBtn {
+    font-size: 12px;
+    width: max-content;
+    color: rgb(0, 0, 0);
+    background-color: white;
+    cursor: pointer;
+}
+
+.dialogBtn.black {
+    color: rgb(255, 255, 255);
+    background-color: #0E0E0E;
+}
+
+.dialogFooter {
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 575px) {
+    .dialogBody {
+        max-width: 90vw;
+    }
+
+    .dialogFooter {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+}

@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/ui/theme-provider";
 import { SITE_CONTENT } from "@/constants/landingPageContent";
+import { generateSignString } from "@/lib/utils";
+import useAuthStore from "@/store/authStore";
 import { Mail, Moon, MoreVertical, Sun } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -18,6 +20,7 @@ import "./header.css";
 export function Header() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { user } = useAuthStore();
 
   useEffect(() => {
     setMounted(true);
@@ -53,7 +56,7 @@ export function Header() {
         <div className="flex h-20 items-center justify-between">
           <div className="flex items-center">
 
-            <a href="/" className="headerLogo">
+            <a href={user ? `/platform/${generateSignString(user?.organization_name)}/` : "/"} className="headerLogo">
               <>
                 {/* Light mode logo (visible only in light mode) */}
                 <Image

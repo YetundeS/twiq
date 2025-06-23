@@ -21,7 +21,7 @@ async function openBillingPortal(stripeCustomerId, updateIsSubscribing) {
 
     try {
         // Get token from localStorage
-        const token = localStorage.getItem("access_token");
+        const token = localStorage.getItem("twiq_access_token");
 
         const response = await API.post('/stripe/billing-portal', { stripeCustomerId },
             {
@@ -46,7 +46,7 @@ async function openBillingPortal(stripeCustomerId, updateIsSubscribing) {
 const callPlanSubscribe = async (priceId, updateIsSubscribing) => {
     try {
         // Get token from localStorage
-        const token = localStorage.getItem("access_token");
+        const token = localStorage.getItem("twiq_access_token");
 
         const response = await API.post('/stripe/create-checkout-session', {
             priceId,

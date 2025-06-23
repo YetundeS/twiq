@@ -126,10 +126,23 @@
     height: 100%;
 }
 
+.inputOverBox {
+    max-width: 540px;
+}
+
 .settingProfileInput {
     max-width: 540px;
+
     color: gray;
     border: 1px solid rgba(128, 128, 128, 0.59);
+}
+
+.settingProfileInput.password {
+    color: black;
+}
+
+.lockIcon {
+    color: #5A0001;
 }
 
 .fogBtn {
@@ -143,6 +156,26 @@
 
 .fogBtn:hover {
     background-color: var(--red-brand-color);
+}
+
+/* Clean circle image */
+.userAvatar {
+  border-radius: 9999px;
+  object-fit: cover;
+}
+
+/* Optional: tighter save button */
+.saveBtn {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+
+.dangerZone {
+    border-radius: 12px;
+    padding: .8rem;
+    background: #ffeaea;
 }
 
 /* Mobile */
@@ -164,6 +197,8 @@
         align-items: flex-start;
         gap: 1.2rem;
     }
+
+
 }
 
 /* Dark Theme */

@@ -87,17 +87,22 @@ const LoginForm = ({ setActiveForm }) => {
           });
         }
 
-        if (!response?.user.is_active) {
+        if (!response?.user.email_confirmed) {
+          setTimeout(() => {
+            openSubDialog();
+            router.push(`/platform/${signString}/`);
+          }, 1000);
+        } else if(!response?.user.is_active) {
           setTimeout(() => {
             openSubDialog();
             router.push(`/platform/${signString}/settings`);
-          }, 1500);
+          }, 1000);
         } else {
           setTimeout(() => {
             router.push(`/platform/${signString}/`);
-          }, 1500);
-        }
+          }, 1000);
       }
+    }
     } else {
       setErrors(newErrors);
     }

@@ -26,6 +26,7 @@
     overflow: hidden;
     cursor: pointer;
     transition: all 0.2s ease-in;
+    
 }
 
 .pt_imageBox:hover {

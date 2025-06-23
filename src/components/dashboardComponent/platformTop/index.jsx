@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/ui/theme-provider';
 import useAuthStore from '@/store/authStore';
 import "@/styles/platformStyles.css";
-import { ArrowLeft, CircleUserRound, Moon, Sun } from 'lucide-react';
+import { ArrowLeft, Moon, Sun } from 'lucide-react';
 import Image from 'next/image';
 import './platformTop.css';
 
@@ -25,13 +25,15 @@ const PlatformTop = ({ db, twiqDefinition, setTwiqDefinition }) => {
         if (!user) return;
         const signString = generateSignString(user?.organization_name);
         setOrganization(signString);
+
     }, [user]);
+
 
     const toggleTheme = () => {
         setTheme(theme === "dark" ? "light" : "dark");
     };
 
-    const FALLBACK_IMG = 'https://api.dicebear.com/7.x/identicon/svg?seed=mufutau'
+    const FALLBACK_IMG = 'https://api.dicebear.com/9.x/thumb/svg?seed=mufutau'
 
     return (
         <div className={`${db ? 'db' : ''} platformTop `}>
@@ -67,14 +69,20 @@ const PlatformTop = ({ db, twiqDefinition, setTwiqDefinition }) => {
                                 <div className="pt_imageBox">
                                     {user?.avatar_url ? (
                                         <Image
-                                            src={user?.avatar_url || FALLBACK_IMG}
+                                            src={user?.avatar_url}
                                             width={60}
                                             height={60}
                                             alt="profile Image"
                                             className="profileImg"
                                         />
                                     ) : (
-                                        <CircleUserRound />
+                                        <Image
+                                            src={FALLBACK_IMG}
+                                            width={60}
+                                            height={60}
+                                            alt="profile Image"
+                                            className="profileImg"
+                                        />
                                     )}
                                 </div>
                             </HoverCardTrigger>
@@ -88,32 +96,38 @@ const PlatformTop = ({ db, twiqDefinition, setTwiqDefinition }) => {
 
                             if (item?.name === "Log Out") {
                                 return (
-                                        <div onClick={openDialog}
-                                            className="menu_sideBarItem cursor-pointer"
-                                        >
-                                            <item.icon />
-                                            <span>{item.name}</span>
-                                        </div>
+                                    <div
+                                        key={i}
+                                        onClick={openDialog}
+                                        className="menu_sideBarItem cursor-pointer"
+                                    >
+                                        <item.icon />
+                                        <span>{item.name}</span>
+                                    </div>
                                 )
                             }
                             else if (item?.name === "Help") {
-                                return (<Link
-                                    href={`/help`}
-                                    className="menu_sideBarItem"
-                                >
-                                    <item.icon />
-                                    <span>{item.name}</span>
-                                </Link>
+                                return (
+                                    <Link
+                                        key={i}
+                                        href={`/help`}
+                                        className="menu_sideBarItem"
+                                    >
+                                        <item.icon />
+                                        <span>{item.name}</span>
+                                    </Link>
                                 )
                             }
                             else {
-                                return (<Link
-                                    href={`/platform/${organization}/${item.url}/`}
-                                    className="menu_sideBarItem"
-                                >
-                                    <item.icon />
-                                    <span>{item.name}</span>
-                                </Link>
+                                return (
+                                    <Link
+                                        key={i}
+                                        href={`/platform/${organization}/${item.url}/`}
+                                        className="menu_sideBarItem"
+                                    >
+                                        <item.icon />
+                                        <span>{item.name}</span>
+                                    </Link>
                                 )
                             }
                         })}

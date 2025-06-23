@@ -34,7 +34,8 @@ export const loginUser = async (formData) => {
     const response = await API.post(`/user/login`, { email, password });
 
     // Store token in localStorage
-    localStorage.setItem("access_token", response.data.access_token);
+    localStorage.setItem("twiq_access_token", response.data.access_token);
+    localStorage.setItem("twiq_refresh_token", response.data.refresh_token);
 
     return { status: response.status, user: response.data?.user };
   } catch (err) {
@@ -51,7 +52,7 @@ export const loginUser = async (formData) => {
 export const logOutUser = async () => {
   try {
     // Get token from localStorage
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("twiq_access_token");
 
     // Send request to the logout endpoint (if token exists)
     if (token) {
@@ -70,10 +71,63 @@ export const logOutUser = async () => {
     );
   } finally {
     // ✅ Remove token from localStorage regardless of success or failure
-    localStorage.removeItem("access_token");
+    localStorage.removeItem("twiq_access_token");
   }
 
   return { status: 200, message: "Logged out locally." };
+};
+
+export const callResendEmailAPI = async () => {
+  try {
+
+    const authHeader = addAuthHeader();
+
+    const response = await API.post(`/user/resend-email-confirmation`, {
+
+    },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...authHeader,
+        },
+      });
+
+    return { message: response.data.message };
+  } catch (err) {
+    return {
+      status: err?.response?.status || 500,
+      error:
+        err?.response?.data?.error ||
+        err?.message ||
+        "Problem sending confirmation email - Try again.",
+    };
+  }
+};
+
+export const callVerifyEmailTokenAPI = async (token) => {
+  try {
+    const authHeader = addAuthHeader();
+
+    const response = await API.post(`/user/verify-email-token`, {
+      token
+    },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...authHeader,
+        },
+      });
+
+    return { message: response.data.message };
+  } catch (err) {
+    return {
+      status: err?.response?.status || 500,
+      error:
+        err?.response?.data?.error ||
+        err?.message ||
+        "Problem sending confirmation email - Try again.",
+    };
+  }
 };
 
 export const sendResetMail = async (email) => {
@@ -94,43 +148,9 @@ export const sendResetMail = async (email) => {
   }
 };
 
-// export const fetchUser = async (updateUser) => {
-//   try {
-//     // Retrieve the access token from localStorage
-//     const accessToken = localStorage.getItem("access_token");
-
-//     if (!accessToken) {
-//       console.log("No access token found.");
-//       return;
-//     }
-
-//     // 🔹 Get auth headers
-//     const authHeader = addAuthHeader();
-
-//     // Send the access token to your backend to fetch the user
-//     const response = await API.get("/user/getUser", {
-//       headers: {
-//         "Content-Type": "application/json",
-//         ...authHeader, // 🔥 Spread token header dynamically
-//       },
-//     });
-
-//     updateUser(response?.data.user);
-//   } catch (error) {
-//     toast.error("Error fetching user", {
-//       description:
-//         error?.response?.data?.error || error?.message || "Something went wrong.",
-//       style: { border: "none", color: "red" },
-//     });
-//   }
-// };
-
-
-// utils/fetchUser.js or lib/fetchUser.js
-
 export const fetchUser = async ({ updateUser, onUnauthorized }) => {
   try {
-    const accessToken = localStorage.getItem("access_token");
+    const accessToken = localStorage.getItem("twiq_access_token");
     if (!accessToken) {
       console.warn("No access token found.");
       if (onUnauthorized) onUnauthorized();
@@ -166,5 +186,83 @@ export const fetchUser = async ({ updateUser, onUnauthorized }) => {
         error?.response?.data?.error || error?.message || "Something went wrong.",
       style: { border: "none", color: "red" },
     });
+  }
+};
+
+
+
+export const saveProfilePicAPI = async (selectedImage, onUnauthorized) => {
+  try {
+    const accessToken = localStorage.getItem("twiq_access_token");
+    if (!accessToken) {
+      console.warn("No access token found.");
+      if (onUnauthorized) onUnauthorized();
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("avatar", selectedImage); // field name must match backend multer config
+
+    const response = await API.post("/user/upload-avatar", formData, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (response?.data?.avatar_url) {
+      return response.data.avatar_url; // caller can use this to update UI/store
+    } else {
+      throw new Error("Upload succeeded but avatar_url missing");
+    }
+
+  } catch (error) {
+    const isUnauthorized =
+      error?.response?.status === 401 ||
+      error?.response?.data?.error?.toLowerCase().includes("unauthorized");
+
+    if (isUnauthorized && onUnauthorized) {
+      onUnauthorized();
+    }
+
+    toast.error("Error uploading profile picture", {
+      description:
+        error?.response?.data?.error || error?.message || "Something went wrong.",
+      style: { border: "none", color: "red" },
+    });
+
+    throw error;
+  }
+};
+
+
+export const deleteUserAccountAPI = async () => {
+  try {
+    const accessToken = localStorage.getItem("twiq_access_token");
+    if (!accessToken) {
+      console.warn("No access token found.");
+      if (onUnauthorized) onUnauthorized();
+      return;
+    }
+
+    const authHeader = addAuthHeader();
+
+    await API.get("/user/delete-account", {
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeader,
+      },
+    });
+
+
+    return { message: 'Account deleted successfully'}
+  } catch (err) {
+    return {
+      status: err?.response?.status || 500,
+      error:
+        err?.response?.data?.error ||
+        err?.message ||
+        "Problem signing in - Try again.",
+    };
   }
 };
