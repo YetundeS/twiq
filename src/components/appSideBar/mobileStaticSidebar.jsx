@@ -15,12 +15,13 @@ import {
     MenubarMenu, MenubarTrigger
 } from "@/components/ui/menubar";
 import { models } from "@/constants/sidebar";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { useSidebarChats } from "@/hooks/useSideBarHook";
 import useLogOutDialogStore from "@/store/useLogOutDialogStore";
 import useModelsStore from "@/store/useModelsStore";
 import { useResponsiveSidebarToggle } from "@/store/useResponsiveSidebarToggle";
+import useSusbcriptionDialogStore from "@/store/useSusbcriptionDialogStore";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import CrownIcon from "../dashboardComponent/crown";
 import LogOutDialog from "../dashboardComponent/logOutDialog";
@@ -43,7 +44,7 @@ export const hasAccess = (plan, title) => {
     return false;
 };
 
-export function AppSidebarDesktopStatic({ mobile }) {
+export function AppSidebarDesktopStatic() {
     const { sidebarSessions } = useSideBar();
     const [sessions, setSession] = useState([]);
     const [organization, setOrganization] = useState("");
@@ -52,7 +53,8 @@ export function AppSidebarDesktopStatic({ mobile }) {
     const { isFetching } = useSidebarChats();
     const { activeSessionID } = useModelsStore();
     const toggleSidebar = useResponsiveSidebarToggle();
-    const isMobile = useIsMobile()
+    const { openSubDialog } = useSusbcriptionDialogStore();
+    const router = useRouter();
 
     useEffect(() => {
         setSession([...sidebarSessions]);
@@ -72,6 +74,12 @@ export function AppSidebarDesktopStatic({ mobile }) {
             });
         }
     };
+    
+  const handleUpgradeClick = () => {
+    toggleSidebar()
+    openSubDialog();
+    router.push(`/platform/${signString}/settings`);
+  }
 
     return (
         <div className="relative z-[20] flex h-full  flex-col sidebar">
@@ -167,7 +175,7 @@ export function AppSidebarDesktopStatic({ mobile }) {
             </div>
             <div className=" flex flex-col gap-2 p-2 sidebarFooter">
                 <div className="sidebarMenuItem">
-                    <Link href={`/platform/${organization}/settings`} className="upgradeBar">
+                    <div onClick={handleUpgradeClick} className="upgradeBar">
                         <div className="sideBar_iconBox">
                             <Sparkles className="sparkles_icon" />
                         </div>
@@ -175,7 +183,7 @@ export function AppSidebarDesktopStatic({ mobile }) {
                             <p className="txtHead">Upgrade plan</p>
                             <p className="txtsubHead">More access to best features</p>
                         </div>
-                    </Link>
+                    </div>
                 </div>
                 <div className="sidebarMenuItem" onClick={openDialog}>
                     <div className="upgradeBar logout">

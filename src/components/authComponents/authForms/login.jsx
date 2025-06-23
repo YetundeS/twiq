@@ -16,7 +16,7 @@ const LoginForm = ({ setActiveForm }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-  });
+  }); 
 
   const router = useRouter();
     const { openSubDialog } = useSusbcriptionDialogStore();
@@ -89,7 +89,6 @@ const LoginForm = ({ setActiveForm }) => {
 
         if (!response?.user.email_confirmed) {
           setTimeout(() => {
-            openSubDialog();
             router.push(`/platform/${signString}/`);
           }, 1000);
         } else if(!response?.user.is_active) {
@@ -103,7 +102,7 @@ const LoginForm = ({ setActiveForm }) => {
           }, 1000);
       }
     }
-    } else {
+  } else {
       setErrors(newErrors);
     }
   };

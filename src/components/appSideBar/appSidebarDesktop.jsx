@@ -28,7 +28,9 @@ import { useSidebarChats } from "@/hooks/useSideBarHook";
 import useLogOutDialogStore from "@/store/useLogOutDialogStore";
 import useModelsStore from "@/store/useModelsStore";
 import { useResponsiveSidebarToggle } from "@/store/useResponsiveSidebarToggle";
+import useSusbcriptionDialogStore from "@/store/useSusbcriptionDialogStore";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import CrownIcon from "../dashboardComponent/crown";
 import LogOutDialog from "../dashboardComponent/logOutDialog";
@@ -66,6 +68,8 @@ export function AppSidebarDesktop() {
   const { activeSessionID } = useModelsStore();
 
     const toggleSidebar = useResponsiveSidebarToggle();
+    const { openSubDialog } = useSusbcriptionDialogStore();
+    const router = useRouter();
 
   useEffect(() => {
     setSession([...sidebarSessions]);
@@ -89,6 +93,11 @@ export function AppSidebarDesktop() {
       });
     }
   };
+
+  const handleUpgradeClick = () => {
+    openSubDialog();
+    router.push(`/platform/${signString}/settings`);
+  }
 
   return (
     <Sidebar className="sidebar">
@@ -216,7 +225,7 @@ export function AppSidebarDesktop() {
       <SidebarFooter className="sidebarFooter">
         <SidebarMenu>
           <SidebarMenuItem>
-            <Link href={`/platform/${organization}/settings`}>
+            <div onClick={handleUpgradeClick}>
               <SidebarMenuButton className="upgradeBar">
                 <div className="sideBar_iconBox">
                   <Sparkles className="sparkles_icon" />
@@ -226,7 +235,7 @@ export function AppSidebarDesktop() {
                   <p className="txtsubHead">More access to best features</p>
                 </div>
               </SidebarMenuButton>
-            </Link>
+            </div>
           </SidebarMenuItem>
           <SidebarMenuItem onClick={openDialog}>
             <SidebarMenuButton className="upgradeBar logout">

@@ -192,6 +192,10 @@
 
 @media (max-width: 525px) {
 
+.tabCardContent {
+    width: 96%;
+}
+
     .settings_cardRow {
         flex-direction: column;
         align-items: flex-start;

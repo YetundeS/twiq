@@ -2,8 +2,10 @@
 import { createUser } from "@/apiCalls/authAPI";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { validateForm } from "@/lib/utils";
+import { generateSignString, validateForm } from "@/lib/utils";
+import useAuthStore from "@/store/authStore";
 import { Lock } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import AuhVisitBtn from "./auhVisitBtn";
@@ -17,9 +19,11 @@ const SignupForm = () => {
     organization_name: "",
   });
 
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const updateUser = useAuthStore((state) => state.updateUser);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,12 +46,30 @@ const SignupForm = () => {
         });
       } else {
         toast.success("Account has been created", {
-          description: "Verify your email to log in",
+          description: "Taking you to dashboard",
           style: {
             border: "none",
             color: "green",
           },
         });
+
+        // update user state and route to dashboard
+        updateUser(response.user);
+        const signString = generateSignString(response.user?.organization_name);
+
+        if (!signString) {
+          toast.error("Error navigating you to dashboard.", {
+            description: "Your organization name is not available",
+            style: {
+              border: "none",
+              color: "red",
+            },
+          });
+        }
+
+          setTimeout(() => {
+            router.push(`/platform/${signString}/`);
+          }, 1000);
       }
       setLoading(false);
     } else {
@@ -95,7 +117,7 @@ const SignupForm = () => {
             value={formData.organization_name}
             onChange={handleChange}
             className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
-            />
+          />
         </div>
       </div>
 
@@ -116,7 +138,7 @@ const SignupForm = () => {
             value={formData.email}
             onChange={handleChange}
             className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
-            />
+          />
         </div>
       </div>
 
@@ -137,7 +159,7 @@ const SignupForm = () => {
             value={formData.password}
             onChange={handleChange}
             className="formInput rounded-lg py-5 pr-4 pl-4 text-lg"
-            />
+          />
           <Lock
             onClick={() => setShowPassword(!showPassword)}
             className="cursor-pointer absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform text-white"
@@ -146,19 +168,19 @@ const SignupForm = () => {
       </div>
 
       {/* Submit Button */}
-      <AuhVisitBtn loading={loading} black onClick={handleSubmit} text="Sign Up"  />
+      <AuhVisitBtn loading={loading} black onClick={handleSubmit} text="Sign Up" />
 
       {(errors.username ||
         errors?.organization_name ||
         errors?.email ||
         errors?.password) && (
-        <p className="textError">
-          {errors?.username ||
-            errors?.organization_name ||
-            errors?.email ||
-            errors?.password}
-        </p>
-      )}
+          <p className="textError">
+            {errors?.username ||
+              errors?.organization_name ||
+              errors?.email ||
+              errors?.password}
+          </p>
+        )}
 
       {/* <SocialButtons /> */}
     </form>

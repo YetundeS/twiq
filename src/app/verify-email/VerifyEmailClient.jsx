@@ -86,7 +86,7 @@ const VerifyEmailClient = () => {
                 className="db_pageBody w-full h-full flex flex-col items-center justify-center min-h-[70vh] px-4 text-center"
             >
                 <div className="max-w-md w-full border border-[#5A0001]/20 rounded-lg shadow-md p-6 text-center"
-                style={{ backgroundColor: "#fff" }}>
+                    style={{ backgroundColor: "#fff" }}>
                     <div className="flex flex-col items-center space-y-4">
                         {loading ? (
                             <>
@@ -118,7 +118,14 @@ const VerifyEmailClient = () => {
                                     {error || "Something went wrong. Please try again later."}
                                 </p>
                                 <Button
-                                    onClick={() => router.push("/")}
+                                    onClick={() => {
+                                        if (user) {
+                                            const signString = generateSignString(user?.organization_name);
+                                            router.push(`/platform/${signString}/`);
+                                        } else {
+                                            router.push("/")
+                                        }
+                                    }}
                                     className="mt-4 bg-[#5A0001] hover:bg-[#4a0000] text-white transition-colors duration-300"
                                 >
                                     Go to Home

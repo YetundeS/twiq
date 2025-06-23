@@ -17,7 +17,11 @@ export const createUser = async (formData) => {
       organization_name,
     });
 
-    return { status: response.status, user: response.data };
+    // Store token in localStorage
+    localStorage.setItem("twiq_access_token", response.data.access_token);
+    localStorage.setItem("twiq_refresh_token", response.data.refresh_token);
+
+    return { status: response.status, user: response.data?.user };
   } catch (err) {
     return {
       error:
