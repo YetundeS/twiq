@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import LogOutDialog from '../logOutDialog';
 
-const PlatformTop = ({ db, twiqDefinition, setTwiqDefinition }) => {
+const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => {
     const { theme, setTheme } = useTheme();
     const { user } = useAuthStore();
     const [organization, setOrganization] = useState("");
@@ -61,7 +61,8 @@ const PlatformTop = ({ db, twiqDefinition, setTwiqDefinition }) => {
                 )}
             </Button>
 
-            <Menubar className="menuBar platformMenu">
+            {!hideAccount && (
+                <Menubar className="menuBar platformMenu">
                 <MenubarMenu>
                     <MenubarTrigger className="menubarTrigger platformMenu">
                         <HoverCard>
@@ -134,6 +135,7 @@ const PlatformTop = ({ db, twiqDefinition, setTwiqDefinition }) => {
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>
+            )}
             <LogOutDialog />
         </div>
     )
