@@ -10,6 +10,9 @@
   background: var(--sidebar-bg-light);
 
   color: var(--page-text);
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 
@@ -63,11 +66,12 @@
 .scrollableArea::-webkit-scrollbar {
   width: 10px;
   /* or whatever width you want */
+  border-radius: 12px;
 }
 
 /* Style the scrollbar track */
 .scrollableArea::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: rgba(44, 44, 44, 0);
 }
 
 /* Optional: style the thumb (the draggable part) */
