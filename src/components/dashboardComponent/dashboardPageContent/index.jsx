@@ -10,6 +10,7 @@ import { modelsOverview, TWIQ_FURTHER_DESC } from "../../../constants/dahsboard"
 import CopyrightTxt from "../copyrightTxt";
 import PlatformTop from "../platformTop";
 import TwiqBg from "../twiqBg";
+import UpgradeBanner from "../UpgradeBanner";
 import "./dpc.css";
 
 const DashboardPageContent = () => {
@@ -101,6 +102,7 @@ const DashboardPageContent = () => {
           <AuhVisitBtn red onClick={handleDownload} text="Dowload TWIQ PDF" />
         </div>
         <CopyrightTxt />
+        <UpgradeBanner />
       </div>
     </div>
   );

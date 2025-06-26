@@ -1,0 +1,64 @@
+.upgrade-banner {
+    position: fixed;
+    bottom: 24px;
+    right: 64px;
+    z-index: 9999;
+    transform: translateY(50px);
+    opacity: 0;
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+    cursor: pointer;
+        width: max-content;
+}
+
+.upgrade-banner.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.upgrade-content {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.upgrade-banner:hover {
+    transform: scale(1.05);
+}
+
+.upgrade-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.upgrade-button {
+    background-color: #5A0001;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+
+
+@media (max-width: 575px) {
+    .upgrade-banner {
+        right: 50%;
+        transform: translateY(50px) translateX(50%);
+    }
+
+    .upgrade-banner.visible {
+        transform: translateY(0) translateX(50%);
+        opacity: 1;
+    }
+}
