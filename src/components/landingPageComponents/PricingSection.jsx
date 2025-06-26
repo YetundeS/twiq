@@ -161,7 +161,7 @@ export function PricingSection({ platform }) {
                       router.push(`/`);
                     }
                   }}
-                  className="w-full cursor-pointer rounded-xl py-3 text-lg font-semibold transition-all duration-200 hover:scale-105 bg-white text-black"
+                  className="w-full cursor-pointer rounded-xl py-3 text-lg font-semibold transition-all duration-200 hover:scale-105 bg-white hover:bg-white text-black"
                 >
                   {subscribingPlanId !== plan.priceId ? (
                     <p>{plan.buttonText}</p>

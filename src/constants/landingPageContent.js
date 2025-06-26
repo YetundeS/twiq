@@ -142,7 +142,7 @@ export const SITE_CONTENT = {
         "Full-Year Content Planner",
         "Custom Bot Integrations + API support",
       ],
-      buttonText: "Book a Demo →",
+      buttonText: "Get Enterprise Plan →",
       popular: false,
       theme: "enterprise",
       style: {
