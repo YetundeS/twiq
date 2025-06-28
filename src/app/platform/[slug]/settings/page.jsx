@@ -7,14 +7,14 @@ import NewChatBtn from '@/components/dashboardComponent/newChatBtn';
 import PlatformTop from '@/components/dashboardComponent/platformTop';
 import SubscriptionDialog from '@/components/dashboardComponent/subscriptionDialog';
 import TwiqBg from '@/components/dashboardComponent/twiqBg';
+import { SubscriptionTab } from '@/components/settingsComps/SubscriptionTab';
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -317,7 +317,7 @@ const Settings = () => {
 
             </Card>
           </TabsContent>
-          <TabsContent value="subscription">
+          {/* <TabsContent value="subscription">
             <Card className="tabsContent">
               <CardHeader>
                 <CardTitle className="text-black">Subscription</CardTitle>
@@ -357,7 +357,8 @@ const Settings = () => {
                 )}
               </CardFooter>
             </Card>
-          </TabsContent>
+          </TabsContent> */}
+          <SubscriptionTab user={user} openSubDialog={openSubDialog} />
         </Tabs>
       </div>
       <SubscriptionDialog />

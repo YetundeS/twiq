@@ -32,7 +32,7 @@ export const fetchChats = async (user, slug, updateSideBarSessions, setIsFetchin
 
         updateSideBarSessions(data);
     } catch (err) {
-        console.log('err: ', err)
+        // console.log('err: ', err)
         toast.error(`Failed to fetch ${slug} assistant chats`, {
             description: "Something went wrong - reload page",
             style: {

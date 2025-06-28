@@ -85,7 +85,6 @@
 
     border-radius: 10px;
     color: var(--fog);
-    font-weight: 600;
     text-transform: capitalize;
 
     box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.12);
@@ -101,7 +100,7 @@
 .settings_cardRow_content span {
     margin: 0 1rem;
     color: black;
-    font-size: 13.2px;
+    font-size: 15.4px;
 }
 
 .tabCardContent {
@@ -149,14 +148,28 @@
     color: white;
     background-color: black;
     cursor: pointer;
+    transition: all 0.3s ease-in;
     box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.12);
     -webkit-box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.12);
     -moz-box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
-.fogBtn:hover {
+.fogBtn.alt {
     background-color: var(--red-brand-color);
+    margin-left: 1.4rem;
 }
+
+.fogBtn:hover {
+    background-color: transparent;
+    color: black;
+}
+
+
+.fogBtn.alt:hover {
+    background-color: transparent;
+    color: black;
+}
+
 
 /* Clean circle image */
 .userAvatar {

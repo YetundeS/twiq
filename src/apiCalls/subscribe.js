@@ -75,3 +75,39 @@ const callPlanSubscribe = async (priceId, updateIsSubscribing) => {
     }
         updateIsSubscribing(false)
 }
+
+
+
+
+export const handleBuyCreditAPI = async (selectedBundle, setLoading) => {
+  try {
+    const token = localStorage.getItem("twiq_access_token");
+
+    const response = await API.post(
+      '/stripe/buy-credits',
+      { bundle: selectedBundle },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    const { url } = response.data;
+    if (url) {
+      window.location.href = url;
+    } else {
+      throw new Error("Stripe didn't return a URL.");
+    }
+  } catch (err) {
+    const errMsg =
+      err?.response?.data?.error ||
+      err?.message ||
+      "Error creating checkout session";
+
+    toast.error("Error creating checkout session", {
+      description: errMsg,
+      style: { border: "none", color: "red" },
+    });
+  } finally {
+    setLoading(false);
+  }
+};
