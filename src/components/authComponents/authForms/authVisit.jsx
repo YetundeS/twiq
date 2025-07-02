@@ -20,7 +20,7 @@ const AuthVisit = ({ setActiveForm }) => {
                 </div>
                 <div className="authVisitTitle">
                     <h2 className='first'>content bots for</h2>
-                    <h2 className='second'>thoughts <br /> leaders</h2>
+                    <h2 className='second'>thought <br /> leaders</h2>
                 </div>
             </div>
 
