@@ -28,6 +28,8 @@ const HeadlinesModel = () => {
     showToggleChat
   } = useAssistantChat('Headlines', 'headlines');
 
+
+
   return (
     <div className="page_content">
       <div className="pageTop">

@@ -12,6 +12,7 @@ const ChatMessageWindow = ({
   assistantSlug,
   isFetchingChats
 }) => {
+  
   return (
     <div className="chats_area">
       {isFetchingChats ? (

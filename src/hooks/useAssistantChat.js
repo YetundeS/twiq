@@ -28,7 +28,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
   const eventSourceRef = useRef(null);
   const messagesEndRef = useRef(null);
   const { user } = useAuthStore()
-    const isMobile = useIsMobile();
+  const isMobile = useIsMobile();
 
   const pathname = usePathname();
   const [isFetchingChats, setIsFetchingChats] = useState(true);
@@ -73,6 +73,10 @@ export default function useAssistantChat(modelName, assistantSlug) {
     return 'Server Error - Please try again.';
   }
 
+  const updateStreamingData = (chunk) => {
+    streamingDataRef.current += chunk;
+    setStreamingData(streamingDataRef.current);
+  };
 
   const sendMessage = async () => {
     if (!inputValue || streaming) return;
@@ -113,15 +117,11 @@ export default function useAssistantChat(modelName, assistantSlug) {
       activeSessionID,
       assistantSlug,
       (streamedData) => {
-        setStreamingData((prev) => {
-          const updatedData = prev + streamedData;
-          streamingDataRef.current = updatedData;
-          return updatedData;
-        });
+          updateStreamingData(streamedData);
       },
       () => {
         setStreaming(false);
-        const finalMessage = streamingDataRef.current; // capture here
+        const finalMessage = streamingDataRef.current;
         setStreamingData(""); // reset
 
         const assistantChat = {
@@ -148,7 +148,6 @@ export default function useAssistantChat(modelName, assistantSlug) {
       abortController,
       (chatSession) => {
         if (chatSession.id) {
-          // console.log('chatSession: ', chatSession)
           handleNewChatSession(chatSession);
         }
       }
@@ -180,7 +179,6 @@ export default function useAssistantChat(modelName, assistantSlug) {
 
 
   const handleNewChatSession = async (newChatSession) => {
-    // console.log('newChatSession: ', newChatSession)
     addToSideBarSessions(newChatSession);
     updateActiveSessionID(newChatSession?.id);
   };
@@ -200,7 +198,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
   }, [suggestions])
 
   useEffect(() => {
-    if(!isSidebarOpen || isMobile) {
+    if (!isSidebarOpen || isMobile) {
       setShowToggleChat(true)
     } else {
       setShowToggleChat(false)

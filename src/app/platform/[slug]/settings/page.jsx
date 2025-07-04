@@ -317,47 +317,6 @@ const Settings = () => {
 
             </Card>
           </TabsContent>
-          {/* <TabsContent value="subscription">
-            <Card className="tabsContent">
-              <CardHeader>
-                <CardTitle className="text-black">Subscription</CardTitle>
-                <CardDescription>
-                  Update your subscription plan
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="settings_cardContent">
-                <div className="settings_cardRow">
-                  <Label htmlFor="current">Current Plan</Label>
-                  <p className="settings_cardRow_content">
-                    {!user?.is_active ?
-                      "Inactive"
-                      : `${user?.subscription_plan} plan`}
-                  </p>
-                </div>
-                <div className="settings_cardRow">
-                  <Label htmlFor="current">Current Plan Quota</Label>
-                  <p className="settings_cardRow_content gray">
-                    Input tokens: <span>{user?.subscription_quota?.input_tokens}</span> Output tokens: <span>{user?.subscription_quota?.output_tokens}</span>
-                  </p>
-                </div>
-                <div className="settings_cardRow">
-                  <Label htmlFor="current">Your Quota Usage</Label>
-                  <p className="settings_cardRow_content gray">
-                    Input used: <span>{user?.subscription_usage?.input_tokens_used || 0}</span> Output used: <span>{user?.subscription_usage?.output_tokens_used || 0}</span>
-                  </p>
-                </div>
-              </CardContent>
-              <CardFooter>
-                {!user?.is_active ? (
-                  <Button onClick={openSubDialog} className="fogBtn">Subscribe</Button>
-                ) : (
-                  <Button onClick={openSubDialog} className="fogBtn">
-                    Change plan
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
-          </TabsContent> */}
           <SubscriptionTab user={user} openSubDialog={openSubDialog} />
         </Tabs>
       </div>
