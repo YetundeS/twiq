@@ -13,8 +13,6 @@ const CarouselChat = () => {
 
   const {
     toggleSidebar,
-    // modelName,
-    // modelDescription,
     isFetchingChats,
     inputValue,
     setInputValue,
@@ -23,6 +21,9 @@ const CarouselChat = () => {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    setUploadedFiles,
+    uploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,
@@ -54,8 +55,9 @@ const CarouselChat = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
-            assistantSlug={'headlines'}
             isFetchingChats={isFetchingChats}
+            uploadedFiles={uploadedFiles}
+            assistantSlug={'headlines'}
           />
           <ChatInputArea
             inputValue={inputValue}
@@ -65,6 +67,9 @@ const CarouselChat = () => {
             streamingData={streamingData}
             sendBtnActive={sendBtnActive}
             aiSuggestions={aiSuggestions}
+            uploadBtnActive={uploadBtnActive}
+            setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </div>
       </div>

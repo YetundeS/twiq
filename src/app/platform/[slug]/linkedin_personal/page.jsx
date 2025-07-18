@@ -13,6 +13,7 @@ const LinkedInPersonalModel = () => {
 
   const {
     toggleSidebar,
+    // modelName,
     // modelDescription,
     // isFetchingChats,
     inputValue,
@@ -22,6 +23,9 @@ const LinkedInPersonalModel = () => {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    setUploadedFiles,
+    uploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,
@@ -50,6 +54,7 @@ const LinkedInPersonalModel = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            uploadedFiles={uploadedFiles}
             assistantSlug={'linkedin_personal'}
           />
           <ChatInputArea
@@ -60,6 +65,9 @@ const LinkedInPersonalModel = () => {
             streamingData={streamingData}
             sendBtnActive={sendBtnActive}
             aiSuggestions={aiSuggestions}
+            uploadBtnActive={uploadBtnActive}
+            setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </div>
       </div>

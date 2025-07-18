@@ -14,9 +14,6 @@ const StorytellerModel = () => {
 
   const {
     toggleSidebar,
-    // modelName,
-    // modelDescription,
-    // isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -24,6 +21,9 @@ const StorytellerModel = () => {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    setUploadedFiles,
+    uploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,
@@ -31,7 +31,7 @@ const StorytellerModel = () => {
   } = useAssistantChat('Storyteller', 'storyteller');
 
 
-  return ( 
+  return (
     <div className="page_content">
       <div className="pageTop">
         {(showToggleChat) && (
@@ -47,7 +47,7 @@ const StorytellerModel = () => {
         )}
         <PlatformTop />
       </div>
-        <TwiqBg />
+      <TwiqBg />
       <div className="pageBody">
         <div className="pageBody_innerBox">
           <ChatMessageWindow
@@ -56,6 +56,7 @@ const StorytellerModel = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            uploadedFiles={uploadedFiles}
             assistantSlug={'storyteller'}
           />
           <ChatInputArea
@@ -66,6 +67,9 @@ const StorytellerModel = () => {
             streamingData={streamingData}
             sendBtnActive={sendBtnActive}
             aiSuggestions={aiSuggestions}
+            uploadBtnActive={uploadBtnActive}
+            setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </div>
       </div>

@@ -13,7 +13,6 @@ const LBChat = () => {
 
   const {
     toggleSidebar,
-    // modelDescription,
     isFetchingChats,
     inputValue,
     setInputValue,
@@ -22,6 +21,9 @@ const LBChat = () => {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    setUploadedFiles,
+    uploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,
@@ -53,8 +55,9 @@ const LBChat = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
-            assistantSlug={'linkedin_business'}
             isFetchingChats={isFetchingChats}
+            uploadedFiles={uploadedFiles}
+            assistantSlug={'linkedin_business'}
           />
           <ChatInputArea
             inputValue={inputValue}
@@ -64,6 +67,9 @@ const LBChat = () => {
             streamingData={streamingData}
             sendBtnActive={sendBtnActive}
             aiSuggestions={aiSuggestions}
+            uploadBtnActive={uploadBtnActive}
+            setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </div>
       </div>

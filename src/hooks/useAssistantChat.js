@@ -10,7 +10,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useIsMobile } from "./use-mobile";
-import { usePromptSuggestions } from "./usePromptSuggestion";
 
 
 
@@ -20,6 +19,8 @@ import { usePromptSuggestions } from "./usePromptSuggestion";
 export default function useAssistantChat(modelName, assistantSlug) {
   const [inputValue, setInputValue] = useState("");
   const [sendBtnActive, setSendBtnActive] = useState(false);
+  const [uploadBtnActive, setUploadBtnActive] = useState(true);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [streamingData, setStreamingData] = useState("");
   const [streaming, setStreaming] = useState(false);
   const [aiSuggestions, setAISuggestions] = useState([]);
@@ -38,8 +39,6 @@ export default function useAssistantChat(modelName, assistantSlug) {
   const { activeSessionID, activeChatMessages: chats, updateActiveSessionID, updateActiveChatMessages, setActiveChatMessages } = useModelsStore();
 
   const modelDescription = modelDetailsMap[assistantSlug]?.description;
-
-  const { suggestions } = usePromptSuggestions(inputValue, modelName, modelDescription);
 
   const toggleSidebar = useResponsiveSidebarToggle();
 
@@ -63,8 +62,19 @@ export default function useAssistantChat(modelName, assistantSlug) {
   }, [chats]);
 
   useEffect(() => {
-    setSendBtnActive(inputValue && !streaming);
+    if(inputValue && !streaming) {  // active when not streaming and there's prompt
+      setSendBtnActive(true)
+    } else {
+      setSendBtnActive(false)
+    }
+
+    if(!streaming) {  // active when not streaming
+      setUploadBtnActive(true)
+    } else {
+      setUploadBtnActive(false)
+    }
   }, [inputValue, streaming]);
+
 
   function getErrorMessage(error = '') {
     if (error.includes('Unauthorized')) return 'Unauthorized - Please login';
@@ -100,6 +110,10 @@ export default function useAssistantChat(modelName, assistantSlug) {
       content: inputValue,
       sessionID: activeSessionID || 'newChat',
       created_at: new Date(),
+      hasFile: Array.isArray(uploadedFiles) && uploadedFiles.length > 0,
+      linkedFiles: Array.isArray(uploadedFiles)
+        ? uploadedFiles.map(({ name, type }) => ({ name, type }))
+        : null,
     };
 
     // Update local state 
@@ -116,6 +130,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
       inputValue,
       activeSessionID,
       assistantSlug,
+      uploadedFiles,
       (streamedData) => {
           updateStreamingData(streamedData);
       },
@@ -154,6 +169,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
     );
 
     setInputValue("");
+    setUploadedFiles([])
   };
 
   // end streaming output from assistant
@@ -174,6 +190,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
       setStreamingData("");
       streamingDataRef.current = "";
       eventSourceRef.current = null;
+      setUploadedFiles([])
     }
   };
 
@@ -189,13 +206,6 @@ export default function useAssistantChat(modelName, assistantSlug) {
       closeStreaming();
     };
   }, []);
-
-  useEffect(() => {
-    if (suggestions && suggestions?.length > 0) {
-      setAISuggestions(suggestions)
-    }
-
-  }, [suggestions])
 
   useEffect(() => {
     if (!isSidebarOpen || isMobile) {
@@ -218,6 +228,9 @@ export default function useAssistantChat(modelName, assistantSlug) {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    uploadedFiles,
+    setUploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,

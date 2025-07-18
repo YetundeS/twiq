@@ -22,6 +22,9 @@ const LPChat = () => {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    setUploadedFiles,
+    uploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,
@@ -53,8 +56,9 @@ const LPChat = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
-            assistantSlug={'linkedin_personal'}
             isFetchingChats={isFetchingChats}
+            uploadedFiles={uploadedFiles}
+            assistantSlug={'linkedin_personal'}
           />
           <ChatInputArea
             inputValue={inputValue}
@@ -64,6 +68,9 @@ const LPChat = () => {
             streamingData={streamingData}
             sendBtnActive={sendBtnActive}
             aiSuggestions={aiSuggestions}
+            uploadBtnActive={uploadBtnActive}
+            setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </div>
       </div>

@@ -13,7 +13,6 @@ const StorytellerChat = () => {
 
   const {
     toggleSidebar,
-    // modelDescription,
     isFetchingChats,
     inputValue,
     setInputValue,
@@ -22,6 +21,9 @@ const StorytellerChat = () => {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    setUploadedFiles,
+    uploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,
@@ -44,7 +46,7 @@ const StorytellerChat = () => {
         )}
         <PlatformTop />
       </div>
-                <TwiqBg />
+      <TwiqBg />
       <div className="pageBody">
         <div className="pageBody_innerBox">
           <ChatMessageWindow
@@ -53,8 +55,9 @@ const StorytellerChat = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
-            assistantSlug={'storyteller'}
             isFetchingChats={isFetchingChats}
+            uploadedFiles={uploadedFiles}
+            assistantSlug={'storyteller'}
           />
           <ChatInputArea
             inputValue={inputValue}
@@ -64,6 +67,9 @@ const StorytellerChat = () => {
             streamingData={streamingData}
             sendBtnActive={sendBtnActive}
             aiSuggestions={aiSuggestions}
+            uploadBtnActive={uploadBtnActive}
+            setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </div>
       </div>

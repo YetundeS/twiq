@@ -22,6 +22,9 @@ const VideoScriptsModel = () => {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    setUploadedFiles,
+    uploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,
@@ -51,6 +54,7 @@ const VideoScriptsModel = () => {
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
             assistantSlug={'video_scripts'}
+            uploadedFiles={uploadedFiles}
           />
           <ChatInputArea
             inputValue={inputValue}
@@ -60,6 +64,9 @@ const VideoScriptsModel = () => {
             streamingData={streamingData}
             sendBtnActive={sendBtnActive}
             aiSuggestions={aiSuggestions}
+            uploadBtnActive={uploadBtnActive}
+            setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </div>
       </div>

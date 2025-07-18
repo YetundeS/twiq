@@ -13,8 +13,6 @@ const CarouselPage = () => {
 
   const {
     toggleSidebar,
-    // modelDescription,
-    // isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -22,6 +20,9 @@ const CarouselPage = () => {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    setUploadedFiles,
+    uploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,
@@ -50,6 +51,7 @@ const CarouselPage = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            uploadedFiles={uploadedFiles}
             assistantSlug={'carousel'}
           />
           <ChatInputArea
@@ -60,6 +62,9 @@ const CarouselPage = () => {
             streamingData={streamingData}
             sendBtnActive={sendBtnActive}
             aiSuggestions={aiSuggestions}
+            uploadBtnActive={uploadBtnActive}
+            setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </div>
       </div>

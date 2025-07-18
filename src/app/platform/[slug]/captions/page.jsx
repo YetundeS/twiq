@@ -13,8 +13,6 @@ const CaptionModel = () => {
 
   const {
     toggleSidebar,
-    // modelDescription,
-    // isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -22,6 +20,9 @@ const CaptionModel = () => {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    setUploadedFiles,
+    uploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,
@@ -50,6 +51,7 @@ const CaptionModel = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            uploadedFiles={uploadedFiles}
             assistantSlug={'captions'}
           />
           <ChatInputArea
@@ -60,6 +62,9 @@ const CaptionModel = () => {
             streamingData={streamingData}
             sendBtnActive={sendBtnActive}
             aiSuggestions={aiSuggestions}
+            uploadBtnActive={uploadBtnActive}
+            setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </div>
       </div>

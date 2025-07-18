@@ -13,8 +13,6 @@ const HeadlinesModel = () => {
 
   const {
     toggleSidebar,
-    // modelDescription,
-    // isFetchingChats,
     inputValue,
     setInputValue,
     sendMessage,
@@ -22,6 +20,9 @@ const HeadlinesModel = () => {
     streamingData,
     streaming,
     sendBtnActive,
+    uploadBtnActive,
+    setUploadedFiles,
+    uploadedFiles,
     chats,
     messagesEndRef,
     aiSuggestions,
@@ -52,6 +53,7 @@ const HeadlinesModel = () => {
             streaming={streaming}
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
+            uploadedFiles={uploadedFiles}
             assistantSlug={'headlines'}
           />
           <ChatInputArea
@@ -62,6 +64,9 @@ const HeadlinesModel = () => {
             streamingData={streamingData}
             sendBtnActive={sendBtnActive}
             aiSuggestions={aiSuggestions}
+            uploadBtnActive={uploadBtnActive}
+            setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </div>
       </div>

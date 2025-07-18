@@ -10,7 +10,8 @@ const ChatMessageWindow = ({
   messagesEndRef,
   setInputValue,
   assistantSlug,
-  isFetchingChats
+  isFetchingChats,
+  uploadedFiles
 }) => {
   
   return (
@@ -24,7 +25,7 @@ const ChatMessageWindow = ({
           {chats?.length > 0 ? (
             <>
               {chats?.map((chat, i) => (
-                <ChatMessage chat={chat} key={i} />
+                <ChatMessage uploadedFiles={uploadedFiles} chat={chat} key={i} />
               ))}
               {streaming && streamingData && (
                 <ChatMessage chat={{ content: streamingData, sender: "assistant" }} />
