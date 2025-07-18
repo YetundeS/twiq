@@ -110,7 +110,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
       content: inputValue,
       sessionID: activeSessionID || 'newChat',
       created_at: new Date(),
-      hasFile: Array.isArray(uploadedFiles) && uploadedFiles.length > 0,
+      has_files: Array.isArray(uploadedFiles) && uploadedFiles.length > 0,
       linkedFiles: Array.isArray(uploadedFiles)
         ? uploadedFiles.map(({ name, type }) => ({ name, type }))
         : null,

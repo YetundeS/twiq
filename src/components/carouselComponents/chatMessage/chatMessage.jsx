@@ -41,9 +41,10 @@ const ChatMessage = ({ chat, uploadedFiles }) => {
   }
 
 
+
   return (
     <div className="messageWrapper">
-      {chat?.sender === "user" && chat?.hasFile && (
+      {chat?.sender === "user" && chat?.has_files && (
         <div className="messageUploads hide-scrollbar">
           <div className="messageUploads_innerCont">
             {chat?.linkedFiles?.map((file, index) => (
