@@ -12,10 +12,6 @@ import { toast } from "sonner";
 import { useIsMobile } from "./use-mobile";
 
 
-
-
-
-
 export default function useAssistantChat(modelName, assistantSlug) {
   const [inputValue, setInputValue] = useState("");
   const [sendBtnActive, setSendBtnActive] = useState(false);
@@ -53,9 +49,6 @@ export default function useAssistantChat(modelName, assistantSlug) {
     updateActiveSessionID(sessionId)
     fetchMessages(sessionId, assistantSlug, setIsFetchingChats, setActiveChatMessages);
   }, [pathname, setActiveChatMessages, updateActiveSessionID]);
-
-
-  // imported
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

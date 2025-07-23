@@ -35,11 +35,21 @@ const ChatInputArea = ({
     const maxFiles = 5;
 
     const allowedTypes = [
+      // Document types
       "application/pdf",
       "text/plain",
       "text/markdown",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "text/html"
+      "text/html",
+      // Image types
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+      "image/svg+xml",
+      "image/bmp",
+      "image/tiff"
     ];
 
     const updatedFiles = [...uploadedFiles]; // previously selected files
@@ -82,11 +92,10 @@ const ChatInputArea = ({
     }
 
     setUploadedFiles([...updatedFiles, ...validNewFiles]);
-    
+
     // Clear the input value so the same file can be selected again
     event.target.value = '';
-  };  
-
+  };
 
   const removeFile = (index) => {
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
@@ -124,7 +133,7 @@ const ChatInputArea = ({
               type="file"
               onChange={handleFileChange}
               multiple
-              accept=".pdf,.txt,.md,.docx,.html"
+              accept=".pdf,.txt,.md,.docx,.html,.jpg,.jpeg,.png,.gif,.webp,.svg,.bmp,.tiff"
               style={{ display: 'none' }}
               id="file-upload"
             />
