@@ -81,26 +81,18 @@ export default function useAssistantChat(modelName, assistantSlug) {
     }
 
     updateActiveSessionID(sessionId);
-    
-    // Set loading state
+  }, [sessionId, updateActiveSessionID, resetMessagesPagination]);
+
+  useEffect(() => {
     setIsFetchingChats(isLoadingMessages);
-    
-    // Update messages when SWR data changes
+  }, [isLoadingMessages]);
+
+  useEffect(() => {
     if (messages && messages.length > 0) {
       setActiveChatMessages(messages);
       setMessagesHasMore(hasMore);
     }
-  }, [
-    sessionId, 
-    messages, 
-    hasMore, 
-    isLoadingMessages,
-    updateActiveSessionID, 
-    setActiveChatMessages, 
-    setMessagesHasMore,
-    setIsFetchingChats,
-    resetMessagesPagination
-  ]);
+  }, [messages, hasMore, setActiveChatMessages, setMessagesHasMore]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -256,10 +248,10 @@ export default function useAssistantChat(modelName, assistantSlug) {
   };
 
 
-  const handleNewChatSession = async (newChatSession) => {
+  const handleNewChatSession = useCallback(async (newChatSession) => {
     addToSideBarSessions(newChatSession);
     updateActiveSessionID(newChatSession?.id);
-  };
+  }, [addToSideBarSessions, updateActiveSessionID]);
 
   // Load more messages for infinite scroll
   const loadMoreMessages = useCallback(async () => {
@@ -308,12 +300,8 @@ export default function useAssistantChat(modelName, assistantSlug) {
   }, []);
 
   useEffect(() => {
-    if (!isSidebarOpen || isMobile) {
-      setShowToggleChat(true)
-    } else {
-      setShowToggleChat(false)
-    }
-  }, [isSidebarOpen, isMobileSidebarOpen, isMobile])
+    setShowToggleChat(!isSidebarOpen || isMobile);
+  }, [isSidebarOpen, isMobile]);
   
 
 

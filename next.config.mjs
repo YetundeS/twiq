@@ -14,7 +14,6 @@ const nextConfig = {
 
   // Bundle optimization
   experimental: {
-    optimizeCss: true, // Enable CSS optimization
     optimizePackageImports: [
       '@radix-ui/react-dialog',
       '@radix-ui/react-dropdown-menu', 
@@ -92,7 +91,6 @@ const nextConfig = {
   
   // Production-only optimizations
   ...(process.env.NODE_ENV === 'production' && {
-    swcMinify: true, // Use SWC minifier (faster than Terser)
     
     // Headers for better caching and security
     async headers() {

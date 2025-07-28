@@ -6,7 +6,7 @@ export function cn(...inputs) {
 }
 
 export function generateSignString(orgName) {
-  if (!orgName) return;
+  if (!orgName) return "";
   return "@" + orgName.replace(/\s+/g, "");
 }
 

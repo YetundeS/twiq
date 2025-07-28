@@ -18,10 +18,13 @@ const NewChatBtn = ({ alt, mobile }) => {
   const { user } = useAuthStore();
 
   useEffect(() => {
-    if (!user) return;
-    const signString = generateSignString(user?.organization_name);
+    if (!user?.organization_name) {
+      setOrganization("");
+      return;
+    }
+    const signString = generateSignString(user.organization_name);
     setOrganization(signString);
-  }, [user]);
+  }, [user?.organization_name]);
 
 
   const handleClick = (e, userHasAccess, title) => {

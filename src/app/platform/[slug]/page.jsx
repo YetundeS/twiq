@@ -12,21 +12,27 @@ import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
+  const [hasNavigated, setHasNavigated] = useState(false);
   const { user } = useAuthStore();
   const router = useRouter();
-    const { openSubDialog } = useSusbcriptionDialogStore();
+  const { openSubDialog } = useSusbcriptionDialogStore();
 
   useEffect(() => {
-    if (!user?.email_confirmed) {
-      setIsEmailConfirmed(false)
-    } else if (!user?.is_active) {
+    if (!user) return;
+
+    if (!user.email_confirmed) {
+      setIsEmailConfirmed(false);
+    } else if (!user.is_active && !hasNavigated) {
+      setHasNavigated(true);
       openSubDialog();
-      const signString = generateSignString(user?.organization_name);
-      router.push(`/platform/${signString}/settings`);
-    } else {
-      setIsEmailConfirmed(true)
+      const signString = generateSignString(user.organization_name);
+      if (signString) {
+        router.push(`/platform/${signString}/settings`);
+      }
+    } else if (user.is_active) {
+      setIsEmailConfirmed(true);
     }
-  }, [user]);
+  }, [user?.email_confirmed, user?.is_active, user?.organization_name, hasNavigated, openSubDialog, router]);
 
   return isEmailConfirmed ? <DashboardPageContent /> : <VerifyEmail />;
 };
