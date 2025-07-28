@@ -17,9 +17,11 @@ export const useSideBar = create((set) => ({
       isMobileSidebarOpen: openState,
     })),
 
-  updateSideBarSessions: (newChatSessions) =>
-    set(() => ({
-      sidebarSessions: [...newChatSessions],
+  updateSideBarSessions: (newChatSessions, append = false) =>
+    set((state) => ({
+      sidebarSessions: append 
+        ? [...state.sidebarSessions, ...newChatSessions] // Append for pagination
+        : [...newChatSessions], // Replace for initial load
     })),
 
   addToSideBarSessions: (newChatSession) =>

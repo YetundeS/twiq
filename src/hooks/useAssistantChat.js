@@ -6,8 +6,10 @@ import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
 import useModelsStore from "@/store/useModelsStore";
 import { useResponsiveSidebarToggle } from "@/store/useResponsiveSidebarToggle";
+import { useChatMessages } from "./useApiCache";
+import { withDeduplication } from "@/utils/requestDeduplication";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useIsMobile } from "./use-mobile";
 
@@ -32,23 +34,73 @@ export default function useAssistantChat(modelName, assistantSlug) {
 
 
   const { addToSideBarSessions, isSidebarOpen, isMobileSidebarOpen } = useSideBar();
-  const { activeSessionID, activeChatMessages: chats, updateActiveSessionID, updateActiveChatMessages, setActiveChatMessages } = useModelsStore();
+  const { 
+    activeSessionID, 
+    activeChatMessages: chats, 
+    messagesHasMore,
+    messagesPage,
+    updateActiveSessionID, 
+    updateActiveChatMessages, 
+    setActiveChatMessages,
+    setMessagesHasMore,
+    setMessagesPage,
+    resetMessagesPagination
+  } = useModelsStore();
 
   const modelDescription = modelDetailsMap[assistantSlug]?.description;
 
   const toggleSidebar = useResponsiveSidebarToggle();
 
-  useEffect(() => {
+  // Extract session ID from pathname
+  const sessionId = useMemo(() => {
     const match = pathname.match(/\/platform\/@[^/]+\/[^/]+\/([^/?#]+)/);
-    const sessionId = match?.[1];
+    return match?.[1];
+  }, [pathname]);
 
-    if (!sessionId) return;
+  // Use SWR hook for cached message fetching
+  const { 
+    messages, 
+    hasMore, 
+    isLoading: isLoadingMessages,
+    mutate: mutateMessages 
+  } = useChatMessages(sessionId, assistantSlug, {
+    enabled: !!sessionId && !!assistantSlug,
+    page: messagesPage,
+  });
 
-    setIsFetchingChats(true);
+  // Optimized fetch messages with deduplication
+  const fetchMessagesDeduped = useMemo(
+    () => withDeduplication(fetchMessages),
+    []
+  );
 
-    updateActiveSessionID(sessionId)
-    fetchMessages(sessionId, assistantSlug, setIsFetchingChats, setActiveChatMessages);
-  }, [pathname, setActiveChatMessages, updateActiveSessionID]);
+  useEffect(() => {
+    if (!sessionId) {
+      resetMessagesPagination();
+      return;
+    }
+
+    updateActiveSessionID(sessionId);
+    
+    // Set loading state
+    setIsFetchingChats(isLoadingMessages);
+    
+    // Update messages when SWR data changes
+    if (messages && messages.length > 0) {
+      setActiveChatMessages(messages);
+      setMessagesHasMore(hasMore);
+    }
+  }, [
+    sessionId, 
+    messages, 
+    hasMore, 
+    isLoadingMessages,
+    updateActiveSessionID, 
+    setActiveChatMessages, 
+    setMessagesHasMore,
+    setIsFetchingChats,
+    resetMessagesPagination
+  ]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -81,7 +133,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
     setStreamingData(streamingDataRef.current);
   };
 
-  const sendMessage = async () => {
+  const sendMessage = useCallback(async () => {
     if (!inputValue || streaming) return;
 
     const hasModelAccess = hasAccess(user?.subscription_plan, modelName);
@@ -119,11 +171,14 @@ export default function useAssistantChat(modelName, assistantSlug) {
     const abortController = new AbortController();
     eventSourceRef.current = abortController;
 
+    const currentInput = inputValue;
+    const currentFiles = uploadedFiles;
+
     sendChatMessage(
-      inputValue,
+      currentInput,
       activeSessionID,
       assistantSlug,
-      uploadedFiles,
+      currentFiles,
       (streamedData) => {
           updateStreamingData(streamedData);
       },
@@ -140,6 +195,9 @@ export default function useAssistantChat(modelName, assistantSlug) {
         };
 
         updateActiveChatMessages(assistantChat);
+        
+        // Invalidate cache to get latest messages
+        mutateMessages();
       },
       (error) => {
         closeStreaming();
@@ -163,7 +221,17 @@ export default function useAssistantChat(modelName, assistantSlug) {
 
     setInputValue("");
     setUploadedFiles([])
-  };
+  }, [
+    inputValue, 
+    streaming, 
+    user?.subscription_plan, 
+    modelName, 
+    uploadedFiles, 
+    activeSessionID, 
+    assistantSlug, 
+    updateActiveChatMessages,
+    mutateMessages
+  ]);
 
   // end streaming output from assistant
   const closeStreaming = () => {
@@ -192,6 +260,45 @@ export default function useAssistantChat(modelName, assistantSlug) {
     addToSideBarSessions(newChatSession);
     updateActiveSessionID(newChatSession?.id);
   };
+
+  // Load more messages for infinite scroll
+  const loadMoreMessages = useCallback(async () => {
+    if (!messagesHasMore || isLoadingMessages || !sessionId) return;
+
+    const nextPage = messagesPage + 1;
+    setMessagesPage(nextPage);
+
+    try {
+      const result = await fetchMessagesDeduped(
+        sessionId, 
+        assistantSlug, 
+        () => {}, // No need for loading state since we have SWR
+        setActiveChatMessages, 
+        nextPage
+      );
+
+      if (result && result.messages) {
+        setActiveChatMessages(result.messages, true); // Prepend older messages
+        setMessagesHasMore(result.hasMore);
+      }
+    } catch (error) {
+      console.error('Failed to load more messages:', error);
+      toast.error('Failed to load more messages', {
+        description: 'Please try again',
+        style: { border: "none", color: "red" },
+      });
+    }
+  }, [
+    messagesHasMore, 
+    isLoadingMessages, 
+    sessionId, 
+    messagesPage, 
+    assistantSlug,
+    fetchMessagesDeduped,
+    setActiveChatMessages,
+    setMessagesPage,
+    setMessagesHasMore
+  ]);
 
   // closes stream when component unmounts unexpectedly
   useEffect(() => {
@@ -227,6 +334,11 @@ export default function useAssistantChat(modelName, assistantSlug) {
     chats,
     messagesEndRef,
     aiSuggestions,
-    showToggleChat
+    showToggleChat,
+    // New optimized features
+    loadMoreMessages,
+    messagesHasMore,
+    isLoadingMessages,
+    mutateMessages
   };
 }

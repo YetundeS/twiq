@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "ANALYZE=true npm run build",
+    "bundle-report": "node scripts/analyze-bundle.js",
+    "optimize": "npm run lint && npm run bundle-report",
+    "perf-check": "npm run build && npm run start & sleep 5 && curl -o /dev/null -s -w 'Total time: %{time_total}s\\n' http://localhost:3000"
   },
   "dependencies": {
     "@codebayu/use-hydration-zustand": "^1.0.4",
@@ -26,6 +30,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.7",
     "axios": "^1.9.0",
+    "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.15.0",
@@ -45,6 +50,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.4.4",
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",

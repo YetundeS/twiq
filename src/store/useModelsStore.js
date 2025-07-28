@@ -116,9 +116,29 @@ You can [download the transcript](#) or [view tasks in the dashboard](#).`,
 const useModelsStore = create((set) => ({
   activeSessionID: null,
   activeChatMessages: [],
+  messagesHasMore: false,
+  messagesPage: 1,
+  
   updateActiveSessionID: (newSessionID) => set({ activeSessionID: newSessionID }),
-  updateActiveChatMessages: (newChatMessage) => set((state) => ({ activeChatMessages: [...state?.activeChatMessages, newChatMessage]})),
-  setActiveChatMessages: (fetchDBMessages) => set(() => ({ activeChatMessages: [...fetchDBMessages]})),
+  
+  updateActiveChatMessages: (newChatMessage) => set((state) => ({ 
+    activeChatMessages: [...state?.activeChatMessages, newChatMessage]
+  })),
+  
+  setActiveChatMessages: (fetchDBMessages, prepend = false) => set((state) => ({
+    activeChatMessages: prepend 
+      ? [...fetchDBMessages, ...state.activeChatMessages] // Prepend for loading older messages
+      : [...fetchDBMessages] // Replace for initial load
+  })),
+  
+  setMessagesHasMore: (hasMore) => set({ messagesHasMore: hasMore }),
+  setMessagesPage: (page) => set({ messagesPage: page }),
+  
+  // Reset pagination state when switching sessions
+  resetMessagesPagination: () => set({ 
+    messagesHasMore: false, 
+    messagesPage: 1 
+  }),
 }));
 
 export default useModelsStore;

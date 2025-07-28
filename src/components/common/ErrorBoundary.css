@@ -1,0 +1,168 @@
+/* Error Boundary Styles */
+.error-boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 2rem;
+  background: #fafafa;
+  border-radius: 8px;
+  margin: 1rem;
+}
+
+.error-content {
+  text-align: center;
+  max-width: 500px;
+}
+
+.error-icon {
+  color: #ef4444;
+  margin-bottom: 1rem;
+}
+
+.error-icon svg {
+  width: 64px;
+  height: 64px;
+}
+
+.error-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.error-message {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.error-details {
+  text-align: left;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.error-details summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.error-stack {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: #4b5563;
+}
+
+.error-stack pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #ffffff;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+  margin-top: 0.5rem;
+}
+
+.error-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+.error-id {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-family: 'Courier New', monospace;
+}
+
+/* Async Error Styles */
+.async-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.async-error h3 {
+  color: #dc2626;
+  margin-bottom: 0.5rem;
+}
+
+.async-error p {
+  color: #7f1d1d;
+  margin-bottom: 1rem;
+}
+
+.async-error button {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.async-error button:hover {
+  background: #b91c1c;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .error-boundary {
+    min-height: 300px;
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+  
+  .error-actions {
+    flex-direction: column;
+  }
+  
+  .error-icon svg {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .error-title {
+    font-size: 1.25rem;
+  }
+}

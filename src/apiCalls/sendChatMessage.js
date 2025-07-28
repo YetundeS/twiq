@@ -116,6 +116,7 @@ export async function sendChatMessage(
     let body;
     let headers = {
       Accept: 'text/event-stream',
+      'Accept-Encoding': 'gzip, deflate, br',
       ...authHeader,
     };
 

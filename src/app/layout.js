@@ -1,4 +1,6 @@
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
+import { setupGlobalErrorHandling } from "@/utils/errorHandling";
 import {
   Cormorant_Garamond,
   Geist,
@@ -9,6 +11,7 @@ import {
 import Head from "next/head";
 import { Toaster } from "sonner";
 import "./globals.css";
+import "@/components/common/ErrorBoundary.css";
 
 
 const inter = Inter({
@@ -89,6 +92,11 @@ export const metadata = {
 
 
 export default function RootLayout({ children }) {
+  // Setup global error handling on client side
+  if (typeof window !== 'undefined') {
+    setupGlobalErrorHandling();
+  }
+
   return (
     <html lang="en">
       <Head>
@@ -130,7 +138,11 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lato.variable} ${cormorant.variable} antialiased`}
       >
-        <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
+        <ErrorBoundary>
+          <ThemeProvider defaultTheme="light">
+            {children}
+          </ThemeProvider>
+        </ErrorBoundary>
         <Toaster />
       </body>
     </html>
