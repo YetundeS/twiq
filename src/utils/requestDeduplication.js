@@ -23,7 +23,7 @@ class RequestDeduplicator {
     const existingRequest = this.pendingRequests.get(key);
     
     if (existingRequest && existingRequest.timestamp > now - this.CACHE_TTL) {
-      console.log(`🔄 Deduplicating request: ${method} ${url}`);
+      // console.log(`🔄 Deduplicating request: ${method} ${url}`);
       
       try {
         // Return the existing promise

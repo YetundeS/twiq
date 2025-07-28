@@ -83,7 +83,6 @@ export const fetchChats = async (user, slug, updateSideBarSessions, setIsFetchin
             return { sessions: data, hasMore: false };
         }
     } catch (err) {
-        // console.log('err: ', err)
         toast.error(`Failed to fetch ${slug} assistant chats`, {
             description: "Something went wrong - reload page",
             style: {
@@ -98,7 +97,6 @@ export const fetchChats = async (user, slug, updateSideBarSessions, setIsFetchin
 
 export const fetchChat = async (sessionId) => {
     try {
-        // console.log('sessionID: ', sessionId)
         if (!sessionId) return;
         
         // 🔹 Get auth headers
@@ -126,7 +124,6 @@ export const fetchChat = async (sessionId) => {
         }
 
         const data = await response.json();
-        // console.log('data: ', data)
 
         return null
 

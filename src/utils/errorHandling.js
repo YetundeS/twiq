@@ -235,7 +235,7 @@ export const withRetry = async (fn, options = {}) => {
         maxDelay
       );
       
-      console.log(`Retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms`);
+      // console.log(`Retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms`);
       
       // Wait before retry
       await new Promise(resolve => setTimeout(resolve, delay));

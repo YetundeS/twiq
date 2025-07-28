@@ -44,18 +44,18 @@ export const compressImage = async (file, options = {}) => {
       compressionOptions.quality = 0.82;
     }
 
-    console.log(`🖼️ Compressing image: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+    // console.log(`🖼️ Compressing image: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
 
     const compressedFile = await imageCompression(file, compressionOptions);
     
     const compressionRatio = ((file.size - compressedFile.size) / file.size * 100).toFixed(1);
-    console.log(
-      `✅ Compressed ${file.name}: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB (${compressionRatio}% reduction)`
-    );
+    // console.log(
+    //   `✅ Compressed ${file.name}: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB (${compressionRatio}% reduction)`
+    // );
 
     return compressedFile;
   } catch (error) {
-    console.error('Image compression failed:', error);
+    // console.error('Image compression failed:', error);
     // Return original file if compression fails
     return file;
   }

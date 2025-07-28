@@ -10,7 +10,6 @@ export function useResponsiveSidebarToggle() {
             setIsSidebarOpen(!isSidebarOpen);
         } else {
             setIsMobileSidebarOpen(!isMobileSidebarOpen);
-            console.log('mobile: ', isMobileSidebarOpen)
         }
     };
 

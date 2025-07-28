@@ -104,13 +104,15 @@ const ChatInputArea = ({
 
   return (
     <div className="inputbox">
-      <div className="uploadsContainer hide-scrollbar">
-        <div className="uploadsInnerContainer">
-          {uploadedFiles?.map((file, index) => (
-            <FileBadge key={index} file={file} onRemove={() => removeFile(index)} />
-          ))}
+      {uploadedFiles?.length > 0 && (
+        <div className="uploadsContainer hide-scrollbar">
+          <div className="uploadsInnerContainer">
+            {uploadedFiles?.map((file, index) => (
+              <FileBadge key={index} file={file} onRemove={() => removeFile(index)} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
       <div className="upperInput_box">
         <textarea
           type="text"
