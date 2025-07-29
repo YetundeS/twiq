@@ -61,6 +61,11 @@ export const SITE_CONTENT = {
       "Yes. TWIQ is built for multi-passionate humans who don’t fit neatly in one box. The bots help you clarify your content pillars so you can speak to different aspects of your brand without confusing your audience.",
   },
   {
+    question: "What do I do when my thread is exhausted?",
+    answer:
+      "ChatGPT rules apply here, create a new thread when it gets exhausted",
+  },
+  {
     question: "Is this just for social media content?",
     answer:
       "Nope. While it’s amazing for social, you can also use TWIQ for thought leadership, website copy, pitches, podcast planning, and even full brand messaging strategy. The platform grows with you.",
