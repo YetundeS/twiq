@@ -87,7 +87,15 @@ const LoginForm = ({ setActiveForm }) => {
           });
         }
 
-        if (!response?.user.email_confirmed) {
+        // Check if user is admin
+        const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',') || [];
+        const isAdmin = response.user.is_admin || adminEmails.includes(response.user.email);
+
+        if (isAdmin) {
+          setTimeout(() => {
+            router.push(`/platform/${signString}/admin`);
+          }, 1000);
+        } else if (!response?.user.email_confirmed) {
           setTimeout(() => {
             router.push(`/platform/${signString}/`);
           }, 1000);
