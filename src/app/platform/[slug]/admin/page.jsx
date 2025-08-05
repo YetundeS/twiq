@@ -7,8 +7,10 @@ import BetaUserStats from '@/components/adminComponents/BetaUserStats';
 import BetaUserTable from '@/components/adminComponents/BetaUserTable';
 import AddBetaUserDialog from '@/components/adminComponents/AddBetaUserDialog';
 import { Button } from '@/components/ui/button';
-import { Plus, RefreshCw } from 'lucide-react';
+import { Plus, RefreshCw, Home } from 'lucide-react';
 import { toast } from 'sonner';
+import { useRouter, useParams } from 'next/navigation';
+import useAuthStore from '@/store/authStore';
 
 const Admin = () => {
   const [stats, setStats] = useState(null);
@@ -16,6 +18,10 @@ const Admin = () => {
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [includeExpired, setIncludeExpired] = useState(false);
+  
+  const router = useRouter();
+  const params = useParams();
+  const { user } = useAuthStore();
 
   const fetchData = async () => {
     try {
@@ -51,6 +57,11 @@ const Admin = () => {
     fetchData();
   };
 
+  const handleGoToDashboard = () => {
+    const slug = params.slug;
+    router.push(`/platform/${slug}`);
+  };
+
   if (loading) {
     return (
       <div className="page_content">
@@ -75,6 +86,14 @@ const Admin = () => {
             </p>
           </div>
           <div className="flex gap-3">
+            <Button
+              onClick={handleGoToDashboard}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Home className="h-4 w-4" />
+              Go to Dashboard
+            </Button>
             <Button
               onClick={handleRefresh}
               variant="outline"

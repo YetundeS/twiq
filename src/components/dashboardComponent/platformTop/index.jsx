@@ -2,7 +2,8 @@ import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/ui/theme-provider';
 import useAuthStore from '@/store/authStore';
 import "@/styles/platformStyles.css";
-import { ArrowLeft, Moon, Sun } from 'lucide-react';
+import { ArrowLeft, Moon, Sun, Settings } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import './platformTop.css';
 
@@ -20,6 +21,7 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
     const { user } = useAuthStore();
     const [organization, setOrganization] = useState("");
     const { openDialog } = useLogOutDialogStore();
+    const router = useRouter();
 
     useEffect(() => {
         if (!user?.organization_name) {
@@ -33,6 +35,19 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
 
     const toggleTheme = () => {
         setTheme(theme === "dark" ? "light" : "dark");
+    };
+
+    // Check if current user is admin
+    const isAdmin = () => {
+        if (!user) return false;
+        const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',') || [];
+        return user.is_admin || adminEmails.includes(user.email);
+    };
+
+    const handleGoToAdmin = () => {
+        if (organization) {
+            router.push(`/platform/${organization}/admin`);
+        }
     };
 
     const FALLBACK_IMG = 'https://api.dicebear.com/9.x/thumb/svg?seed=mufutau'
@@ -62,6 +77,19 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
                     <Moon className="size-6" />
                 )}
             </Button>
+
+            {/* Admin Panel Button - Only visible to admins */}
+            {isAdmin() && (
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleGoToAdmin}
+                    className="cursor-pointer text-white hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                    title="Admin Panel"
+                >
+                    <Settings className="size-6" />
+                </Button>
+            )}
 
             {!hideAccount && (
                 <Menubar className="menuBar platformMenu">
