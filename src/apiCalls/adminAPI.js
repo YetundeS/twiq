@@ -99,3 +99,18 @@ export const processExpiredBetaUsers = async () => {
     throw error.response?.data || error;
   }
 };
+
+// Invite new user and grant beta access
+export const inviteUser = async ({ userName, userEmail, organizationName, betaPlan, startDate, durationDays }) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/admin/invite-user`,
+      { userName, userEmail, organizationName, betaPlan, startDate, durationDays },
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error inviting user:", error);
+    throw error.response?.data || error;
+  }
+};

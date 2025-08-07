@@ -5,13 +5,15 @@ import { Dialog } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { grantBetaAccess, getAllUsers } from '@/apiCalls/adminAPI';
-import { Search, Calendar, Clock, Award } from 'lucide-react';
+import { grantBetaAccess, getAllUsers, inviteUser } from '@/apiCalls/adminAPI';
+import { Search, Calendar, Clock, Award, UserPlus, Users } from 'lucide-react';
 import { toast } from 'sonner';
 
 const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
   const [formData, setFormData] = useState({
     userEmail: '',
+    userName: '',
+    organizationName: '',
     betaPlan: 'PRO',
     startDate: new Date().toISOString().split('T')[0],
     durationDays: 90
@@ -21,12 +23,26 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [isInviteMode, setIsInviteMode] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      fetchUsers();
+      if (!isInviteMode) {
+        fetchUsers();
+      }
+      // Reset form when dialog opens
+      setFormData({
+        userEmail: '',
+        userName: '',
+        organizationName: '',
+        betaPlan: 'PRO',
+        startDate: new Date().toISOString().split('T')[0],
+        durationDays: 90
+      });
+      setSearchTerm('');
+      setShowUserDropdown(false);
     }
-  }, [isOpen]);
+  }, [isOpen, isInviteMode]);
 
   useEffect(() => {
     if (searchTerm) {
@@ -56,19 +72,35 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.userEmail) {
-      toast.error('Please select a user');
-      return;
+    if (isInviteMode) {
+      // Validate invitation form
+      if (!formData.userName || !formData.userEmail) {
+        toast.error('Please provide user name and email');
+        return;
+      }
+    } else {
+      // Validate existing user selection
+      if (!formData.userEmail) {
+        toast.error('Please select a user');
+        return;
+      }
     }
 
     try {
       setLoading(true);
-      await grantBetaAccess(formData);
-      toast.success('Beta access granted successfully');
+      
+      if (isInviteMode) {
+        const result = await inviteUser(formData);
+        toast.success(`User invited successfully! Temporary password: ${result.temporaryPassword}`);
+      } else {
+        await grantBetaAccess(formData);
+        toast.success('Beta access granted successfully');
+      }
+      
       onUserAdded();
     } catch (error) {
-      console.error('Error granting beta access:', error);
-      toast.error(error.error || 'Failed to grant beta access');
+      console.error(`Error ${isInviteMode ? 'inviting user' : 'granting beta access'}:`, error);
+      toast.error(error.error || `Failed to ${isInviteMode ? 'invite user' : 'grant beta access'}`);
     } finally {
       setLoading(false);
     }
@@ -85,7 +117,24 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const toggleInviteMode = () => {
+    setIsInviteMode(!isInviteMode);
+    setFormData({
+      userEmail: '',
+      userName: '',
+      organizationName: '',
+      betaPlan: 'PRO',
+      startDate: new Date().toISOString().split('T')[0],
+      durationDays: 90
+    });
+    setSearchTerm('');
+    setShowUserDropdown(false);
+  };
+
   const getDurationOptions = () => [
+    { value: 5, label: '5 days' },
+    { value: 7, label: '7 days' },
+    { value: 14, label: '14 days' },
     { value: 30, label: '30 days (1 month)' },
     { value: 60, label: '60 days (2 months)' },
     { value: 90, label: '90 days (3 months)' },
@@ -99,49 +148,124 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Grant Beta Access
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              {isInviteMode ? 'Invite New User' : 'Grant Beta Access'}
+            </h2>
+            
+            {/* Mode Toggle */}
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant={!isInviteMode ? "default" : "outline"}
+                onClick={() => !isInviteMode || toggleInviteMode()}
+                className="flex items-center gap-2 text-sm"
+                disabled={loading}
+              >
+                <Users className="h-4 w-4" />
+                Existing User
+              </Button>
+              <Button
+                type="button"
+                variant={isInviteMode ? "default" : "outline"}
+                onClick={() => isInviteMode || toggleInviteMode()}
+                className="flex items-center gap-2 text-sm"
+                disabled={loading}
+              >
+                <UserPlus className="h-4 w-4" />
+                Invite New
+              </Button>
+            </div>
+          </div>
           
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* User Selection */}
-            <div className="relative">
-              <Label htmlFor="userSearch" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Select User
-              </Label>
-              <div className="relative mt-1">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-4 w-4 text-gray-400" />
+            {isInviteMode ? (
+              /* Invitation Form Fields */
+              <>
+                <div>
+                  <Label htmlFor="userName" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Full Name
+                  </Label>
+                  <Input
+                    type="text"
+                    name="userName"
+                    placeholder="Enter user's full name"
+                    value={formData.userName}
+                    onChange={handleInputChange}
+                    className="mt-1"
+                    required
+                  />
                 </div>
-                <Input
-                  type="text"
-                  placeholder="Search users by email or name..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
+
+                <div>
+                  <Label htmlFor="userEmail" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Email Address
+                  </Label>
+                  <Input
+                    type="email"
+                    name="userEmail"
+                    placeholder="Enter user's email"
+                    value={formData.userEmail}
+                    onChange={handleInputChange}
+                    className="mt-1"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="organizationName" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Organization Name (Optional)
+                  </Label>
+                  <Input
+                    type="text"
+                    name="organizationName"
+                    placeholder="Enter organization name"
+                    value={formData.organizationName}
+                    onChange={handleInputChange}
+                    className="mt-1"
+                  />
+                </div>
+              </>
+            ) : (
+              /* Existing User Selection */
+              <div className="relative">
+                <Label htmlFor="userSearch" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Select User
+                </Label>
+                <div className="relative mt-1">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-4 w-4 text-gray-400" />
+                  </div>
+                  <Input
+                    type="text"
+                    placeholder="Search users by email or name..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                
+                {/* User Dropdown */}
+                {showUserDropdown && filteredUsers.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-40 overflow-y-auto">
+                    {filteredUsers.slice(0, 10).map((user) => (
+                      <div
+                        key={user.id}
+                        onClick={() => handleUserSelect(user)}
+                        className="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+                      >
+                        <div className="font-medium text-gray-900 dark:text-white">
+                          {user.user_name}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {user.email}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-              
-              {/* User Dropdown */}
-              {showUserDropdown && filteredUsers.length > 0 && (
-                <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-40 overflow-y-auto">
-                  {filteredUsers.slice(0, 10).map((user) => (
-                    <div
-                      key={user.id}
-                      onClick={() => handleUserSelect(user)}
-                      className="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
-                    >
-                      <div className="font-medium text-gray-900 dark:text-white">
-                        {user.user_name}
-                      </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {user.email}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            )}
 
             {/* Plan Selection */}
             <div>
@@ -207,9 +331,12 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
               </Button>
               <Button
                 type="submit"
-                disabled={loading || !formData.userEmail}
+                disabled={loading || (isInviteMode ? !formData.userName || !formData.userEmail : !formData.userEmail)}
               >
-                {loading ? 'Granting...' : 'Grant Beta Access'}
+                {loading 
+                  ? (isInviteMode ? 'Inviting...' : 'Granting...') 
+                  : (isInviteMode ? 'Send Invitation' : 'Grant Beta Access')
+                }
               </Button>
             </div>
           </form>
