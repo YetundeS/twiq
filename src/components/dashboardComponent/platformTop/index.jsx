@@ -37,11 +37,10 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
         setTheme(theme === "dark" ? "light" : "dark");
     };
 
-    // Check if current user is admin
+    // Check if current user is admin - now from backend only
     const isAdmin = () => {
         if (!user) return false;
-        const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',') || [];
-        return user.is_admin || adminEmails.includes(user.email);
+        return user.is_admin === true;
     };
 
     const handleGoToAdmin = () => {

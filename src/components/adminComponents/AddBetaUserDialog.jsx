@@ -24,6 +24,7 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
   const [loading, setLoading] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isInviteMode, setIsInviteMode] = useState(false);
+  const [emailError, setEmailError] = useState('');
 
   useEffect(() => {
     if (isOpen) {
@@ -41,6 +42,7 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
       });
       setSearchTerm('');
       setShowUserDropdown(false);
+      setEmailError(''); // Clear email error when dialog opens
     }
   }, [isOpen, isInviteMode]);
 
@@ -69,6 +71,24 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
     }
   };
 
+  // Email validation function
+  const validateEmail = (email) => {
+    if (!email) {
+      return 'Email is required';
+    }
+    
+    const trimmedEmail = email.trim();
+    
+    // Improved email regex - requires at least one dot and TLD
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    if (!emailRegex.test(trimmedEmail)) {
+      return 'Please enter a valid email address (e.g., user@example.com)';
+    }
+    
+    return '';
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -76,6 +96,14 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
       // Validate invitation form
       if (!formData.userName || !formData.userEmail) {
         toast.error('Please provide user name and email');
+        return;
+      }
+      
+      // Validate email format
+      const emailValidationError = validateEmail(formData.userEmail);
+      if (emailValidationError) {
+        setEmailError(emailValidationError);
+        toast.error(emailValidationError);
         return;
       }
     } else {
@@ -88,12 +116,21 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
 
     try {
       setLoading(true);
+      setEmailError(''); // Clear any previous errors
+      
+      // Trim email before sending
+      const trimmedFormData = {
+        ...formData,
+        userEmail: formData.userEmail.trim(),
+        userName: formData.userName?.trim(),
+        organizationName: formData.organizationName?.trim()
+      };
       
       if (isInviteMode) {
-        const result = await inviteUser(formData);
+        const result = await inviteUser(trimmedFormData);
         toast.success(`User invited successfully! Temporary password: ${result.temporaryPassword}`);
       } else {
-        await grantBetaAccess(formData);
+        await grantBetaAccess(trimmedFormData);
         toast.success('Beta access granted successfully');
       }
       
@@ -115,6 +152,18 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    
+    // Clear email error when user starts typing
+    if (name === 'userEmail' && emailError) {
+      setEmailError('');
+    }
+  };
+  
+  const handleEmailBlur = () => {
+    if (formData.userEmail) {
+      const error = validateEmail(formData.userEmail);
+      setEmailError(error);
+    }
   };
 
   const toggleInviteMode = () => {
@@ -129,6 +178,7 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
     });
     setSearchTerm('');
     setShowUserDropdown(false);
+    setEmailError(''); // Clear email error when switching modes
   };
 
   const getDurationOptions = () => [
@@ -207,9 +257,15 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
                     placeholder="Enter user's email"
                     value={formData.userEmail}
                     onChange={handleInputChange}
-                    className="mt-1"
+                    onBlur={handleEmailBlur}
+                    className={`mt-1 ${emailError ? 'border-red-500' : ''}`}
                     required
                   />
+                  {emailError && (
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      {emailError}
+                    </p>
+                  )}
                 </div>
 
                 <div>

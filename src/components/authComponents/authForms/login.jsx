@@ -87,9 +87,8 @@ const LoginForm = ({ setActiveForm }) => {
           });
         }
 
-        // Check if user is admin
-        const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',') || [];
-        const isAdmin = response.user.is_admin || adminEmails.includes(response.user.email);
+        // Check if user is admin - now comes from backend only
+        const isAdmin = response.user.is_admin === true;
 
         if (isAdmin) {
           setTimeout(() => {
