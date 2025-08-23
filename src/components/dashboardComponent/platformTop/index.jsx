@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/ui/theme-provider';
 import useAuthStore from '@/store/authStore';
 import "@/styles/platformStyles.css";
-import { ArrowLeft, Moon, Sun, Settings } from 'lucide-react';
+import { ArrowLeft, Moon, Sun, Settings, Hourglass } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import './platformTop.css';
@@ -12,6 +12,7 @@ import { Menubar, MenubarContent, MenubarMenu, MenubarTrigger } from '@/componen
 import { accountPopMenu } from '@/constants/dahsboard';
 import { generateSignString } from '@/lib/utils';
 import useLogOutDialogStore from '@/store/useLogOutDialogStore';
+import useSusbcriptionDialogStore from '@/store/useSusbcriptionDialogStore';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import LogOutDialog from '../logOutDialog';
@@ -21,6 +22,7 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
     const { user } = useAuthStore();
     const [organization, setOrganization] = useState("");
     const { openDialog } = useLogOutDialogStore();
+    const { openSubDialog } = useSusbcriptionDialogStore();
     const router = useRouter();
 
     useEffect(() => {
@@ -31,6 +33,24 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
         const signString = generateSignString(user.organization_name);
         setOrganization(signString);
     }, [user?.organization_name]);
+
+    // Beta status calculation
+    const getBetaStatus = () => {
+        if (!user?.is_beta_user || !user?.beta_end_date) return null;
+        
+        const endDate = new Date(user.beta_end_date);
+        const now = new Date();
+        const timeDiff = endDate - now;
+        const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+        
+        return {
+            daysRemaining: Math.max(0, daysRemaining),
+            isActive: daysRemaining > 0,
+            urgency: daysRemaining <= 3 ? 'critical' : daysRemaining <= 7 ? 'warning' : 'safe'
+        };
+    };
+
+    const betaStatus = getBetaStatus();
 
 
     const toggleTheme = () => {
@@ -46,6 +66,13 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
     const handleGoToAdmin = () => {
         if (organization) {
             router.push(`/platform/${organization}/admin`);
+        }
+    };
+
+    const handleBetaClick = () => {
+        if (organization) {
+            openSubDialog();
+            router.push(`/platform/${organization}/settings`);
         }
     };
 
@@ -76,6 +103,38 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
                     <Moon className="size-6" />
                 )}
             </Button>
+
+            {/* Beta Trial Icon - Only visible to beta users */}
+            {betaStatus && betaStatus.isActive && (
+                <HoverCard>
+                    <HoverCardTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={handleBetaClick}
+                            className={`cursor-pointer text-white hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 beta-trial-icon ${betaStatus.urgency}`}
+                        >
+                            <Hourglass className="size-6" />
+                        </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-64">
+                        <div className="space-y-2">
+                            <div className={`text-sm font-semibold ${
+                                betaStatus.urgency === 'critical' 
+                                    ? 'text-red-600 dark:text-red-400' 
+                                    : betaStatus.urgency === 'warning' 
+                                        ? 'text-orange-600 dark:text-orange-400' 
+                                        : 'text-blue-600 dark:text-blue-400'
+                            }`}>
+                                Beta Trial: {betaStatus.daysRemaining} day{betaStatus.daysRemaining !== 1 ? 's' : ''} remaining
+                            </div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">
+                                {user?.beta_plan} plan access expires soon. Click to upgrade and keep your features.
+                            </div>
+                        </div>
+                    </HoverCardContent>
+                </HoverCard>
+            )}
 
             {/* Admin Panel Button - Only visible to admins */}
             {isAdmin() && (

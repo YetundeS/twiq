@@ -45,3 +45,86 @@
 .dark .pt_imageBox {
   border: 2px solid white;
 }
+
+/* Beta Trial Icon Animations */
+.beta-trial-icon {
+  position: relative;
+}
+
+.beta-trial-icon svg {
+  animation: beta-hourglass-rotate 3s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Different animation speeds based on urgency */
+.beta-trial-icon.critical svg {
+  animation: beta-hourglass-rotate-urgent 2s ease-in-out infinite;
+  color: #ef4444 !important; /* Red for critical */
+}
+
+.beta-trial-icon.warning svg {
+  animation: beta-hourglass-rotate 3s ease-in-out infinite;
+  color: #f59e0b !important; /* Orange for warning */
+}
+
+.beta-trial-icon.safe svg {
+  animation: beta-hourglass-rotate 4s ease-in-out infinite;
+  color: #3b82f6 !important; /* Blue for safe */
+}
+
+/* Rotation keyframes - normal speed */
+@keyframes beta-hourglass-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(180deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Rotation keyframes - urgent speed */
+@keyframes beta-hourglass-rotate-urgent {
+  0% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(180deg);
+  }
+  40% {
+    transform: rotate(180deg);
+  }
+  70% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hover effect for beta icon */
+.beta-trial-icon:hover svg {
+  animation-play-state: paused;
+  transform: scale(1.1);
+}
+
+/* Dark mode colors */
+.dark .beta-trial-icon.critical svg {
+  color: #f87171 !important;
+}
+
+.dark .beta-trial-icon.warning svg {
+  color: #fbbf24 !important;
+}
+
+.dark .beta-trial-icon.safe svg {
+  color: #60a5fa !important;
+}
