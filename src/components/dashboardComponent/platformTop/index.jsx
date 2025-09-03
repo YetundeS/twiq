@@ -76,7 +76,7 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
         }
     };
 
-    const FALLBACK_IMG = 'https://api.dicebear.com/9.x/thumb/svg?seed=mufutau'
+    const FALLBACK_IMG = '/images/user-avatar.png'
 
     return (
         <div className={`${db ? 'db' : ''} platformTop `}>
@@ -163,6 +163,9 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
                                             height={60}
                                             alt="profile Image"
                                             className="profileImg"
+                                            onError={(e) => {
+                                                e.target.src = FALLBACK_IMG;
+                                            }}
                                         />
                                     ) : (
                                         <Image
@@ -171,6 +174,9 @@ const PlatformTop = ({ hideAccount, db, twiqDefinition, setTwiqDefinition }) => 
                                             height={60}
                                             alt="profile Image"
                                             className="profileImg"
+                                            onError={(e) => {
+                                                console.error('Failed to load fallback avatar:', e);
+                                            }}
                                         />
                                     )}
                                 </div>

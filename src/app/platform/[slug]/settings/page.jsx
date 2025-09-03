@@ -226,12 +226,15 @@ const Settings = () => {
                       src={
                         previewUrl ||
                         user?.avatar_url ||
-                        "https://api.dicebear.com/7.x/identicon/svg?seed=mufutau"
+                        "/images/user-avatar.png"
                       }
                       width={64}
                       height={64}
                       alt="user avatar"
                       className="rounded-full border object-cover w-16 h-16"
+                      onError={(e) => {
+                        e.target.src = "/images/user-avatar.png";
+                      }}
                     />
                     <div className="flex flex-col">
                       <input
