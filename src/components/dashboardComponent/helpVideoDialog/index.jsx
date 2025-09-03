@@ -21,9 +21,13 @@ const HelpVidDialog = () => {
         setOrganization(signString);
     }, [user]);
 
+    // 🚧 TEMPORARILY HIDDEN - Don't show dialog when no video available
+    if (!isOpen || isOpen.trim() === '') {
+        return null;
+    }
 
     return (
-        <Dialog onOpenChange={closeDialog} open={isOpen}>
+        <Dialog onOpenChange={closeDialog} open={!!isOpen}>
             <DialogContent className="flex flex-col items-center gap-4 p-4 sm:max-w-[700px]">
                 <div className="w-full aspect-video">
                     <iframe
