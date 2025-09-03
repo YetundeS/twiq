@@ -3,10 +3,10 @@
 import HelpModelIcon from "@/components/dashboardComponent/helpIcon";
 import HelpVidDialog from "@/components/dashboardComponent/helpVideoDialog";
 import { assistantDisplayIcons, assistantDisplayNames, assistantPromptTemplates, helpVideoIDs } from "@/constants/model";
+import { PenTool } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { PenTool } from "lucide-react";
 import "./mt.css";
 
 const ModelTemplates = ({ setInputValue, assistantSlug }) => {
