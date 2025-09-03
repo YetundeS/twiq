@@ -3,7 +3,10 @@ import { API } from "./authAPI";
 
 export const handleSubscribe = async (priceId, user, updateIsSubscribing) => {
     if (!user) {
-        router.push(`/sign-off`);
+        // For API calls, we can't use router directly - redirect via window.location
+        if (typeof window !== 'undefined') {
+            window.location.href = '/sign-off';
+        }
         return
     }
 
