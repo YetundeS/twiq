@@ -115,7 +115,7 @@ const nextConfig = {
               value: [
                 "default-src 'self'",
                 "script-src 'self' 'unsafe-inline' https://js.stripe.com https://checkout.stripe.com",
-                "connect-src 'self' https://api.stripe.com https://*.supabase.co wss://*.supabase.co",
+                "connect-src 'self' https://api.stripe.com https://*.supabase.co wss://*.supabase.co https://twiq-server.onrender.com https://*.onrender.com",
                 "img-src 'self' data: blob: https://api.dicebear.com https://*.supabase.co",
                 "style-src 'self' 'unsafe-inline'",
                 "font-src 'self'",
@@ -142,6 +142,23 @@ const nextConfig = {
             {
               key: 'Cache-Control',
               value: 'public, max-age=31536000, immutable',
+            },
+            {
+              key: 'Content-Type',
+              value: 'application/javascript; charset=utf-8',
+            },
+          ],
+        },
+        {
+          source: '/_next/static/css/(.*).css',
+          headers: [
+            {
+              key: 'Cache-Control',
+              value: 'public, max-age=31536000, immutable',
+            },
+            {
+              key: 'Content-Type',
+              value: 'text/css; charset=utf-8',
             },
           ],
         },
