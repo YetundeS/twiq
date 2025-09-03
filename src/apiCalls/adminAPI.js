@@ -114,3 +114,76 @@ export const inviteUser = async ({ userName, userEmail, organizationName, betaPl
     throw error.response?.data || error;
   }
 };
+
+// System Logs Management
+export const getSystemLogs = async (filters = {}) => {
+  try {
+    // Build query parameters
+    const queryParams = new URLSearchParams();
+    
+    if (filters.level && filters.level !== 'all') {
+      queryParams.append('level', filters.level);
+    }
+    
+    if (filters.source && filters.source !== 'all') {
+      queryParams.append('source', filters.source);
+    }
+    
+    if (filters.page) {
+      queryParams.append('page', filters.page.toString());
+    }
+    
+    if (filters.limit) {
+      queryParams.append('limit', filters.limit.toString());
+    }
+    
+    if (filters.search) {
+      queryParams.append('search', filters.search);
+    }
+    
+    if (filters.startDate) {
+      queryParams.append('startDate', filters.startDate);
+    }
+    
+    if (filters.endDate) {
+      queryParams.append('endDate', filters.endDate);
+    }
+
+    const response = await axios.get(
+      `${API_URL}/admin/logs?${queryParams.toString()}`,
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching system logs:", error);
+    throw error.response?.data || error;
+  }
+};
+
+// Get log statistics for dashboard
+export const getLogStats = async () => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/admin/logs/stats`,
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching log statistics:", error);
+    throw error.response?.data || error;
+  }
+};
+
+// Cleanup old logs (30+ days)
+export const cleanupOldLogs = async () => {
+  try {
+    const response = await axios.delete(
+      `${API_URL}/admin/logs/cleanup`,
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error cleaning up old logs:", error);
+    throw error.response?.data || error;
+  }
+};
