@@ -110,6 +110,21 @@ const nextConfig = {
               key: 'X-XSS-Protection',
               value: '1; mode=block',
             },
+            {
+              key: 'Content-Security-Policy',
+              value: [
+                "default-src 'self'",
+                "script-src 'self' 'unsafe-inline' https://js.stripe.com https://checkout.stripe.com",
+                "connect-src 'self' https://api.stripe.com https://*.supabase.co wss://*.supabase.co",
+                "img-src 'self' data: blob: https://api.dicebear.com https://*.supabase.co",
+                "style-src 'self' 'unsafe-inline'",
+                "font-src 'self'",
+                "frame-src 'self' https://js.stripe.com https://checkout.stripe.com",
+                "object-src 'none'",
+                "base-uri 'self'",
+                "form-action 'self'"
+              ].join('; ')
+            },
           ],
         },
         {
