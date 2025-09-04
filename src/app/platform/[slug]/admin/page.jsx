@@ -82,72 +82,74 @@ const Admin = () => {
 
   return (
     <div className="page_content">
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+          <div className="text-center sm:text-left">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
               Admin Panel
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
               Manage beta users and view platform statistics
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap justify-center sm:justify-end gap-2 sm:gap-3">
             <Button
               onClick={handleGoToDashboard}
               variant="outline"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 text-sm sm:text-base px-3 sm:px-4 py-2"
             >
-              <Home className="h-4 w-4" />
-              Go to Dashboard
+              <Home className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">Go to Dashboard</span>
+              <span className="sm:hidden">Dashboard</span>
             </Button>
             <Button
               onClick={handleRefresh}
               variant="outline"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 text-sm sm:text-base px-3 sm:px-4 py-2"
             >
-              <RefreshCw className="h-4 w-4" />
+              <RefreshCw className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Refresh
             </Button>
             {activeTab === 'beta-users' && (
               <Button
                 onClick={handleAddBetaUser}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 text-sm sm:text-base px-3 sm:px-4 py-2"
               >
-                <Plus className="h-4 w-4" />
-                Add Beta User
+                <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Add Beta User</span>
+                <span className="sm:hidden">Add User</span>
               </Button>
             )}
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="border-b">
-          <nav className="flex space-x-8">
+        <div className="border-b overflow-x-auto">
+          <nav className="flex space-x-4 sm:space-x-8 min-w-max">
             <button
               onClick={() => setActiveTab('beta-users')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 px-1 sm:px-2 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
                 activeTab === 'beta-users'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 Beta Users
               </div>
             </button>
             <button
               onClick={() => setActiveTab('system-logs')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`py-2 px-1 sm:px-2 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
                 activeTab === 'system-logs'
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              <div className="flex items-center gap-2">
-                <FileText className="h-4 w-4" />
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <FileText className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 System Logs
               </div>
             </button>

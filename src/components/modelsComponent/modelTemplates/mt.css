@@ -184,7 +184,7 @@
 
 @media (max-width: 500px) {
     .modelTemplates {
-        justify-content: flex-start;
+        justify-content: flex-end;
     }
 
 }
