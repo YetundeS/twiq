@@ -2,7 +2,7 @@
 
 import { handleSubscribe } from "@/apiCalls/subscribe";
 import { Button } from "@/components/ui/button";
-import { SITE_CONTENT } from "@/constants/landingPageContent";
+import { getPricingPlans } from "@/utils/pricingConfig";
 import useAuthStore from "@/store/authStore";
 import useSusbcriptionDialogStore from "@/store/useSusbcriptionDialogStore";
 import { CircularProgress } from "@mui/material";
@@ -13,14 +13,15 @@ import { useEffect, useRef, useState } from "react";
 import { TextEffect } from "../ui/text-effect";
 import './header.css';
 
-const pricingPlans = SITE_CONTENT.pricingPlans;
-
 export function PricingSection({ platform }) {
   const [visibleCards, setVisibleCards] = useState([]);
   const sectionRef = useRef(null);
   const router = useRouter();
   const { user } = useAuthStore()
   const { subscribingPlanId, setSubscribingPlanId } = useSusbcriptionDialogStore()
+
+  // Get pricing plans dynamically based on test/production mode
+  const pricingPlans = getPricingPlans();
 
 
   useEffect(() => {

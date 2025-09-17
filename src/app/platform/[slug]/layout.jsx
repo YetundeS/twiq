@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }) {
 
   const isHydrated = useHydrationZustand(useAuthStore);
   const router = useRouter();
-  const { updateUser } = useAuthStore();
+  const { updateUser, setInitialLoading, checkCacheVersion } = useAuthStore();
 
   // Determine if sidebar should be shown based on current route
   const shouldShowSidebar = useMemo(() => {
@@ -36,10 +36,25 @@ export default function DashboardLayout({ children }) {
   useEffect(() => {
     if (!isHydrated) return;
 
+    // Check cache version and clear if outdated
+    const cacheWasCleared = checkCacheVersion();
+    if (cacheWasCleared) {
+      console.log('[Layout] Cache cleared due to version mismatch');
+    }
+
+    // Set loading state while fetching fresh data
+    setInitialLoading(true);
+
+    // Always force refresh user data on page load/reload to ensure fresh data
     fetchUser({
       updateUser,
       onUnauthorized: () => router.push("/sign-off"),
-    })
+      forceRefresh: true,
+      silent: true // Don't show error toasts for background refresh
+    }).finally(() => {
+      // Clear loading state after fetch completes (success or error)
+      setInitialLoading(false);
+    });
   }, [isHydrated]);
 
 

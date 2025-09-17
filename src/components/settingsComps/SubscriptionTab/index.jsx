@@ -7,7 +7,9 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { TabsContent } from "@/components/ui/tabs";
+import useAuthStore from '@/store/authStore';
 import { useBuyCreditDialog } from '@/store/useBuyCreditDialog';
 import { Info } from "lucide-react";
 import { BuyCreditDialog } from '../BuyCreditDialog';
@@ -19,6 +21,8 @@ export function SubscriptionTab({ user, openSubDialog }) {
     //   const outputUsed = Math.floor((user?.subscription_usage?.output_tokens_used || 0) / 1000);
 
     const { setOpen } = useBuyCreditDialog();
+    const { isInitialLoading } = useAuthStore();
+
 
     // Calculate beta status
     const getBetaStatus = () => {
@@ -41,6 +45,30 @@ export function SubscriptionTab({ user, openSubDialog }) {
     };
 
     const betaStatus = getBetaStatus();
+
+    // Show loading skeleton while fetching fresh data
+    if (isInitialLoading) {
+        return (
+            <TabsContent value="subscription">
+                <Card className="tabsContent">
+                    <CardHeader>
+                        <CardTitle className="text-black">Subscription</CardTitle>
+                        <CardDescription>Loading subscription information...</CardDescription>
+                    </CardHeader>
+                    <CardContent className="settings_cardContent space-y-5">
+                        <div className="space-y-4">
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                        </div>
+                    </CardContent>
+                    <CardFooter>
+                        <Skeleton className="h-10 w-32" />
+                    </CardFooter>
+                </Card>
+            </TabsContent>
+        );
+    }
 
     return (
         <TabsContent value="subscription">
@@ -92,16 +120,22 @@ export function SubscriptionTab({ user, openSubDialog }) {
                         </>
                     )}
 
-                    {/* Regular Plan Section for non-beta users or as additional info */}
+                    {/* Current Subscription Plan */}
                     <div className="settings_cardRow">
-                        <Label htmlFor="current">
-                            {betaStatus ? 'Current Plan Access' : 'Current Plan'}
-                        </Label>
+                        <Label htmlFor="current">Current Plan</Label>
                         <p className="settings_cardRow_content">
-                            {!user?.is_active ? "Inactive" : `${user?.subscription_plan} plan`}
+                            {!user?.is_active ? (
+                                "Inactive"
+                            ) : user?.subscription_plan ? (
+                                `${user.subscription_plan} plan`
+                            ) : betaStatus && betaStatus.isActive ? (
+                                "Beta Trial"
+                            ) : (
+                                "No active plan"
+                            )}
                             {betaStatus && betaStatus.isActive && (
-                                <span className="ml-2 text-sm text-gray-500">
-                                    (via beta trial)
+                                <span className="ml-2 text-sm text-green-600 dark:text-green-400">
+                                    (+ {user?.beta_plan} beta access)
                                 </span>
                             )}
                         </p>
@@ -145,23 +179,57 @@ export function SubscriptionTab({ user, openSubDialog }) {
                     </div>
                 </CardContent>
 
-                <CardFooter>
-                    <Button onClick={openSubDialog} className="fogBtn">
-                        {betaStatus && betaStatus.isActive 
-                            ? "Upgrade to Keep Access" 
-                            : user?.is_active 
-                                ? "Change Plan" 
-                                : "Subscribe"
-                        }
-                    </Button>
-                    {(!betaStatus || !betaStatus.isActive) && (
-                        <Button onClick={setOpen} className="fogBtn alt">
-                            Buy Credits
-                        </Button>
-                    )}
-                    {betaStatus && betaStatus.isActive && betaStatus.daysRemaining <= 7 && (
-                        <div className="ml-auto text-sm text-orange-600 dark:text-orange-400 font-medium">
-                            ⏰ Trial expires soon!
+                <CardFooter className="flex flex-col gap-3">
+                    <div className="flex gap-2 w-full">
+                        {betaStatus && betaStatus.isActive ? (
+                            // Beta users with active trial
+                            <>
+                                <Button
+                                    disabled
+                                    className="fogBtn opacity-50 cursor-not-allowed"
+                                    title="Cannot subscribe while beta trial is active"
+                                >
+                                    Subscribe After Trial Ends
+                                </Button>
+                                {betaStatus.daysRemaining <= 7 && (
+                                    <Button
+                                        onClick={() => {
+                                            // Store intent to subscribe after trial
+                                            console.log('[SubscriptionTab] User wants to subscribe after trial');
+                                            openSubDialog();
+                                        }}
+                                        className="fogBtn"
+                                    >
+                                        Schedule Subscription
+                                    </Button>
+                                )}
+                            </>
+                        ) : (
+                            // Non-beta users or expired beta
+                            <>
+                                <Button onClick={openSubDialog} className="fogBtn">
+                                    {user?.is_active ? "Change Plan" : "Subscribe"}
+                                </Button>
+                                <Button onClick={setOpen} className="fogBtn alt">
+                                    Buy Credits
+                                </Button>
+                            </>
+                        )}
+                    </div>
+
+                    {/* Warning messages */}
+                    {betaStatus && betaStatus.isActive && (
+                        <div className="w-full text-sm">
+                            {betaStatus.daysRemaining <= 7 ? (
+                                <p className="text-orange-600 dark:text-orange-400 font-medium">
+                                    ⏰ Trial expires in {betaStatus.daysRemaining} day{betaStatus.daysRemaining !== 1 ? 's' : ''}!
+                                    {user?.subscription_plan && ` Your ${user.subscription_plan} plan will activate automatically.`}
+                                </p>
+                            ) : (
+                                <p className="text-blue-600 dark:text-blue-400">
+                                    ℹ️ Beta trial active. Subscription options available after trial ends.
+                                </p>
+                            )}
                         </div>
                     )}
                 </CardFooter>

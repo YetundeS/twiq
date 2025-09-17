@@ -6,55 +6,74 @@
 export const TEST_PRICING_PLANS = [
   {
     name: "Starter Plan",
+    description: "Perfect for solopreneurs & creative rebels just getting started",
     price: "$399",
-    period: "year",
-    description: "Perfect for content creators getting started",
+    priceId: "price_1S8HVsEttljLjongQ02DiRbX",
+    productId: "prod_T4QMN9mLERYvpl",
+    period: "/year",
+    bots: "3+ TWIQ Bots",
+    botBadges: ["L", "H", "S"],
     features: [
-      "Access to all 7 content creation AI assistants",
-      "498K input tokens monthly",
-      "99K output tokens monthly",
-      "199K cached tokens monthly",
-      "Download generated content",
-      "Priority email support"
+      "Access Through TWIQ AI",
+      "Access to 3 TWIQ Bot",
+      "Prompt + output screenshots to guide your flow",
+      "LinkedIn, Headlines, Storyteller Bots",
     ],
-    priceId: "price_1S8HVsEttljLjongQ02DiRbX", // Replace with actual test price ID
+    buttonText: "Choose Starter Plan →",
     popular: false,
+    theme: "light",
+    style: {
+      bg: '#F2F2F2',
+      color: 'black'
+    }
   },
   {
     name: "Pro Creator Plan",
+    description: "For creators, marketers & educators ready to scale without burnout",
     price: "$799",
-    period: "year",
-    description: "For serious content creators and small teams",
+    priceId: "price_1S8HWXEttljLjong09mMUJv5",
+    productId: "prod_T4QNvMxSVfGfzU",
+    period: "/year",
+    bots: "All 7 TWIQ Bots",
+    botBadges: ["C", "L", "C", "V"],
     features: [
-      "Everything in Starter Plan",
-      "998K input tokens monthly",
-      "199K output tokens monthly",
-      "399K cached tokens monthly",
-      "Advanced content templates",
-      "Team collaboration features",
-      "Priority chat support"
+      "Everything in starter",
+      "Access to 7 TWIQ Bots",
+      "Prompt + output screenshots to guide your flow",
+      "LinkedIn Business, Captions, Video Scripts, Carousel Bots",
     ],
-    priceId: "price_1S8HWXEttljLjong09mMUJv5", // Replace with actual test price ID
+    buttonText: "Get Pro Plan →",
     popular: true,
+    theme: "dark",
+    style: {
+      bg: '#693D3D',
+      color: 'white'
+    }
   },
   {
     name: "Enterprise & Teams",
+    description: "For agencies, coaching programs, & growing brands ready to scale content ops",
     price: "$2,999",
-    period: "year",
-    description: "For large teams and enterprises",
+    priceId: "price_1S8HX4EttljLjongy7t7506r",
+    productId: "prod_T4QNLHlM3F0CCH",
+    period: "/year",
+    bots: "10+ Team Seats",
+    botBadges: ["T", "A", "B", "C"],
     features: [
-      "Everything in Pro Plan",
-      "3.7M input tokens monthly",
-      "749K output tokens monthly",
-      "1.5M cached tokens monthly",
-      "Custom content workflows",
-      "Advanced analytics dashboard",
-      "Dedicated account manager",
-      "Custom integrations",
-      "SLA guarantee"
+      "Access Through TWIQ AI",
+      "Up to 10 team seats with shared access",
+      "Access to TWIQ Masterclass a $199 value",
+      "Full content access across all 7 bots",
+      "Full-Year Content Planner",
+      "Custom Bot Integrations + API support",
     ],
-    priceId: "price_1S8HX4EttljLjongy7t7506r", // Replace with actual test price ID
+    buttonText: "Get Enterprise Plan →",
     popular: false,
+    theme: "enterprise",
+    style: {
+      bg: '#5A0001',
+      color: 'white'
+    }
   },
 ];
 

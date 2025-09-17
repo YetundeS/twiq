@@ -152,7 +152,7 @@ export const sendResetMail = async (email) => {
   }
 };
 
-export const fetchUser = async ({ updateUser, onUnauthorized }) => {
+export const fetchUser = async ({ updateUser, onUnauthorized, forceRefresh = false, silent = false }) => {
   try {
     const accessToken = localStorage.getItem("twiq_access_token");
     if (!accessToken) {
@@ -163,16 +163,28 @@ export const fetchUser = async ({ updateUser, onUnauthorized }) => {
 
     const authHeader = addAuthHeader();
 
-    const response = await API.get("/user/getUser", {
+    // Add cache-busting parameter if force refresh is requested
+    const url = forceRefresh
+      ? `/user/getUser?t=${Date.now()}`
+      : "/user/getUser";
+
+    const response = await API.get(url, {
       headers: {
         "Content-Type": "application/json",
         ...authHeader,
+        // Disable caching for force refresh
+        ...(forceRefresh && { 'Cache-Control': 'no-cache, no-store, must-revalidate' })
       },
     });
 
-
     if (response?.data?.user) {
-      updateUser(response.data.user);
+
+      // Add timestamp when user data was fetched
+      const userWithTimestamp = {
+        ...response.data.user,
+        _lastFetched: Date.now()
+      };
+      updateUser(userWithTimestamp);
     } else {
       throw new Error("User object missing in response");
     }
@@ -185,11 +197,14 @@ export const fetchUser = async ({ updateUser, onUnauthorized }) => {
       onUnauthorized();
     }
 
-    toast.error("Error fetching user", {
-      description:
-        error?.response?.data?.error || error?.message || "Something went wrong.",
-      style: { border: "none", color: "red" },
-    });
+    // Only show error toast if not silent
+    if (!silent) {
+      toast.error("Error fetching user", {
+        description:
+          error?.response?.data?.error || error?.message || "Something went wrong.",
+        style: { border: "none", color: "red" },
+      });
+    }
   }
 };
 
@@ -268,5 +283,37 @@ export const deleteUserAccountAPI = async () => {
         err?.message ||
         "Problem signing in - Try again.",
     };
+  }
+};
+
+// Utility function for manual user data refresh
+export const refreshUserData = async () => {
+  // Dynamically import to avoid circular dependencies
+  const { default: useAuthStore } = await import("@/store/authStore");
+
+  const { updateUser, setRefreshing } = useAuthStore.getState();
+
+  try {
+    setRefreshing(true);
+
+    await fetchUser({
+      updateUser,
+      forceRefresh: true,
+      silent: false, // Show error if manual refresh fails
+      onUnauthorized: () => {
+        // Handle unauthorized access
+        window.location.href = "/sign-off";
+      }
+    });
+
+    toast.success("User data refreshed", {
+      description: "Your information has been updated",
+      style: { border: "none", color: "green" },
+    });
+
+  } catch (error) {
+    console.error("Manual refresh failed:", error);
+  } finally {
+    setRefreshing(false);
   }
 };

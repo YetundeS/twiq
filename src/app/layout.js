@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
 import { setupGlobalErrorHandling } from "@/utils/errorHandling";
+import TestModeIndicator from "@/components/TestModeIndicator";
 import {
   Cormorant_Garamond,
   Geist,
@@ -140,6 +141,7 @@ export default function RootLayout({ children }) {
       >
         <ErrorBoundary>
           <ThemeProvider defaultTheme="light">
+            <TestModeIndicator />
             {children}
           </ThemeProvider>
         </ErrorBoundary>

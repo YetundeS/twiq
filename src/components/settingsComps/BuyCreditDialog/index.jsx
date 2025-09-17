@@ -7,43 +7,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { getCreditOptions } from "@/utils/pricingConfig";
 import { useBuyCreditDialog } from "@/store/useBuyCreditDialog";
 import clsx from "clsx";
 import { Check, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-
-const creditOptions = [
-  {
-    label: "$25",
-    price: 2500,
-    input_tokens: 37500,
-    output_tokens: 7500,
-    cached_tokens: 15000,
-  },
-  {
-    label: "$50",
-    price: 5000,
-    input_tokens: 75500,
-    output_tokens: 15000,
-    cached_tokens: 30000,
-    recommended: true,
-  },
-  {
-    label: "$75",
-    price: 7500,
-    input_tokens: 112500,
-    output_tokens: 22500,
-    cached_tokens: 45000,
-  },
-  {
-    label: "$100",
-    price: 10000,
-    input_tokens: 150000,
-    output_tokens: 30500,
-    cached_tokens: 60000,
-  },
-];
 
 
 
@@ -51,6 +20,9 @@ export function BuyCreditDialog() {
   const { open, setOpen } = useBuyCreditDialog();
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(null);
+
+  // Get credit options dynamically based on test/production mode
+  const creditOptions = getCreditOptions();
 
   const handleBuy = async () => {
     if (!selected) return;
