@@ -20,10 +20,8 @@ export function isTestMode() {
  */
 export function getPricingPlans() {
   if (isTestMode()) {
-    console.log('🧪 Using TEST mode pricing plans');
     return TEST_PRICING_PLANS;
   } else {
-    console.log('🚀 Using PRODUCTION mode pricing plans');
     return SITE_CONTENT.pricingPlans;
   }
 }
@@ -34,10 +32,8 @@ export function getPricingPlans() {
  */
 export function getCreditOptions() {
   if (isTestMode()) {
-    console.log('🧪 Using TEST mode credit options');
     return TEST_CREDIT_OPTIONS;
   } else {
-    console.log('🚀 Using PRODUCTION mode credit options');
     // Return the production credit options (from BuyCreditDialog component)
     return [
       { label: "$25", price: 2500, input_tokens: 37500, output_tokens: 7500, cached_tokens: 15000 },
