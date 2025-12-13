@@ -4,6 +4,7 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import FileBadge from "../fileBadge";
 import { MarkdownComponents } from "../markdown";
+import MessageActions from "./MessageActions";
 import "./cm.css";
 
 // Memoized function to parse OpenAI response
@@ -63,6 +64,10 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
         className={`chatMessage_message ${chat?.sender === "user" ? "user" : "markdown"
           } ${chat?.status === 'error' ? 'error' : ''}`}
       >
+        <MessageActions
+          content={chat?.content}
+          isAIMessage={chat?.sender !== "user"}
+        />
         <div className="aitextMessageBlock">
           {chat?.sender !== "user" ? (
             <>
