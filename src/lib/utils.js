@@ -29,7 +29,7 @@ export const validateForm = (formData) => {
 };
 
 export const addAuthHeader = () => {
+  if (typeof window === "undefined") return {};
   const token = localStorage.getItem("twiq_access_token");
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
- 

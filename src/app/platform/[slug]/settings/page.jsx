@@ -1,45 +1,37 @@
 "use client";
 
-
-import { saveProfilePicAPI } from '@/apiCalls/authAPI';
-import DeleteAccountDialog from '@/components/dashboardComponent/deleteAccountDialog';
-import NewChatBtn from '@/components/dashboardComponent/newChatBtn';
-import PlatformTop from '@/components/dashboardComponent/platformTop';
-import SubscriptionDialog from '@/components/dashboardComponent/subscriptionDialog';
-import TwiqBg from '@/components/dashboardComponent/twiqBg';
-import { SubscriptionTab } from '@/components/settingsComps/SubscriptionTab';
+import { saveProfilePicAPI } from "@/apiCalls/authAPI";
+import DeleteAccountDialog from "@/components/dashboardComponent/deleteAccountDialog";
+import NewChatBtn from "@/components/dashboardComponent/newChatBtn";
+import PlatformTop from "@/components/dashboardComponent/platformTop";
+import SubscriptionDialog from "@/components/dashboardComponent/subscriptionDialog";
+import TwiqBg from "@/components/dashboardComponent/twiqBg";
+import { SubscriptionTab } from "@/components/settingsComps/SubscriptionTab";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import useAssistantChat from '@/hooks/useAssistantChat';
-import useAuthStore from '@/store/authStore';
-import useDeleteAccountStore from '@/store/useDeleteAccountStore';
-import { useResponsiveSidebarToggle } from '@/store/useResponsiveSidebarToggle';
-import useSusbcriptionDialogStore from '@/store/useSusbcriptionDialogStore';
+import useAssistantChat from "@/hooks/useAssistantChat";
+import useAuthStore from "@/store/authStore";
+import useDeleteAccountStore from "@/store/useDeleteAccountStore";
+import { useResponsiveSidebarToggle } from "@/store/useResponsiveSidebarToggle";
+import useSusbcriptionDialogStore from "@/store/useSusbcriptionDialogStore";
 import "@/styles/platformStyles.css";
-import { CircularProgress } from '@mui/material';
-import { createClient } from "@supabase/supabase-js";
+import { CircularProgress } from "@mui/material";
+import { getSupabase } from "@/lib/supabase";
 import { Lock, PanelRightOpen } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import "./settings.css";
-
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-);
-
 
 const Settings = () => {
   const { openSubDialog } = useSusbcriptionDialogStore();
@@ -75,7 +67,7 @@ const Settings = () => {
     try {
       const avatarUrl = await saveProfilePicAPI(
         selectedImage,
-        () => router.push("/sign-off") // onUnauthorized
+        () => router.push("/sign-off"), // onUnauthorized
       );
 
       toast.success("Upload successful", {
@@ -90,11 +82,12 @@ const Settings = () => {
       setPreviewUrl(null);
       // update avatar in auth store
       updateUser({ ...user, avatar_url: avatarUrl });
-
     } catch (error) {
       toast.error("Error saving new pic.", {
         description:
-          error?.response?.data?.error || error?.message || "Something went wrong.",
+          error?.response?.data?.error ||
+          error?.message ||
+          "Something went wrong.",
         style: {
           border: "none",
           color: "red",
@@ -113,6 +106,12 @@ const Settings = () => {
 
     try {
       setPasswordLoading(true);
+
+      const supabase = getSupabase();
+      if (!supabase) {
+        toast.error("Unable to connect to authentication service.");
+        return;
+      }
 
       const { data, error } = await supabase.auth.updateUser({
         password: newPassword,
@@ -151,6 +150,9 @@ const Settings = () => {
 
   useEffect(() => {
     const initSupabaseSession = async () => {
+      const supabase = getSupabase();
+      if (!supabase) return;
+
       const access_token = localStorage.getItem("twiq_access_token");
       const refresh_token = localStorage.getItem("twiq_refresh_token");
 
@@ -183,14 +185,13 @@ const Settings = () => {
   }, []);
 
   const handleDeleteAccount = () => {
-    openDialog()
+    openDialog();
   };
-
 
   return (
     <div className="page_content">
       <div className="pageTop">
-        {(showToggleChat) && (
+        {showToggleChat && (
           <>
             <div onClick={toggleSidebar} className="pageTop_iconWrapper">
               <PanelRightOpen className="pageIcon" size="22px" />
@@ -203,7 +204,7 @@ const Settings = () => {
       <TwiqBg />
       <div className="settings_content">
         <Tabs defaultValue="profile" className="settingsTab">
-          <TabsList className="grid w-full grid-cols-2 tabsList">
+          <TabsList className="tabsList grid w-full grid-cols-2">
             <TabsTrigger className="tabsTrigger" value="profile">
               Profile
             </TabsTrigger>
@@ -215,12 +216,10 @@ const Settings = () => {
             <Card className="tabsContent">
               <CardHeader>
                 <CardTitle className="text-black">Profile</CardTitle>
-                <CardDescription>
-                  Displays your profile details
-                </CardDescription>
+                <CardDescription>Displays your profile details</CardDescription>
               </CardHeader>
               <CardContent className="tabCardContent space-y-5">
-                <div className="space-y-1 mb-4">
+                <div className="mb-4 space-y-1">
                   <div className="flex items-center gap-4">
                     <Image
                       src={
@@ -231,7 +230,7 @@ const Settings = () => {
                       width={64}
                       height={64}
                       alt="user avatar"
-                      className="rounded-full border object-cover w-16 h-16"
+                      className="h-16 w-16 rounded-full border object-cover"
                       onError={(e) => {
                         e.target.src = "/images/user-avatar.png";
                       }}
@@ -268,16 +267,32 @@ const Settings = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-black" htmlFor="name">Name</Label>
-                  <Input id="name" className="settingProfileInput" defaultValue={user?.user_name} disabled />
+                  <Label className="text-black" htmlFor="name">
+                    Name
+                  </Label>
+                  <Input
+                    id="name"
+                    className="settingProfileInput"
+                    defaultValue={user?.user_name}
+                    disabled
+                  />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-black" htmlFor="username">E-mail</Label>
-                  <Input id="username" className="settingProfileInput" defaultValue={user?.email} disabled />
+                  <Label className="text-black" htmlFor="username">
+                    E-mail
+                  </Label>
+                  <Input
+                    id="username"
+                    className="settingProfileInput"
+                    defaultValue={user?.email}
+                    disabled
+                  />
                 </div>
-                <div className="space-y-1 w-full">
-                  <Label className="text-black" htmlFor="new-password">New Password</Label>
-                  <div className="relative mt-2 inputOverBox w-full">
+                <div className="w-full space-y-1">
+                  <Label className="text-black" htmlFor="new-password">
+                    New Password
+                  </Label>
+                  <div className="inputOverBox relative mt-2 w-full">
                     <Input
                       id="new-password"
                       type={showPassword ? "text" : "password"}
@@ -288,7 +303,7 @@ const Settings = () => {
                     />
                     <Lock
                       onClick={() => setShowPassword(!showPassword)}
-                      className="cursor-pointer absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform lockIcon"
+                      className="lockIcon absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 transform cursor-pointer"
                     />
                   </div>
                   <Button
@@ -303,21 +318,22 @@ const Settings = () => {
                     )}
                   </Button>
                 </div>
-                <div className="space-y-1 mt-6 dangerZone">
-                  <Label className="text-red-600 text-sm font-medium">Danger Zone</Label>
+                <div className="dangerZone mt-6 space-y-1">
+                  <Label className="text-sm font-medium text-red-600">
+                    Danger Zone
+                  </Label>
                   <p className="text-sm text-gray-500">
                     Deleting your account is permanent and cannot be undone.
                   </p>
                   <Button
                     // variant="destructive"
-                    className="mt-2 w-fit px-4 py-2 text-sm font-medium bg-red-300 hover:bg-red-500 cursor-pointer transition-all duration-300"
+                    className="mt-2 w-fit cursor-pointer bg-red-300 px-4 py-2 text-sm font-medium transition-all duration-300 hover:bg-red-500"
                     onClick={handleDeleteAccount}
                   >
                     Delete Account
                   </Button>
                 </div>
               </CardContent>
-
             </Card>
           </TabsContent>
           <SubscriptionTab user={user} openSubDialog={openSubDialog} />
@@ -326,8 +342,7 @@ const Settings = () => {
       <SubscriptionDialog />
       <DeleteAccountDialog />
     </div>
-  )
-}
-
+  );
+};
 
 export default Settings;

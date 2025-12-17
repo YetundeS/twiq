@@ -1,120 +1,123 @@
-import { toast } from 'sonner';
+import { toast } from "sonner";
 
 // Error types
 export const ERROR_TYPES = {
-  NETWORK: 'NETWORK_ERROR',
-  AUTHENTICATION: 'AUTH_ERROR',
-  AUTHORIZATION: 'AUTHORIZATION_ERROR',
-  VALIDATION: 'VALIDATION_ERROR',
-  RATE_LIMIT: 'RATE_LIMIT_ERROR',
-  SERVER: 'SERVER_ERROR',
-  CLIENT: 'CLIENT_ERROR',
-  UNKNOWN: 'UNKNOWN_ERROR'
+  NETWORK: "NETWORK_ERROR",
+  AUTHENTICATION: "AUTH_ERROR",
+  AUTHORIZATION: "AUTHORIZATION_ERROR",
+  VALIDATION: "VALIDATION_ERROR",
+  RATE_LIMIT: "RATE_LIMIT_ERROR",
+  SERVER: "SERVER_ERROR",
+  CLIENT: "CLIENT_ERROR",
+  UNKNOWN: "UNKNOWN_ERROR",
 };
 
 // Error severity levels
 export const ERROR_SEVERITY = {
-  LOW: 'low',
-  MEDIUM: 'medium',
-  HIGH: 'high',
-  CRITICAL: 'critical'
+  LOW: "low",
+  MEDIUM: "medium",
+  HIGH: "high",
+  CRITICAL: "critical",
 };
 
 /**
  * Classify error based on status code and message
  */
 export const classifyError = (error, response = null) => {
-  // Network errors
-  if (!navigator.onLine) {
+  // Network errors (only check in browser)
+  if (typeof window !== "undefined" && !navigator.onLine) {
     return {
       type: ERROR_TYPES.NETWORK,
       severity: ERROR_SEVERITY.HIGH,
-      message: 'No internet connection',
-      retryable: true
+      message: "No internet connection",
+      retryable: true,
     };
   }
 
   // Response-based classification
   if (response) {
     const status = response.status;
-    
+
     if (status === 401) {
       return {
         type: ERROR_TYPES.AUTHENTICATION,
         severity: ERROR_SEVERITY.HIGH,
-        message: 'Authentication required - please log in again',
-        retryable: false
+        message: "Authentication required - please log in again",
+        retryable: false,
       };
     }
-    
+
     if (status === 403) {
       return {
         type: ERROR_TYPES.AUTHORIZATION,
         severity: ERROR_SEVERITY.MEDIUM,
-        message: 'Access denied - insufficient permissions',
-        retryable: false
+        message: "Access denied - insufficient permissions",
+        retryable: false,
       };
     }
-    
+
     if (status === 429) {
       return {
         type: ERROR_TYPES.RATE_LIMIT,
         severity: ERROR_SEVERITY.MEDIUM,
-        message: 'Too many requests - please wait before trying again',
-        retryable: true
+        message: "Too many requests - please wait before trying again",
+        retryable: true,
       };
     }
-    
+
     if (status >= 400 && status < 500) {
       return {
         type: ERROR_TYPES.CLIENT,
         severity: ERROR_SEVERITY.MEDIUM,
-        message: 'Invalid request - please check your input',
-        retryable: false
+        message: "Invalid request - please check your input",
+        retryable: false,
       };
     }
-    
+
     if (status >= 500) {
       return {
         type: ERROR_TYPES.SERVER,
         severity: ERROR_SEVERITY.HIGH,
-        message: 'Server error - please try again later',
-        retryable: true
+        message: "Server error - please try again later",
+        retryable: true,
       };
     }
   }
 
   // Error message-based classification
-  const errorMessage = error?.message?.toLowerCase() || '';
-  
-  if (errorMessage.includes('network') || 
-      errorMessage.includes('fetch') || 
-      errorMessage.includes('connection')) {
+  const errorMessage = error?.message?.toLowerCase() || "";
+
+  if (
+    errorMessage.includes("network") ||
+    errorMessage.includes("fetch") ||
+    errorMessage.includes("connection")
+  ) {
     return {
       type: ERROR_TYPES.NETWORK,
       severity: ERROR_SEVERITY.HIGH,
-      message: 'Network connection failed',
-      retryable: true
+      message: "Network connection failed",
+      retryable: true,
     };
   }
-  
-  if (errorMessage.includes('unauthorized') || 
-      errorMessage.includes('authentication')) {
+
+  if (
+    errorMessage.includes("unauthorized") ||
+    errorMessage.includes("authentication")
+  ) {
     return {
       type: ERROR_TYPES.AUTHENTICATION,
       severity: ERROR_SEVERITY.HIGH,
-      message: 'Authentication failed',
-      retryable: false
+      message: "Authentication failed",
+      retryable: false,
     };
   }
-  
-  if (errorMessage.includes('validation') || 
-      errorMessage.includes('invalid')) {
+
+  if (errorMessage.includes("validation") || errorMessage.includes("invalid")) {
     return {
       type: ERROR_TYPES.VALIDATION,
       severity: ERROR_SEVERITY.MEDIUM,
-      message: 'Validation failed',
-      retryable: false
+      message: "Validation failed",
+      retryable: false,
     };
   }
 
@@ -122,8 +125,8 @@ export const classifyError = (error, response = null) => {
   return {
     type: ERROR_TYPES.UNKNOWN,
     severity: ERROR_SEVERITY.MEDIUM,
-    message: error?.message || 'An unexpected error occurred',
-    retryable: true
+    message: error?.message || "An unexpected error occurred",
+    retryable: true,
   };
 };
 
@@ -136,7 +139,7 @@ export const handleError = (error, context = {}, options = {}) => {
     logError = true,
     throwError = false,
     customMessage = null,
-    retryAction = null
+    retryAction = null,
   } = options;
 
   const classification = classifyError(error, context.response);
@@ -144,10 +147,10 @@ export const handleError = (error, context = {}, options = {}) => {
 
   // Log error
   if (logError) {
-    console.error(`[${errorId}] Error in ${context.component || 'Unknown'}:`, {
+    console.error(`[${errorId}] Error in ${context.component || "Unknown"}:`, {
       error,
       classification,
-      context
+      context,
     });
   }
 
@@ -156,14 +159,14 @@ export const handleError = (error, context = {}, options = {}) => {
     const message = customMessage || classification.message;
     const toastOptions = {
       id: errorId,
-      style: { border: "none", color: "red" }
+      style: { border: "none", color: "red" },
     };
 
     // Add retry action if available and error is retryable
     if (retryAction && classification.retryable) {
       toastOptions.action = {
-        label: 'Retry',
-        onClick: retryAction
+        label: "Retry",
+        onClick: retryAction,
       };
     }
 
@@ -195,7 +198,7 @@ export const handleError = (error, context = {}, options = {}) => {
     error,
     classification,
     errorId,
-    handled: true
+    handled: true,
   };
 };
 
@@ -208,7 +211,7 @@ export const withRetry = async (fn, options = {}) => {
     baseDelay = 1000,
     maxDelay = 10000,
     backoffFactor = 2,
-    retryCondition = (error) => classifyError(error).retryable
+    retryCondition = (error) => classifyError(error).retryable,
   } = options;
 
   let lastError;
@@ -218,27 +221,27 @@ export const withRetry = async (fn, options = {}) => {
       return await fn();
     } catch (error) {
       lastError = error;
-      
+
       // Don't retry if condition is not met
       if (!retryCondition(error)) {
         break;
       }
-      
+
       // Don't retry on last attempt
       if (attempt === maxRetries) {
         break;
       }
-      
+
       // Calculate delay with exponential backoff
       const delay = Math.min(
         baseDelay * Math.pow(backoffFactor, attempt),
-        maxDelay
+        maxDelay,
       );
-      
+
       // console.log(`Retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms`);
-      
+
       // Wait before retry
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 
@@ -250,33 +253,43 @@ export const withRetry = async (fn, options = {}) => {
  */
 export const setupGlobalErrorHandling = () => {
   // Handle unhandled promise rejections
-  window.addEventListener('unhandledrejection', (event) => {
-    console.error('Unhandled promise rejection:', event.reason);
-    
-    handleError(event.reason, {
-      component: 'Global',
-      type: 'unhandledrejection'
-    }, {
-      customMessage: 'An unexpected error occurred. Please refresh the page if problems persist.'
-    });
-    
+  window.addEventListener("unhandledrejection", (event) => {
+    console.error("Unhandled promise rejection:", event.reason);
+
+    handleError(
+      event.reason,
+      {
+        component: "Global",
+        type: "unhandledrejection",
+      },
+      {
+        customMessage:
+          "An unexpected error occurred. Please refresh the page if problems persist.",
+      },
+    );
+
     // Prevent the default browser behavior
     event.preventDefault();
   });
 
   // Handle runtime errors
-  window.addEventListener('error', (event) => {
-    console.error('Runtime error:', event.error);
-    
-    handleError(event.error, {
-      component: 'Global',
-      type: 'runtime',
-      filename: event.filename,
-      lineno: event.lineno,
-      colno: event.colno
-    }, {
-      customMessage: 'A system error occurred. Please refresh the page if problems persist.'
-    });
+  window.addEventListener("error", (event) => {
+    console.error("Runtime error:", event.error);
+
+    handleError(
+      event.error,
+      {
+        component: "Global",
+        type: "runtime",
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+      },
+      {
+        customMessage:
+          "A system error occurred. Please refresh the page if problems persist.",
+      },
+    );
   });
 };
 
@@ -285,11 +298,11 @@ export const setupGlobalErrorHandling = () => {
  */
 export const handleApiError = async (response, context = {}) => {
   let errorData;
-  
+
   try {
     errorData = await response.json();
   } catch {
-    errorData = { message: response.statusText || 'Unknown error' };
+    errorData = { message: response.statusText || "Unknown error" };
   }
 
   const error = new Error(errorData.message || `API Error: ${response.status}`);
@@ -299,7 +312,7 @@ export const handleApiError = async (response, context = {}) => {
   return handleError(error, {
     ...context,
     response,
-    url: response.url
+    url: response.url,
   });
 };
 
@@ -307,12 +320,15 @@ export const handleApiError = async (response, context = {}) => {
  * Hook for handling errors in React components
  */
 export const useErrorHandler = (componentName) => {
-  return React.useCallback((error, additionalContext = {}) => {
-    return handleError(error, {
-      component: componentName,
-      ...additionalContext
-    });
-  }, [componentName]);
+  return React.useCallback(
+    (error, additionalContext = {}) => {
+      return handleError(error, {
+        component: componentName,
+        ...additionalContext,
+      });
+    },
+    [componentName],
+  );
 };
 
 export default {
@@ -323,5 +339,5 @@ export default {
   withRetry,
   setupGlobalErrorHandling,
   handleApiError,
-  useErrorHandler
+  useErrorHandler,
 };

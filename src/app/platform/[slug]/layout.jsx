@@ -16,20 +16,27 @@ export default function DashboardLayout({ children }) {
   const { isSidebarOpen } = useSideBar();
   const pathname = usePathname();
 
-  const isDesktop = useMediaQuery('(min-width: 768px)', { initializeWithValue: false });
+  const isDesktop = useMediaQuery("(min-width: 768px)", {
+    initializeWithValue: false,
+  });
 
   const isHydrated = useHydrationZustand(useAuthStore);
   const router = useRouter();
   const { updateUser, setInitialLoading, checkCacheVersion } = useAuthStore();
 
+  // Manually trigger hydration since we use skipHydration: true
+  useEffect(() => {
+    useAuthStore.persist.rehydrate();
+  }, []);
+
   // Determine if sidebar should be shown based on current route
   const shouldShowSidebar = useMemo(() => {
     if (!pathname) return false;
-    
+
     // Hide sidebar on admin pages and home dashboard pages
-    const isAdminPage = pathname.includes('/admin');
+    const isAdminPage = pathname.includes("/admin");
     const isHomePage = pathname.match(/^\/platform\/[^\/]+\/?$/); // matches /platform/[slug] or /platform/[slug]/
-    
+
     return !isAdminPage && !isHomePage;
   }, [pathname]);
 
@@ -39,7 +46,7 @@ export default function DashboardLayout({ children }) {
     // Check cache version and clear if outdated
     const cacheWasCleared = checkCacheVersion();
     if (cacheWasCleared) {
-      console.log('[Layout] Cache cleared due to version mismatch');
+      console.log("[Layout] Cache cleared due to version mismatch");
     }
 
     // Set loading state while fetching fresh data
@@ -50,21 +57,16 @@ export default function DashboardLayout({ children }) {
       updateUser,
       onUnauthorized: () => router.push("/sign-off"),
       forceRefresh: true,
-      silent: true // Don't show error toasts for background refresh
+      silent: true, // Don't show error toasts for background refresh
     }).finally(() => {
       // Clear loading state after fetch completes (success or error)
       setInitialLoading(false);
     });
   }, [isHydrated]);
 
-
   // Render with or without sidebar based on route
   if (!shouldShowSidebar) {
-    return (
-      <div className="dashboard_wrapper">
-        {children}
-      </div>
-    );
+    return <div className="dashboard_wrapper">{children}</div>;
   }
 
   return (
