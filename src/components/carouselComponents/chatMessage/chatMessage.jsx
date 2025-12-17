@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import FileBadge from "../fileBadge";
 import { MarkdownComponents } from "../markdown";
 import MessageCopyButton from "./MessageCopyButton";
+import MessageSpeakerButton from "./MessageSpeakerButton";
 import MessageContextMenu from "./MessageContextMenu";
 import "./cm.css";
 
@@ -93,7 +94,12 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
         </div>
       </div>
       {isAIMessage && (
-        <MessageCopyButton content={chat?.content} isHovered={isHovered} />
+        <div
+          className={`message-actions-container ${isHovered ? "visible" : ""}`}
+        >
+          <MessageCopyButton content={chat?.content} />
+          <MessageSpeakerButton content={chat?.content} />
+        </div>
       )}
     </div>
   );

@@ -4,14 +4,7 @@ import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { markdownToPlainText } from "@/utils/markdownToText";
 import "./messageActions.css";
 
-/**
- * MessageCopyButton - Copy button shown on hover for AI messages
- *
- * @param {Object} props
- * @param {string} props.content - Message content to copy
- * @param {boolean} props.isHovered - Whether parent message is hovered
- */
-const MessageCopyButton = ({ content, isHovered = false }) => {
+const MessageCopyButton = ({ content }) => {
   const { copyToClipboard, copied } = useCopyToClipboard();
 
   const handleCopy = useCallback(
@@ -24,20 +17,18 @@ const MessageCopyButton = ({ content, isHovered = false }) => {
   );
 
   return (
-    <div className={`message-actions-container ${isHovered ? "visible" : ""}`}>
-      <button
-        className="message-actions-quick-copy"
-        onClick={handleCopy}
-        aria-label="Copy message"
-        type="button"
-      >
-        {copied ? (
-          <span className="message-actions-icon copied">✓</span>
-        ) : (
-          <Copy className="message-actions-icon" size={14} />
-        )}
-      </button>
-    </div>
+    <button
+      className="message-actions-button message-actions-copy"
+      onClick={handleCopy}
+      aria-label="Copy message"
+      type="button"
+    >
+      {copied ? (
+        <span className="message-actions-icon copied">✓</span>
+      ) : (
+        <Copy className="message-actions-icon" size={14} />
+      )}
+    </button>
   );
 };
 
