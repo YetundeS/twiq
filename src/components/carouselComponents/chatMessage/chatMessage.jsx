@@ -98,7 +98,9 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
           className={`message-actions-container ${isHovered ? "visible" : ""}`}
         >
           <MessageCopyButton content={chat?.content} />
-          <MessageSpeakerButton content={chat?.content} />
+          {process.env.NEXT_PUBLIC_TTS_ENABLED === "true" && (
+            <MessageSpeakerButton content={chat?.content} />
+          )}
         </div>
       )}
     </div>
