@@ -4,11 +4,32 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { revokeBetaAccess } from '@/apiCalls/adminAPI';
-import { Trash2, Clock, CheckCircle, XCircle, Filter } from 'lucide-react';
+import { Trash2, Clock, CheckCircle, XCircle, Filter, Pencil, Copy, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
+import EditBetaUserDialog from './EditBetaUserDialog';
 
 const BetaUserTable = ({ betaUsers, onRefresh, includeExpired, onToggleExpired }) => {
   const [loading, setLoading] = useState(false);
+  const [revealedPasswordUserId, setRevealedPasswordUserId] = useState(null);
+  const [editingUser, setEditingUser] = useState(null);
+
+  const handleTogglePassword = (userId) => {
+    setRevealedPasswordUserId((current) => (current === userId ? null : userId));
+  };
+
+  const handleCopyPassword = async (password) => {
+    try {
+      await navigator.clipboard.writeText(password);
+      toast.success('Temporary password copied');
+    } catch {
+      toast.error('Failed to copy password');
+    }
+  };
+
+  const handleUserUpdated = () => {
+    setEditingUser(null);
+    onRefresh();
+  };
 
   const handleRevokeBetaAccess = async (userId, userName) => {
     if (!confirm(`Are you sure you want to revoke beta access for ${userName}?`)) {
@@ -95,6 +116,13 @@ const BetaUserTable = ({ betaUsers, onRefresh, includeExpired, onToggleExpired }
         </div>
       </div>
 
+      <EditBetaUserDialog
+        isOpen={!!editingUser}
+        user={editingUser}
+        onClose={() => setEditingUser(null)}
+        onUserUpdated={handleUserUpdated}
+      />
+
       {betaUsers.length === 0 ? (
         <div className="text-center py-8 text-gray-500 dark:text-gray-400">
           No beta users found
@@ -143,6 +171,34 @@ const BetaUserTable = ({ betaUsers, onRefresh, includeExpired, onToggleExpired }
                           {user.organization_name}
                         </div>
                       )}
+                      {user.temporary_password && (
+                        <div className="mt-2 flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-2 py-1 dark:border-amber-800/50 dark:bg-amber-900/20">
+                          <span className="text-xs font-medium text-amber-800 dark:text-amber-300">
+                            Temp password:
+                          </span>
+                          <code className="font-mono text-xs text-amber-900 dark:text-amber-100">
+                            {revealedPasswordUserId === user.id ? user.temporary_password : '••••••••••••'}
+                          </code>
+                          <button
+                            type="button"
+                            onClick={() => handleTogglePassword(user.id)}
+                            className="text-amber-700 hover:text-amber-900 dark:text-amber-300 dark:hover:text-amber-100"
+                            aria-label={revealedPasswordUserId === user.id ? 'Hide password' : 'Show password'}
+                          >
+                            {revealedPasswordUserId === user.id
+                              ? <EyeOff className="h-3.5 w-3.5" />
+                              : <Eye className="h-3.5 w-3.5" />}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleCopyPassword(user.temporary_password)}
+                            className="text-amber-700 hover:text-amber-900 dark:text-amber-300 dark:hover:text-amber-100"
+                            aria-label="Copy temporary password"
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </td>
                   <td className="py-3 px-2">
@@ -160,17 +216,29 @@ const BetaUserTable = ({ betaUsers, onRefresh, includeExpired, onToggleExpired }
                     {formatDate(user.beta_end_date)}
                   </td>
                   <td className="py-3 px-2">
-                    {!user.isExpired && !user.beta_converted && (
+                    <div className="flex items-center gap-2">
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleRevokeBetaAccess(user.id, user.user_name)}
+                        onClick={() => setEditingUser(user)}
                         disabled={loading}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        aria-label={`Edit ${user.user_name}`}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Pencil className="h-4 w-4" />
                       </Button>
-                    )}
+                      {!user.isExpired && !user.beta_converted && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleRevokeBetaAccess(user.id, user.user_name)}
+                          disabled={loading}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          aria-label={`Revoke beta access for ${user.user_name}`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -94,11 +94,11 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
     
     if (isInviteMode) {
       // Validate invitation form
-      if (!formData.userName || !formData.userEmail) {
-        toast.error('Please provide user name and email');
+      if (!formData.userName || !formData.userEmail || !formData.organizationName) {
+        toast.error('Please provide user name, email and organization');
         return;
       }
-      
+
       // Validate email format
       const emailValidationError = validateEmail(formData.userEmail);
       if (emailValidationError) {
@@ -127,8 +127,8 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
       };
       
       if (isInviteMode) {
-        const result = await inviteUser(trimmedFormData);
-        toast.success(`User invited successfully! Temporary password: ${result.temporaryPassword}`);
+        await inviteUser(trimmedFormData);
+        toast.success('User invited successfully. Temporary password is shown in the users table.');
       } else {
         await grantBetaAccess(trimmedFormData);
         toast.success('Beta access granted successfully');
@@ -270,7 +270,7 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
 
                 <div>
                   <Label htmlFor="organizationName" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Organization Name (Optional)
+                    Organization Name
                   </Label>
                   <Input
                     type="text"
@@ -279,6 +279,7 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
                     value={formData.organizationName}
                     onChange={handleInputChange}
                     className="mt-1"
+                    required
                   />
                 </div>
               </>
@@ -387,7 +388,7 @@ const AddBetaUserDialog = ({ isOpen, onClose, onUserAdded }) => {
               </Button>
               <Button
                 type="submit"
-                disabled={loading || (isInviteMode ? !formData.userName || !formData.userEmail : !formData.userEmail)}
+                disabled={loading || (isInviteMode ? !formData.userName || !formData.userEmail || !formData.organizationName : !formData.userEmail)}
               >
                 {loading 
                   ? (isInviteMode ? 'Inviting...' : 'Granting...') 

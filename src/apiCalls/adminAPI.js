@@ -100,6 +100,21 @@ export const processExpiredBetaUsers = async () => {
   }
 };
 
+// Edit an existing beta user (identity + beta plan / end date)
+export const updateBetaUser = async ({ userId, userName, organizationName, betaPlan, betaEndDate }) => {
+  try {
+    const response = await axios.patch(
+      `${API_URL}/admin/users/${userId}`,
+      { userName, organizationName, betaPlan, betaEndDate },
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating beta user:", error);
+    throw error.response?.data || error;
+  }
+};
+
 // Invite new user and grant beta access
 export const inviteUser = async ({ userName, userEmail, organizationName, betaPlan, startDate, durationDays }) => {
   try {
