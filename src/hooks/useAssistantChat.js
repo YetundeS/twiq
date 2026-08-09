@@ -33,7 +33,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
   const [isFetchingChats, setIsFetchingChats] = useState(true);
 
 
-  const { addToSideBarSessions, isSidebarOpen, isMobileSidebarOpen } = useSideBar();
+  const { addToSideBarSessions, updateSessionInSideBar, isSidebarOpen, isMobileSidebarOpen } = useSideBar();
   const { 
     activeSessionID, 
     activeChatMessages: chats, 
@@ -208,20 +208,26 @@ export default function useAssistantChat(modelName, assistantSlug) {
         if (chatSession.id) {
           handleNewChatSession(chatSession);
         }
+      },
+      (newTitle) => {
+        if (activeSessionID && newTitle) {
+          updateSessionInSideBar(activeSessionID, { title: newTitle });
+        }
       }
     );
 
     setInputValue("");
     setUploadedFiles([])
   }, [
-    inputValue, 
-    streaming, 
-    user?.subscription_plan, 
-    modelName, 
-    uploadedFiles, 
-    activeSessionID, 
-    assistantSlug, 
+    inputValue,
+    streaming,
+    user?.subscription_plan,
+    modelName,
+    uploadedFiles,
+    activeSessionID,
+    assistantSlug,
     updateActiveChatMessages,
+    updateSessionInSideBar,
     mutateMessages
   ]);
 

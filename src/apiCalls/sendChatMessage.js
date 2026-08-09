@@ -9,7 +9,8 @@ export async function sendChatMessage(
   onComplete,
   onError,
   abortController,
-  updateActiveChatSession
+  updateActiveChatSession,
+  onTitleUpdate
 ) {
   try {
     const authHeader = addAuthHeader();
@@ -90,6 +91,9 @@ export async function sendChatMessage(
           const stringedChatSession = JSON.stringify(parsed.chatSession, null, 2);
           const parsedChatSession = JSON.parse(stringedChatSession);
           updateActiveChatSession(parsedChatSession);
+        }
+        if (parsed.type === 'TITLE' && typeof onTitleUpdate === 'function') {
+          onTitleUpdate(parsed.title);
         }
         if (parsed.type === 'END') {
           receivedEnd = true;

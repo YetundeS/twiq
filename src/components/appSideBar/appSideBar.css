@@ -470,5 +470,124 @@
 
 
 
+/* session row + action menu */
+
+.sessionRow .sessionRowShell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.sessionRow .sessionRowLink {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sessionRow .sessionRowTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.sessionRow .sessionRowPinIcon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.8;
+}
+
+.sessionRow .sessionRowMenuTrigger {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--page-text);
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.sessionRow:hover .sessionRowMenuTrigger,
+.sessionRow .sessionRowMenuTrigger[data-state="open"],
+.sessionRow .sessionRowMenuTrigger:focus-visible {
+  opacity: 1;
+}
+
+.sessionRow .sessionRowMenuTrigger:hover {
+  background-color: var(--active-sidebar-item);
+}
+
+.sessionRow[data-pinned] .sessionRowLink .sideBarItem {
+  font-weight: 600;
+}
+
+.sessionRowMenuContent {
+  min-width: 160px;
+}
+
+.sessionRowMenuContent [role="menuitem"] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sessionRowMenuDelete {
+  color: #dc2626;
+}
+
+.sessionRowMenuDelete:focus {
+  color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.08);
+}
+
+.sessionRow .sessionRowRenaming {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 14px;
+  background-color: var(--active-sidebar-item);
+}
+
+.sessionRow .sessionRowRenameInput {
+  flex: 1;
+  height: 32px;
+  padding: 0 0.5rem;
+  font-size: 0.9rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--page-text);
+}
+
+.sidebarArchivedToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0.25rem 0.5rem;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--page-text);
+  opacity: 0.65;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.sidebarArchivedToggle:hover {
+  opacity: 1;
+  background-color: var(--active-sidebar-item);
+}
+
+
 /* mobile sidebar */
 
