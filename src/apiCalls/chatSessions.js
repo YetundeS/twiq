@@ -95,6 +95,88 @@ export const fetchChats = async (user, slug, updateSideBarSessions, setIsFetchin
     }
 };
 
+export const updateSession = async (sessionId, patch) => {
+    if (!sessionId) return null;
+
+    const authHeader = addAuthHeader();
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/${sessionId}`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader,
+                },
+                body: JSON.stringify(patch),
+            }
+        );
+
+        if (!response.ok) {
+            let description = response.statusText || "Please try again";
+            try {
+                const body = await response.json();
+                if (body?.error) description = body.error;
+            } catch (_) { /* ignore parse failures */ }
+
+            toast.error("Failed to update session", {
+                description,
+                style: { border: "none", color: "red" },
+            });
+            return null;
+        }
+
+        const data = await response.json();
+        return data?.session ?? null;
+    } catch (_err) {
+        toast.error("Failed to update session", {
+            description: "Something went wrong - please try again",
+            style: { border: "none", color: "red" },
+        });
+        return null;
+    }
+};
+
+export const deleteSession = async (sessionId) => {
+    if (!sessionId) return false;
+
+    const authHeader = addAuthHeader();
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/${sessionId}`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader,
+                },
+            }
+        );
+
+        if (!response.ok) {
+            let description = response.statusText || "Please try again";
+            try {
+                const body = await response.json();
+                if (body?.error) description = body.error;
+            } catch (_) { /* ignore parse failures */ }
+
+            toast.error("Failed to delete session", {
+                description,
+                style: { border: "none", color: "red" },
+            });
+            return false;
+        }
+
+        return true;
+    } catch (_err) {
+        toast.error("Failed to delete session", {
+            description: "Something went wrong - please try again",
+            style: { border: "none", color: "red" },
+        });
+        return false;
+    }
+};
+
 export const fetchChat = async (sessionId) => {
     try {
         if (!sessionId) return;
