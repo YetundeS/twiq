@@ -15,21 +15,30 @@ const ChatMessageWindow = memo(({
   uploadedFiles,
   loadMoreMessages,
   messagesHasMore,
-  isLoadingMessages
+  isLoadingMessages,
+  onRetryLast
 }) => {
-  
-  // Memoize the chat messages to avoid re-rendering all messages when only streaming data changes
+
+  // Memoize the chat messages to avoid re-rendering all messages when only streaming data changes.
+  // The retry callback is only wired to the LAST message when it's an errored assistant
+  // reply — retrying an older error doesn't make sense (the conversation moved on).
   const chatMessages = useMemo(() => {
     if (!chats?.length) return null;
-    
-    return chats.map((chat, i) => (
-      <ChatMessage 
-        uploadedFiles={uploadedFiles} 
-        chat={chat} 
-        key={chat.id || `${chat.sessionID}-${i}`} // Use unique key if available
-      />
-    ));
-  }, [chats, uploadedFiles]);
+
+    const lastIndex = chats.length - 1;
+    return chats.map((chat, i) => {
+      const isLast = i === lastIndex;
+      const isErroredAssistant = chat?.sender === "assistant" && chat?.status === "error";
+      return (
+        <ChatMessage
+          uploadedFiles={uploadedFiles}
+          chat={chat}
+          onRetry={isLast && isErroredAssistant ? onRetryLast : undefined}
+          key={chat.id || `${chat.sessionID}-${i}`} // Use unique key if available
+        />
+      );
+    });
+  }, [chats, uploadedFiles, onRetryLast]);
 
   // Memoize the streaming message to avoid unnecessary re-renders
   const streamingMessage = useMemo(() => {

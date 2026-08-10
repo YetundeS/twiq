@@ -27,7 +27,8 @@ const StorytellerModel = () => {
     chats,
     messagesEndRef,
     aiSuggestions,
-    showToggleChat
+    showToggleChat,
+    retryLastMessage
   } = useAssistantChat('Storyteller', 'storyteller');
 
 
@@ -57,6 +58,7 @@ const StorytellerModel = () => {
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
             uploadedFiles={uploadedFiles}
+            onRetryLast={retryLastMessage}
             assistantSlug={'storyteller'}
           />
           <ChatInputArea

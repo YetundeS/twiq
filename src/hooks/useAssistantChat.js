@@ -128,8 +128,15 @@ export default function useAssistantChat(modelName, assistantSlug) {
     setStreamingData(streamingDataRef.current);
   };
 
-  const sendMessage = useCallback(async () => {
-    if (!inputValue || streaming) return;
+  // sendMessage accepts an optional `overrideText`. Retry-on-error uses it to
+  // re-send the last user message without going through the input state
+  // (inputValue is asynchronous — setState + call in the same tick loses the
+  // new value). Files aren't carried through on retry: if you had uploads, the
+  // errored turn either succeeded far enough to consume them or fell back to
+  // a plain retry.
+  const sendMessage = useCallback(async (overrideText) => {
+    const text = typeof overrideText === "string" ? overrideText : inputValue;
+    if (!text || streaming) return;
 
     const hasModelAccess = hasAccess(user?.subscription_plan, modelName);
 
@@ -145,14 +152,17 @@ export default function useAssistantChat(modelName, assistantSlug) {
       return; // stop execution
     }
 
+    const usingOverride = typeof overrideText === "string";
+    const filesForTurn = usingOverride ? [] : uploadedFiles;
+
     const userChat = {
       sender: "user", // "user" || 'assistant'
-      content: inputValue,
+      content: text,
       sessionID: activeSessionID || 'newChat',
       created_at: new Date(),
-      has_files: Array.isArray(uploadedFiles) && uploadedFiles.length > 0,
-      linkedFiles: Array.isArray(uploadedFiles)
-        ? uploadedFiles.map(({ name, type }) => ({ name, type }))
+      has_files: Array.isArray(filesForTurn) && filesForTurn.length > 0,
+      linkedFiles: Array.isArray(filesForTurn)
+        ? filesForTurn.map(({ name, type }) => ({ name, type }))
         : null,
     };
 
@@ -166,8 +176,8 @@ export default function useAssistantChat(modelName, assistantSlug) {
     const abortController = new AbortController();
     eventSourceRef.current = abortController;
 
-    const currentInput = inputValue;
-    const currentFiles = uploadedFiles;
+    const currentInput = text;
+    const currentFiles = filesForTurn;
 
     sendChatMessage(
       currentInput,
@@ -333,6 +343,25 @@ export default function useAssistantChat(modelName, assistantSlug) {
     onEscape: handleEscape,
   });
 
+  // Retry the failed turn: drop the errored assistant + its user message
+  // from state, then re-run sendMessage with the user text as an override.
+  // No-op unless the tail of `chats` is the errored assistant preceded by a
+  // user turn (i.e., we actually have something to retry).
+  const retryLastMessage = useCallback(() => {
+    if (streaming) return;
+    if (!Array.isArray(chats) || chats.length < 2) return;
+
+    const errored = chats[chats.length - 1];
+    if (errored?.sender !== "assistant" || errored?.status !== "error") return;
+
+    const userTurn = chats[chats.length - 2];
+    if (userTurn?.sender !== "user" || !userTurn.content) return;
+
+    const trimmed = chats.slice(0, -2);
+    setActiveChatMessages(trimmed);
+    sendMessage(userTurn.content);
+  }, [chats, streaming, setActiveChatMessages, sendMessage]);
+
 
   return {
     toggleSidebar,
@@ -352,6 +381,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
     messagesEndRef,
     aiSuggestions,
     showToggleChat,
+    retryLastMessage,
     // New optimized features
     loadMoreMessages,
     messagesHasMore,

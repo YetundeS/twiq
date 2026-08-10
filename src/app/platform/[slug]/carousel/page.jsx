@@ -26,7 +26,8 @@ const CarouselPage = () => {
     chats,
     messagesEndRef,
     aiSuggestions,
-    showToggleChat
+    showToggleChat,
+    retryLastMessage
   } = useAssistantChat('Carousel', 'carousel');
 
   return (
@@ -52,6 +53,7 @@ const CarouselPage = () => {
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
             uploadedFiles={uploadedFiles}
+            onRetryLast={retryLastMessage}
             assistantSlug={'carousel'}
           />
           <ChatInputArea
