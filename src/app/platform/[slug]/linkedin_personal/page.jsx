@@ -29,7 +29,8 @@ const LinkedInPersonalModel = () => {
     chats,
     messagesEndRef,
     aiSuggestions,
-    showToggleChat
+    showToggleChat,
+    retryLastMessage
   } = useAssistantChat('LinkedIn Personal', 'linkedin_personal');
 
   return (
@@ -55,6 +56,7 @@ const LinkedInPersonalModel = () => {
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
             uploadedFiles={uploadedFiles}
+            onRetryLast={retryLastMessage}
             assistantSlug={'linkedin_personal'}
           />
           <ChatInputArea

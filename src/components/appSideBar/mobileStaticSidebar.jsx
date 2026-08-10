@@ -4,9 +4,10 @@
 import { generateSignString } from "@/lib/utils";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
-import { BadgeHelp, Home, LogOut, MessagesSquare, Package, PanelRightOpen, Settings, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Archive, BadgeHelp, Home, LogOut, Package, PanelRightOpen, Settings, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import "./appSideBar.css";
+import { SessionRow } from "./sessionRow";
 
 import {
     Menubar,
@@ -32,8 +33,8 @@ import { hasAccess } from './index';
 
 export function AppSidebarDesktopStatic() {
     const { sidebarSessions } = useSideBar();
-    const [sessions, setSession] = useState([]);
     const [organization, setOrganization] = useState("");
+    const [showArchived, setShowArchived] = useState(false);
     const { user } = useAuthStore();
     const { openDialog } = useLogOutDialogStore();
     const { isFetching } = useSidebarChats();
@@ -42,9 +43,29 @@ export function AppSidebarDesktopStatic() {
     const { openSubDialog } = useSusbcriptionDialogStore();
     const router = useRouter();
 
-    useEffect(() => {
-        setSession([...sidebarSessions]);
-    }, [sidebarSessions]);
+    const archivedCount = useMemo(
+        () => sidebarSessions.filter((s) => !!s.archived_at).length,
+        [sidebarSessions]
+    );
+
+    // Sort: pinned first, then most-recent-updated. Filter archived unless user opts in.
+    // Same logic as appSidebarDesktop — keeps mobile and desktop in lock-step so the
+    // sidebar row menu (rename / pin / archive / delete) behaves identically.
+    const sortedSessions = useMemo(() => {
+        const source = showArchived
+            ? sidebarSessions
+            : sidebarSessions.filter((s) => !s.archived_at);
+
+        return [...source].sort((a, b) => {
+            const aPinned = a.pinned ? 1 : 0;
+            const bPinned = b.pinned ? 1 : 0;
+            if (aPinned !== bPinned) return bPinned - aPinned;
+
+            const aStamp = new Date(a.updated_at || a.created_at || 0).getTime();
+            const bStamp = new Date(b.updated_at || b.created_at || 0).getTime();
+            return bStamp - aStamp;
+        });
+    }, [sidebarSessions, showArchived]);
 
     useEffect(() => {
         if (!user) return;
@@ -132,22 +153,32 @@ export function AppSidebarDesktopStatic() {
                                 </Link>
                             </div>
 
-                            <p className="chatsLabel"> - Chats</p>{!isFetching ? (
-                                sessions?.map((session, i) => (
-                                    <div key={i} className="sidebarMenuItem">
-                                        <Link
-                                            href={`/platform/${organization}/${session?.assistant_slug}/${session?.id}`}
-                                            className={`sideBarItem mobile ${activeSessionID === session?.id && 'active'}`}
+                            <p className="chatsLabel"> - Chats</p>
+                            {!isFetching ? (
+                                <>
+                                    {sortedSessions.map((session) => (
+                                        <SessionRow
+                                            key={session.id}
+                                            session={session}
+                                            organization={organization}
+                                            activeSessionID={activeSessionID}
+                                        />
+                                    ))}
+                                    {archivedCount > 0 && (
+                                        <button
+                                            type="button"
+                                            className="sidebarArchivedToggle"
+                                            onClick={() => setShowArchived((v) => !v)}
                                         >
-                                            <MessagesSquare />
+                                            <Archive size={12} />
                                             <span>
-                                                {session.title.length > 20
-                                                    ? `${session.title.slice(0, 20)}...`
-                                                    : session.title}
+                                                {showArchived
+                                                    ? "Hide archived"
+                                                    : `Show archived (${archivedCount})`}
                                             </span>
-                                        </Link>
-                                    </div>
-                                ))
+                                        </button>
+                                    )}
+                                </>
                             ) : (
                                 <div className="loadingIndicator">
                                     <SpinnerLoader className="smaller" />

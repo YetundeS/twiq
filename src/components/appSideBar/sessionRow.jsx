@@ -18,7 +18,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { useSideBar } from "@/store/sidebarStore";
 import useModelsStore from "@/store/useModelsStore";
 import { Archive, ArchiveRestore, MessagesSquare, MoreHorizontal, Pin, PinOff, Trash2 } from "lucide-react";
@@ -119,9 +118,14 @@ export function SessionRow({ session, organization, activeSessionID }) {
     }
   };
 
+  // Layout note: we render a plain <div> root (not shadcn's SidebarMenuItem)
+  // so this component works in BOTH contexts — the desktop sidebar (parented
+  // by a shadcn <SidebarMenu ul>) and the mobile sheet sidebar (parented by
+  // a plain <div>). The shadcn SidebarMenuItem is literally just a styled
+  // <li>, so nothing visual is lost by using our own container here.
   return (
     <>
-      <SidebarMenuItem className="sidebarMenuItem sessionRow" data-pinned={isPinned || undefined}>
+      <div className="sidebarMenuItem sessionRow" data-pinned={isPinned || undefined}>
         {isRenaming ? (
           <div className="sideBarItem sessionRowRenaming">
             <MessagesSquare />
@@ -146,15 +150,13 @@ export function SessionRow({ session, organization, activeSessionID }) {
           </div>
         ) : (
           <div className="sessionRowShell">
-            <SidebarMenuButton className="sidebarMenuBtn sessionRowLink" asChild>
-              <Link
-                href={`/platform/${organization}/${session.assistant_slug}/${session.id}`}
-                className={`sideBarItem ${isActive ? "active" : ""}`}
-              >
-                {isPinned ? <Pin className="sessionRowPinIcon" /> : <MessagesSquare />}
-                <span className="sessionRowTitle">{session.title || "Untitled chat"}</span>
-              </Link>
-            </SidebarMenuButton>
+            <Link
+              href={`/platform/${organization}/${session.assistant_slug}/${session.id}`}
+              className={`sidebarMenuBtn sessionRowLink sideBarItem ${isActive ? "active" : ""}`}
+            >
+              {isPinned ? <Pin className="sessionRowPinIcon" /> : <MessagesSquare />}
+              <span className="sessionRowTitle">{session.title || "Untitled chat"}</span>
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
@@ -222,7 +224,7 @@ export function SessionRow({ session, organization, activeSessionID }) {
             </DropdownMenu>
           </div>
         )}
-      </SidebarMenuItem>
+      </div>
 
       <Dialog open={confirmDeleteOpen} onOpenChange={setConfirmDeleteOpen}>
         <DialogContent>

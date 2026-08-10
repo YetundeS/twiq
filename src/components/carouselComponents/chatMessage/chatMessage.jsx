@@ -35,7 +35,7 @@ const parseOpenAIResponse = (raw) => {
   };
 };
 
-const ChatMessage = memo(({ chat, uploadedFiles }) => {
+const ChatMessage = memo(({ chat, uploadedFiles, onRetry }) => {
   const [isHovered, setIsHovered] = useState(false);
   const isAIMessage = chat?.sender !== "user";
   const isErrorMessage = isAIMessage && chat?.status === "error";
@@ -79,7 +79,7 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
       >
         <div className="aitextMessageBlock">
           {isErrorMessage ? (
-            <MessageErrorBanner content={chat?.content} />
+            <MessageErrorBanner content={chat?.content} onRetry={onRetry} />
           ) : isAIMessage ? (
             <>
               <Markdown
