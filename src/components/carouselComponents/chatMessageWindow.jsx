@@ -16,7 +16,9 @@ const ChatMessageWindow = memo(({
   loadMoreMessages,
   messagesHasMore,
   isLoadingMessages,
-  onRetryLast
+  onRetryLast,
+  onRegenerate,
+  onEdit
 }) => {
 
   // Memoize the chat messages to avoid re-rendering all messages when only streaming data changes.
@@ -33,23 +35,31 @@ const ChatMessageWindow = memo(({
         <ChatMessage
           uploadedFiles={uploadedFiles}
           chat={chat}
+          assistantSlug={assistantSlug}
           onRetry={isLast && isErroredAssistant ? onRetryLast : undefined}
+          onRegenerate={onRegenerate}
+          onEdit={onEdit}
           key={chat.id || `${chat.sessionID}-${i}`} // Use unique key if available
         />
       );
     });
-  }, [chats, uploadedFiles, onRetryLast]);
+  }, [chats, uploadedFiles, assistantSlug, onRetryLast, onRegenerate, onEdit]);
 
   // Memoize the streaming message to avoid unnecessary re-renders
   const streamingMessage = useMemo(() => {
     if (!streaming) return null;
-    
+
     if (streamingData) {
-      return <ChatMessage chat={{ content: streamingData, sender: "assistant" }} />;
+      return (
+        <ChatMessage
+          chat={{ content: streamingData, sender: "assistant" }}
+          assistantSlug={assistantSlug}
+        />
+      );
     }
-    
+
     return <ChatLoader />;
-  }, [streaming, streamingData]);
+  }, [streaming, streamingData, assistantSlug]);
 
   // Load more messages button for infinite scroll
   const loadMoreButton = useMemo(() => {

@@ -27,7 +27,9 @@ const LinkedInBusinessModel = () => {
     messagesEndRef,
     aiSuggestions,
     showToggleChat,
-    retryLastMessage
+    retryLastMessage,
+    regenerateAssistantReply,
+    editUserMessage
   } = useAssistantChat("LinkedIn Your Business", 'linkedin_business');
 
 
@@ -55,6 +57,8 @@ const LinkedInBusinessModel = () => {
             setInputValue={setInputValue}
             uploadedFiles={uploadedFiles}
             onRetryLast={retryLastMessage}
+            onRegenerate={regenerateAssistantReply}
+            onEdit={editUserMessage}
             assistantSlug={'linkedin_business'}
           />
           <ChatInputArea

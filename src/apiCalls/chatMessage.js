@@ -1,6 +1,51 @@
 import { addAuthHeader } from "@/lib/utils";
 import { toast } from "sonner";
 
+// PATCH /chat-message/:id — edit a user message in place.
+// Returns the updated message row on success, or null on error (a toast
+// has already fired for the user). Caller decides whether to auto-resend.
+export const editChatMessage = async (messageId, content) => {
+    if (!messageId) return null;
+
+    const authHeader = addAuthHeader();
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/chat-message/${messageId}`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader,
+                },
+                body: JSON.stringify({ content }),
+            }
+        );
+
+        if (!response.ok) {
+            let description = response.statusText || "Please try again";
+            try {
+                const body = await response.json();
+                if (body?.error) description = body.error;
+            } catch (_) { /* ignore parse failures */ }
+
+            toast.error("Failed to edit message", {
+                description,
+                style: { border: "none", color: "red" },
+            });
+            return null;
+        }
+
+        const data = await response.json();
+        return data?.message ?? null;
+    } catch (_err) {
+        toast.error("Failed to edit message", {
+            description: "Something went wrong - please try again",
+            style: { border: "none", color: "red" },
+        });
+        return null;
+    }
+};
+
 export const fetchMessages = async (sessionId, assistantSlug, setIsFetchingChats, setActiveChatMessages, page = 1, limit = 50) => {
     try {
         // 🔹 Get auth headers with compression preference
