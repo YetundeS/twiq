@@ -27,7 +27,9 @@ const CaptionModel = () => {
     messagesEndRef,
     aiSuggestions,
     showToggleChat,
-    retryLastMessage
+    retryLastMessage,
+    regenerateAssistantReply,
+    editUserMessage
   } = useAssistantChat('Captions', 'captions');
 
   return (
@@ -54,6 +56,8 @@ const CaptionModel = () => {
             setInputValue={setInputValue}
             uploadedFiles={uploadedFiles}
             onRetryLast={retryLastMessage}
+            onRegenerate={regenerateAssistantReply}
+            onEdit={editUserMessage}
             assistantSlug={'captions'}
           />
           <ChatInputArea

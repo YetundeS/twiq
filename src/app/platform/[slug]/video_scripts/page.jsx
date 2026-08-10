@@ -29,7 +29,9 @@ const VideoScriptsModel = () => {
     messagesEndRef,
     aiSuggestions,
     showToggleChat,
-    retryLastMessage
+    retryLastMessage,
+    regenerateAssistantReply,
+    editUserMessage
   } = useAssistantChat('Video Scripts', 'video_scripts');
 
   return (
@@ -55,6 +57,8 @@ const VideoScriptsModel = () => {
             messagesEndRef={messagesEndRef}
             setInputValue={setInputValue}
             onRetryLast={retryLastMessage}
+            onRegenerate={regenerateAssistantReply}
+            onEdit={editUserMessage}
             assistantSlug={'video_scripts'}
             uploadedFiles={uploadedFiles}
           />

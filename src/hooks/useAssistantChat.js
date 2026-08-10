@@ -1,4 +1,5 @@
-import { fetchMessages } from "@/apiCalls/chatMessage";
+import { editChatMessage, fetchMessages } from "@/apiCalls/chatMessage";
+import { regenerateChatMessage } from "@/apiCalls/regenerateChatMessage";
 import { sendChatMessage } from "@/apiCalls/sendChatMessage";
 import { hasAccess } from "@/components/appSideBar";
 import { modelDetailsMap } from "@/constants/carousel";
@@ -362,6 +363,102 @@ export default function useAssistantChat(modelName, assistantSlug) {
     sendMessage(userTurn.content);
   }, [chats, streaming, setActiveChatMessages, sendMessage]);
 
+  // Regenerate a specific assistant reply. Optimistically drop the target
+  // row from local state, then stream the replacement in via SSE. On END,
+  // invalidate the SWR cache — the backend inserted a sibling row (same
+  // parent_id, later created_at) which the sibling filter will resolve on
+  // the next full fetch.
+  const regenerateAssistantReply = useCallback(async (targetMessageId) => {
+    if (!targetMessageId || streaming) return;
+
+    const hasModelAccess = hasAccess(user?.subscription_plan, modelName);
+    if (!hasModelAccess) {
+      toast.error(`Upgrade to access "${modelName}" model`, {
+        style: { border: "none", color: "red" },
+      });
+      return;
+    }
+
+    // Drop the target reply from state so the loader renders in its place.
+    // If it's not the tail row, filter it out; otherwise slice(-1) is fine.
+    setActiveChatMessages(
+      (chats || []).filter(
+        (m) => !(m?.id === targetMessageId && m?.sender === "assistant")
+      )
+    );
+
+    setStreaming(true);
+    setStreamingData("");
+    streamingDataRef.current = "";
+
+    const abortController = new AbortController();
+    eventSourceRef.current = abortController;
+
+    regenerateChatMessage(targetMessageId, {
+      abortController,
+      onMessage: (chunk) => updateStreamingData(chunk),
+      onComplete: () => {
+        setStreaming(false);
+        const finalMessage = streamingDataRef.current;
+        setStreamingData("");
+        updateActiveChatMessages({
+          sender: "assistant",
+          content: finalMessage,
+          sessionID: activeSessionID || "newChat",
+          created_at: new Date(),
+        });
+        mutateMessages();
+      },
+      onError: (error) => {
+        closeStreaming();
+        updateActiveChatMessages({
+          sender: "assistant",
+          status: "error",
+          content: getErrorMessage(error),
+          sessionID: activeSessionID || "newChat",
+          created_at: new Date(),
+        });
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chats, streaming, activeSessionID, user?.subscription_plan, modelName, setActiveChatMessages, updateActiveChatMessages, mutateMessages]);
+
+  // Edit a user message in place. Optimistic update; roll back on API failure.
+  // No auto-resend — user decides whether to send a new turn after editing.
+  const editUserMessage = useCallback(async (messageId, nextContent) => {
+    if (!messageId || typeof nextContent !== "string") return null;
+    const trimmed = nextContent.trim();
+    if (!trimmed) return null;
+
+    const current = (chats || []).find((m) => m?.id === messageId);
+    if (!current || current.sender !== "user") return null;
+    if (current.content === trimmed) return current;
+
+    const prevContent = current.content;
+    const optimistic = (chats || []).map((m) =>
+      m?.id === messageId
+        ? {
+            ...m,
+            content: trimmed,
+            edited_at: new Date().toISOString(),
+            original_content: m.original_content ?? prevContent,
+          }
+        : m
+    );
+    setActiveChatMessages(optimistic);
+
+    const updated = await editChatMessage(messageId, trimmed);
+    if (!updated) {
+      // Roll back — toast fired inside editChatMessage
+      const rolledBack = (chats || []).map((m) =>
+        m?.id === messageId ? { ...m, content: prevContent } : m
+      );
+      setActiveChatMessages(rolledBack);
+      return null;
+    }
+    return updated;
+  }, [chats, setActiveChatMessages]);
+
 
   return {
     toggleSidebar,
@@ -382,6 +479,8 @@ export default function useAssistantChat(modelName, assistantSlug) {
     aiSuggestions,
     showToggleChat,
     retryLastMessage,
+    regenerateAssistantReply,
+    editUserMessage,
     // New optimized features
     loadMoreMessages,
     messagesHasMore,
