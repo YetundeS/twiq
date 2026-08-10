@@ -179,3 +179,99 @@
 .dark .chatMessage_message.user {
     background-color: var(--active-sidebar-item);
 }
+
+
+/* Model badge — appears alongside message actions on assistant replies */
+.modelBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.01em;
+    color: var(--page-text);
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 999px;
+    opacity: 0.75;
+    text-transform: none;
+}
+
+.dark .modelBadge {
+    color: var(--page-text-dark);
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+
+/* Inline error banner — replaces the plain red block for turn errors */
+.chatMessage_message.errorBanner {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+}
+
+.messageErrorBanner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(220, 38, 38, 0.35);
+    background-color: rgba(220, 38, 38, 0.06);
+    color: var(--page-text);
+    font-size: 13px;
+    line-height: 1.4;
+    max-width: 560px;
+}
+
+.messageErrorBanner__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #b91c1c;
+}
+
+.messageErrorBanner__icon {
+    flex-shrink: 0;
+}
+
+.messageErrorBanner__body {
+    margin: 0;
+    color: inherit;
+    text-transform: none;
+}
+
+.messageErrorBanner__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.messageErrorBanner__link {
+    font-size: 12px;
+    color: #b91c1c;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.messageErrorBanner__link:hover {
+    color: #7f1d1d;
+}
+
+.dark .messageErrorBanner {
+    color: var(--page-text-dark);
+    background-color: rgba(248, 113, 113, 0.08);
+    border-color: rgba(248, 113, 113, 0.35);
+}
+
+.dark .messageErrorBanner__head,
+.dark .messageErrorBanner__link {
+    color: #fca5a5;
+}
+
+.dark .messageErrorBanner__link:hover {
+    color: #fecaca;
+}

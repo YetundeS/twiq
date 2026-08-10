@@ -7,6 +7,8 @@ import { MarkdownComponents } from "../markdown";
 import MessageCopyButton from "./MessageCopyButton";
 import MessageSpeakerButton from "./MessageSpeakerButton";
 import MessageContextMenu from "./MessageContextMenu";
+import MessageErrorBanner from "./MessageErrorBanner";
+import ModelBadge from "./ModelBadge";
 import "./cm.css";
 
 // Memoized function to parse OpenAI response
@@ -36,14 +38,15 @@ const parseOpenAIResponse = (raw) => {
 const ChatMessage = memo(({ chat, uploadedFiles }) => {
   const [isHovered, setIsHovered] = useState(false);
   const isAIMessage = chat?.sender !== "user";
+  const isErrorMessage = isAIMessage && chat?.status === "error";
 
   // Memoize the parsed AI response to avoid recalculating on every render
   const aiRes = useMemo(() => {
-    if (isAIMessage && chat?.content) {
+    if (isAIMessage && !isErrorMessage && chat?.content) {
       return parseOpenAIResponse(chat.content);
     }
     return { markdown: "", trailingText: null };
-  }, [chat?.content, isAIMessage]);
+  }, [chat?.content, isAIMessage, isErrorMessage]);
 
   // Memoize the file badges to avoid re-rendering if files haven't changed
   const fileBadges = useMemo(() => {
@@ -72,10 +75,12 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
       <div
         className={`chatMessage_message ${
           chat?.sender === "user" ? "user" : "markdown"
-        } ${chat?.status === "error" ? "error" : ""}`}
+        } ${isErrorMessage ? "errorBanner" : ""}`}
       >
         <div className="aitextMessageBlock">
-          {isAIMessage ? (
+          {isErrorMessage ? (
+            <MessageErrorBanner content={chat?.content} />
+          ) : isAIMessage ? (
             <>
               <Markdown
                 remarkPlugins={[remarkGfm]}
@@ -93,7 +98,7 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
           )}
         </div>
       </div>
-      {isAIMessage && (
+      {isAIMessage && !isErrorMessage && (
         <div
           className={`message-actions-container ${isHovered ? "visible" : ""}`}
         >
@@ -101,6 +106,7 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
           {process.env.NEXT_PUBLIC_TTS_ENABLED === "true" && (
             <MessageSpeakerButton content={chat?.content} />
           )}
+          <ModelBadge model={chat?.model} />
         </div>
       )}
     </div>

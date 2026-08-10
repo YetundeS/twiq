@@ -8,10 +8,12 @@ import useModelsStore from "@/store/useModelsStore";
 import { useResponsiveSidebarToggle } from "@/store/useResponsiveSidebarToggle";
 import { useChatMessages } from "./useApiCache";
 import { withDeduplication } from "@/utils/requestDeduplication";
-import { usePathname } from "next/navigation";
+import { generateSignString } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useIsMobile } from "./use-mobile";
+import useKeyboardShortcuts from "./useKeyboardShortcuts";
 
 
 export default function useAssistantChat(modelName, assistantSlug) {
@@ -30,6 +32,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
   const isMobile = useIsMobile();
 
   const pathname = usePathname();
+  const router = useRouter();
   const [isFetchingChats, setIsFetchingChats] = useState(true);
 
 
@@ -308,7 +311,27 @@ export default function useAssistantChat(modelName, assistantSlug) {
   useEffect(() => {
     setShowToggleChat(!isSidebarOpen || isMobile);
   }, [isSidebarOpen, isMobile]);
-  
+
+  const startNewChat = useCallback(() => {
+    if (!assistantSlug) return;
+    const organization = user?.organization_name
+      ? generateSignString(user.organization_name)
+      : "";
+    if (!organization) return;
+    router.push(`/platform/${organization}/${assistantSlug}/`);
+  }, [assistantSlug, user?.organization_name, router]);
+
+  const handleEscape = useCallback(() => {
+    // closeStreaming is a plain function defined in this hook; it reads from
+    // refs, so a stale closure here is safe but eslint-react-hooks flags it.
+    if (streaming) closeStreaming();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streaming]);
+
+  useKeyboardShortcuts({
+    onNewChat: startNewChat,
+    onEscape: handleEscape,
+  });
 
 
   return {
