@@ -14,6 +14,54 @@ const getAuthHeaders = () => {
   };
 };
 
+// ---------------------------------------------------------------------------
+// Plan-models CRUD (Phase 2 §12.2)
+// ---------------------------------------------------------------------------
+
+export const listPlanModels = async () => {
+  const res = await axios.get(`${API_URL}/admin/plan-models`, getAuthHeaders());
+  return res.data?.planModels ?? [];
+};
+
+export const createPlanModel = async (body) => {
+  try {
+    const res = await axios.post(`${API_URL}/admin/plan-models`, body, getAuthHeaders());
+    return res.data?.planModel;
+  } catch (err) {
+    const msg = err?.response?.data?.error || err.message || "createPlanModel failed";
+    throw new Error(msg);
+  }
+};
+
+export const updatePlanModel = async (id, patch) => {
+  try {
+    const res = await axios.patch(`${API_URL}/admin/plan-models/${id}`, patch, getAuthHeaders());
+    return res.data?.planModel;
+  } catch (err) {
+    const msg = err?.response?.data?.error || err.message || "updatePlanModel failed";
+    throw new Error(msg);
+  }
+};
+
+export const deletePlanModel = async (id) => {
+  try {
+    const res = await axios.delete(`${API_URL}/admin/plan-models/${id}`, getAuthHeaders());
+    return res.data;
+  } catch (err) {
+    const msg = err?.response?.data?.error || err.message || "deletePlanModel failed";
+    throw new Error(msg);
+  }
+};
+
+// OpenRouter's live catalog — used to seed the "Add Model" dropdown.
+// Backend caches this 24h so the frontend can fetch on-demand without
+// worrying about upstream load.
+export const listOpenRouterModels = async () => {
+  const res = await axios.get(`${API_URL}/admin/openrouter/models`, getAuthHeaders());
+  return res.data?.models ?? [];
+};
+
+
 // Grant beta access to a user
 export const grantBetaAccess = async ({ userEmail, betaPlan, startDate, durationDays }) => {
   try {
