@@ -29,7 +29,8 @@ const LinkedInBusinessModel = () => {
     showToggleChat,
     retryLastMessage,
     regenerateAssistantReply,
-    editUserMessage
+    editUserMessage,
+    coach
   } = useAssistantChat("LinkedIn Your Business", 'linkedin_business');
 
 
@@ -59,6 +60,7 @@ const LinkedInBusinessModel = () => {
             onRetryLast={retryLastMessage}
             onRegenerate={regenerateAssistantReply}
             onEdit={editUserMessage}
+            coach={coach}
             assistantSlug={'linkedin_business'}
           />
           <ChatInputArea

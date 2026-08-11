@@ -1,4 +1,5 @@
 import { editChatMessage, fetchMessages } from "@/apiCalls/chatMessage";
+import { fetchCoachPublicProfile } from "@/apiCalls/chatSessions";
 import { regenerateChatMessage } from "@/apiCalls/regenerateChatMessage";
 import { sendChatMessage } from "@/apiCalls/sendChatMessage";
 import { hasAccess } from "@/components/appSideBar";
@@ -26,6 +27,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
   const [streaming, setStreaming] = useState(false);
   const [aiSuggestions, setAISuggestions] = useState([]);
   const [showToggleChat, setShowToggleChat] = useState(false);
+  const [coach, setCoach] = useState(null);
   const streamingDataRef = useRef("");
   const eventSourceRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -323,6 +325,21 @@ export default function useAssistantChat(modelName, assistantSlug) {
     setShowToggleChat(!isSidebarOpen || isMobile);
   }, [isSidebarOpen, isMobile]);
 
+  // Fetch coach public profile once per assistantSlug. Powers the
+  // retry-with-model dropdown and any future coach-metadata UI. Fails
+  // silently — the dropdown just hides itself if coach is null.
+  useEffect(() => {
+    if (!assistantSlug) {
+      setCoach(null);
+      return;
+    }
+    let cancelled = false;
+    fetchCoachPublicProfile(assistantSlug).then((data) => {
+      if (!cancelled) setCoach(data);
+    });
+    return () => { cancelled = true; };
+  }, [assistantSlug]);
+
   const startNewChat = useCallback(() => {
     if (!assistantSlug) return;
     const organization = user?.organization_name
@@ -368,7 +385,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
   // invalidate the SWR cache — the backend inserted a sibling row (same
   // parent_id, later created_at) which the sibling filter will resolve on
   // the next full fetch.
-  const regenerateAssistantReply = useCallback(async (targetMessageId) => {
+  const regenerateAssistantReply = useCallback(async (targetMessageId, options = {}) => {
     if (!targetMessageId || streaming) return;
 
     const hasModelAccess = hasAccess(user?.subscription_plan, modelName);
@@ -396,6 +413,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
 
     regenerateChatMessage(targetMessageId, {
       abortController,
+      modelId: options.modelId,
       onMessage: (chunk) => updateStreamingData(chunk),
       onComplete: () => {
         setStreaming(false);
@@ -481,6 +499,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
     retryLastMessage,
     regenerateAssistantReply,
     editUserMessage,
+    coach,
     // New optimized features
     loadMoreMessages,
     messagesHasMore,

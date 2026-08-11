@@ -451,3 +451,79 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+
+/* Branch picker — < N/M > cycler on messages with siblings */
+.branchPicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 2px 6px;
+    font-size: 11px;
+    color: var(--page-text);
+    opacity: 0.65;
+    align-self: flex-start;
+}
+
+.branchPicker__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.branchPicker__btn:hover:not(:disabled) {
+    background-color: rgba(0, 0, 0, 0.06);
+    opacity: 1;
+}
+
+.branchPicker__btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.branchPicker__label {
+    font-variant-numeric: tabular-nums;
+    min-width: 30px;
+    text-align: center;
+}
+
+.dark .branchPicker {
+    color: var(--page-text-dark);
+}
+
+.dark .branchPicker__btn:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+
+/* Retry-with-model dropdown */
+.retryWithModel__content {
+    min-width: 200px;
+}
+
+.retryWithModel__content [role="menuitem"] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.retryWithModel__label {
+    color: inherit;
+}
+
+.retryWithModel__model {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    opacity: 0.75;
+}

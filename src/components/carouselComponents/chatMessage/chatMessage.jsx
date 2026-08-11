@@ -5,12 +5,14 @@ import remarkGfm from "remark-gfm";
 import { Pencil, RefreshCw } from "lucide-react";
 import FileBadge from "../fileBadge";
 import { MarkdownComponents } from "../markdown";
+import BranchPicker from "./BranchPicker";
 import CoachIdentity from "./CoachIdentity";
 import MessageCopyButton from "./MessageCopyButton";
 import MessageSpeakerButton from "./MessageSpeakerButton";
 import MessageContextMenu from "./MessageContextMenu";
 import MessageErrorBanner from "./MessageErrorBanner";
 import ModelBadge from "./ModelBadge";
+import RetryWithModelMenu from "./RetryWithModelMenu";
 import UserMessageEditor from "./UserMessageEditor";
 import "./cm.css";
 
@@ -38,7 +40,16 @@ const parseOpenAIResponse = (raw) => {
   };
 };
 
-const ChatMessage = memo(({ chat, uploadedFiles, assistantSlug, onRetry, onRegenerate, onEdit }) => {
+const ChatMessage = memo(({
+  chat,
+  uploadedFiles,
+  assistantSlug,
+  coach,
+  siblingInfo,
+  onRetry,
+  onRegenerate,
+  onEdit,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const isAIMessage = chat?.sender !== "user";
@@ -78,6 +89,14 @@ const ChatMessage = memo(({ chat, uploadedFiles, assistantSlug, onRetry, onRegen
     >
       {isAIMessage && !isErrorMessage && assistantSlug && (
         <CoachIdentity assistantSlug={assistantSlug} />
+      )}
+      {siblingInfo && (
+        <BranchPicker
+          index={siblingInfo.index}
+          total={siblingInfo.total}
+          onPrev={siblingInfo.onPrev}
+          onNext={siblingInfo.onNext}
+        />
       )}
       {chat?.sender === "user" && chat?.has_files && (
         <div className="messageUploads hide-scrollbar">
@@ -128,15 +147,23 @@ const ChatMessage = memo(({ chat, uploadedFiles, assistantSlug, onRetry, onRegen
             <MessageSpeakerButton content={chat?.content} />
           )}
           {canRegenerate && (
-            <button
-              type="button"
-              className="messageActionBtn"
-              aria-label="Regenerate reply"
-              onClick={() => onRegenerate(chat.id)}
-              title="Regenerate reply"
-            >
-              <RefreshCw size={14} />
-            </button>
+            <>
+              <button
+                type="button"
+                className="messageActionBtn"
+                aria-label="Regenerate reply"
+                onClick={() => onRegenerate(chat.id)}
+                title="Regenerate reply"
+              >
+                <RefreshCw size={14} />
+              </button>
+              <RetryWithModelMenu
+                coach={coach}
+                onPick={(modelId) =>
+                  onRegenerate(chat.id, modelId ? { modelId } : undefined)
+                }
+              />
+            </>
           )}
           <ModelBadge model={chat?.model} />
         </div>
