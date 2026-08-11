@@ -30,7 +30,8 @@ const StorytellerModel = () => {
     showToggleChat,
     retryLastMessage,
     regenerateAssistantReply,
-    editUserMessage
+    editUserMessage,
+    coach
   } = useAssistantChat('Storyteller', 'storyteller');
 
 
@@ -63,6 +64,7 @@ const StorytellerModel = () => {
             onRetryLast={retryLastMessage}
             onRegenerate={regenerateAssistantReply}
             onEdit={editUserMessage}
+            coach={coach}
             assistantSlug={'storyteller'}
           />
           <ChatInputArea

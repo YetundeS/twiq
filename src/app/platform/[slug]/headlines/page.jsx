@@ -29,7 +29,8 @@ const HeadlinesModel = () => {
     showToggleChat,
     retryLastMessage,
     regenerateAssistantReply,
-    editUserMessage
+    editUserMessage,
+    coach
   } = useAssistantChat('Headlines', 'headlines');
 
 
@@ -60,6 +61,7 @@ const HeadlinesModel = () => {
             onRetryLast={retryLastMessage}
             onRegenerate={regenerateAssistantReply}
             onEdit={editUserMessage}
+            coach={coach}
             assistantSlug={'headlines'}
           />
           <ChatInputArea

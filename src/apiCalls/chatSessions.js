@@ -177,10 +177,34 @@ export const deleteSession = async (sessionId) => {
     }
 };
 
+// GET /api/chats/coach/:slug — read-only coach identity + model allowlist.
+// Feeds the retry-with-model picker so we can offer the fallback model
+// as an alternative to the coach default.
+export const fetchCoachPublicProfile = async (slug) => {
+    if (!slug) return null;
+    const authHeader = addAuthHeader();
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/coach/${slug}`,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader,
+                },
+            }
+        );
+        if (!response.ok) return null;
+        const data = await response.json();
+        return data?.coach ?? null;
+    } catch (_err) {
+        return null;
+    }
+};
+
 export const fetchChat = async (sessionId) => {
     try {
         if (!sessionId) return;
-        
+
         // 🔹 Get auth headers
         const authHeader = addAuthHeader();
         const response = await fetch(

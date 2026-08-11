@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import SpinnerLoader from "../dashboardComponent/spinnerLoader";
 import ModelTemplates from "../modelsComponent/modelTemplates";
 import "./cc.css";
@@ -18,8 +18,32 @@ const ChatMessageWindow = memo(({
   isLoadingMessages,
   onRetryLast,
   onRegenerate,
-  onEdit
+  onEdit,
+  coach
 }) => {
+
+  // parent_id → the sibling id the user is currently viewing. Empty by
+  // default → the most-recent sibling wins (matches the backend model
+  // filter and matches user expectation post-regenerate).
+  const [activeByParent, setActiveByParent] = useState({});
+
+  // Group messages that share a parent_id. Messages without parent_id are
+  // never in a group (they're the parent user turns + all legacy rows).
+  const siblingGroups = useMemo(() => {
+    const groups = new Map();
+    for (const m of chats || []) {
+      const parentId = m?.parent_id;
+      if (parentId == null) continue;
+      if (!groups.has(parentId)) groups.set(parentId, []);
+      groups.get(parentId).push(m);
+    }
+    for (const arr of groups.values()) {
+      arr.sort(
+        (a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0)
+      );
+    }
+    return groups;
+  }, [chats]);
 
   // Memoize the chat messages to avoid re-rendering all messages when only streaming data changes.
   // The retry callback is only wired to the LAST message when it's an errored assistant
@@ -31,11 +55,44 @@ const ChatMessageWindow = memo(({
     return chats.map((chat, i) => {
       const isLast = i === lastIndex;
       const isErroredAssistant = chat?.sender === "assistant" && chat?.status === "error";
+
+      // Skip losing siblings — for each parent_id group, only render the
+      // active one (default: last i.e. most recent).
+      const group = chat?.parent_id != null ? siblingGroups.get(chat.parent_id) : null;
+      let siblingInfo = null;
+      if (group && group.length > 1) {
+        const activeId = activeByParent[chat.parent_id] ?? group[group.length - 1].id;
+        if (chat.id !== activeId) return null;
+        const index = group.findIndex((m) => m.id === activeId);
+        siblingInfo = {
+          index,
+          total: group.length,
+          onPrev: () => {
+            if (index > 0) {
+              setActiveByParent((prev) => ({
+                ...prev,
+                [chat.parent_id]: group[index - 1].id,
+              }));
+            }
+          },
+          onNext: () => {
+            if (index < group.length - 1) {
+              setActiveByParent((prev) => ({
+                ...prev,
+                [chat.parent_id]: group[index + 1].id,
+              }));
+            }
+          },
+        };
+      }
+
       return (
         <ChatMessage
           uploadedFiles={uploadedFiles}
           chat={chat}
           assistantSlug={assistantSlug}
+          coach={coach}
+          siblingInfo={siblingInfo}
           onRetry={isLast && isErroredAssistant ? onRetryLast : undefined}
           onRegenerate={onRegenerate}
           onEdit={onEdit}
@@ -43,7 +100,7 @@ const ChatMessageWindow = memo(({
         />
       );
     });
-  }, [chats, uploadedFiles, assistantSlug, onRetryLast, onRegenerate, onEdit]);
+  }, [chats, uploadedFiles, assistantSlug, coach, siblingGroups, activeByParent, onRetryLast, onRegenerate, onEdit]);
 
   // Memoize the streaming message to avoid unnecessary re-renders
   const streamingMessage = useMemo(() => {

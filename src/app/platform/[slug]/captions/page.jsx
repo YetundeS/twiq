@@ -29,7 +29,8 @@ const CaptionModel = () => {
     showToggleChat,
     retryLastMessage,
     regenerateAssistantReply,
-    editUserMessage
+    editUserMessage,
+    coach
   } = useAssistantChat('Captions', 'captions');
 
   return (
@@ -58,6 +59,7 @@ const CaptionModel = () => {
             onRetryLast={retryLastMessage}
             onRegenerate={regenerateAssistantReply}
             onEdit={editUserMessage}
+            coach={coach}
             assistantSlug={'captions'}
           />
           <ChatInputArea

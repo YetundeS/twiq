@@ -29,7 +29,8 @@ const CarouselPage = () => {
     showToggleChat,
     retryLastMessage,
     regenerateAssistantReply,
-    editUserMessage
+    editUserMessage,
+    coach
   } = useAssistantChat('Carousel', 'carousel');
 
   return (
@@ -58,6 +59,7 @@ const CarouselPage = () => {
             onRetryLast={retryLastMessage}
             onRegenerate={regenerateAssistantReply}
             onEdit={editUserMessage}
+            coach={coach}
             assistantSlug={'carousel'}
           />
           <ChatInputArea
