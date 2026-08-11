@@ -201,6 +201,38 @@ export const fetchCoachPublicProfile = async (slug) => {
     }
 };
 
+// Cross-session search (§6.11). Returns { results, count } or { error }.
+// Doesn't toast — callers usually render inline validation state instead.
+export const searchChatsAPI = async (q, limit = 20) => {
+    const authHeader = addAuthHeader();
+    const params = new URLSearchParams({ q: q ?? "", limit: String(limit) });
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/search?${params.toString()}`,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader,
+                },
+            }
+        );
+
+        if (!response.ok) {
+            let error = response.statusText || "Search failed";
+            try {
+                const body = await response.json();
+                if (body?.error) error = body.error;
+            } catch (_) { /* ignore */ }
+            return { error, results: [] };
+        }
+
+        const data = await response.json();
+        return { results: data?.results ?? [], count: data?.count ?? 0 };
+    } catch (_err) {
+        return { error: "Network error. Please try again.", results: [] };
+    }
+};
+
 export const fetchChat = async (sessionId) => {
     try {
         if (!sessionId) return;

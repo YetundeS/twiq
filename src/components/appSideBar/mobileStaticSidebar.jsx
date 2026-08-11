@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import CrownIcon from "../dashboardComponent/crown";
 import LogOutDialog from "../dashboardComponent/logOutDialog";
 import NewChatBtn from "../dashboardComponent/newChatBtn";
+import { SearchDialog } from "./SearchDialog";
 import SpinnerLoader from "../dashboardComponent/spinnerLoader";
 import { hasAccess } from './index';
 
@@ -97,6 +98,7 @@ export function AppSidebarDesktopStatic() {
                             <PanelRightOpen className="pageIcon" size="22px" />
                         </div>
                         <NewChatBtn mobile />
+                        <SearchDialog />
                     </div>
 
                     <div className="scrollableArea mobile">
