@@ -7,6 +7,7 @@ import PlatformTop from "@/components/dashboardComponent/platformTop";
 import SubscriptionDialog from "@/components/dashboardComponent/subscriptionDialog";
 import TwiqBg from "@/components/dashboardComponent/twiqBg";
 import { SubscriptionTab } from "@/components/settingsComps/SubscriptionTab";
+import { UsageTab } from "@/components/settingsComps/UsageTab";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -204,12 +205,15 @@ const Settings = () => {
       <TwiqBg />
       <div className="settings_content">
         <Tabs defaultValue="profile" className="settingsTab">
-          <TabsList className="tabsList grid w-full grid-cols-2">
+          <TabsList className="tabsList grid w-full grid-cols-3">
             <TabsTrigger className="tabsTrigger" value="profile">
               Profile
             </TabsTrigger>
             <TabsTrigger className="tabsTrigger" value="subscription">
               Subscription
+            </TabsTrigger>
+            <TabsTrigger className="tabsTrigger" value="usage">
+              Usage
             </TabsTrigger>
           </TabsList>
           <TabsContent value="profile">
@@ -337,6 +341,7 @@ const Settings = () => {
             </Card>
           </TabsContent>
           <SubscriptionTab user={user} openSubDialog={openSubDialog} />
+          <UsageTab />
         </Tabs>
       </div>
       <SubscriptionDialog />
