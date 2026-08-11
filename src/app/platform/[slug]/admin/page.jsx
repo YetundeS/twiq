@@ -6,9 +6,10 @@ import { getDashboardStats, getBetaUsers } from '@/apiCalls/adminAPI';
 import BetaUserStats from '@/components/adminComponents/BetaUserStats';
 import BetaUserTable from '@/components/adminComponents/BetaUserTable';
 import AddBetaUserDialog from '@/components/adminComponents/AddBetaUserDialog';
+import PlanModelsPanel from '@/components/adminComponents/PlanModelsPanel';
 import SystemLogs from '@/components/adminComponents/SystemLogs';
 import { Button } from '@/components/ui/button';
-import { Plus, RefreshCw, Home, Users, FileText } from 'lucide-react';
+import { Plus, RefreshCw, Home, Users, FileText, Package } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter, useParams } from 'next/navigation';
 import useAuthStore from '@/store/authStore';
@@ -153,6 +154,19 @@ const Admin = () => {
                 System Logs
               </div>
             </button>
+            <button
+              onClick={() => setActiveTab('models')}
+              className={`py-2 px-1 sm:px-2 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
+                activeTab === 'models'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                Models
+              </div>
+            </button>
           </nav>
         </div>
 
@@ -184,6 +198,12 @@ const Admin = () => {
         {activeTab === 'system-logs' && (
           <div className="mt-6">
             <SystemLogs />
+          </div>
+        )}
+
+        {activeTab === 'models' && (
+          <div className="mt-6">
+            <PlanModelsPanel />
           </div>
         )}
       </div>
