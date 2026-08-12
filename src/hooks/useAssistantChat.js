@@ -29,6 +29,12 @@ export default function useAssistantChat(modelName, assistantSlug) {
   const [showToggleChat, setShowToggleChat] = useState(false);
   const [coach, setCoach] = useState(null);
   const streamingDataRef = useRef("");
+  // rAF batching (§10.2 perf sprint). Chunks arrive faster than 60fps on
+  // fast connections — one setStreamingData per chunk = 30-60 React commits
+  // per second of the whole message window. Coalescing per animation frame
+  // caps that at ~60Hz with no visible latency (tokens still surface at the
+  // next paint they'd have anyway).
+  const pendingStreamingRafRef = useRef(null);
   const eventSourceRef = useRef(null);
   const messagesEndRef = useRef(null);
   const { user } = useAuthStore()
@@ -126,10 +132,45 @@ export default function useAssistantChat(modelName, assistantSlug) {
     return 'Server Error - Please try again.';
   }
 
+  // Append to ref immediately (so post-stream reads see the full accumulated
+  // content) but schedule at most one React commit per animation frame.
   const updateStreamingData = (chunk) => {
     streamingDataRef.current += chunk;
-    setStreamingData(streamingDataRef.current);
+    if (pendingStreamingRafRef.current !== null) return; // already scheduled
+    if (typeof window === "undefined" || typeof window.requestAnimationFrame !== "function") {
+      // SSR / non-browser env fallback — commit synchronously.
+      setStreamingData(streamingDataRef.current);
+      return;
+    }
+    pendingStreamingRafRef.current = window.requestAnimationFrame(() => {
+      pendingStreamingRafRef.current = null;
+      setStreamingData(streamingDataRef.current);
+    });
   };
+
+  // Reset all streaming state atomically. Cancels any pending rAF so a
+  // late-fire doesn't briefly re-paint stale content after reset. Callers
+  // that want to keep the accumulated content (onComplete/onAbort insert
+  // paths) should read streamingDataRef.current BEFORE calling this.
+  const resetStreaming = () => {
+    if (pendingStreamingRafRef.current !== null) {
+      window.cancelAnimationFrame(pendingStreamingRafRef.current);
+      pendingStreamingRafRef.current = null;
+    }
+    streamingDataRef.current = "";
+    setStreamingData("");
+  };
+
+  // Cancel any pending rAF on unmount so it can't fire against an
+  // unmounted component (React warns; not a hard crash but noisy).
+  useEffect(() => {
+    return () => {
+      if (pendingStreamingRafRef.current !== null && typeof window !== "undefined") {
+        window.cancelAnimationFrame(pendingStreamingRafRef.current);
+        pendingStreamingRafRef.current = null;
+      }
+    };
+  }, []);
 
   // sendMessage accepts an optional `overrideText`. Retry-on-error uses it to
   // re-send the last user message without going through the input state
@@ -173,8 +214,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
     updateActiveChatMessages(userChat);
 
     setStreaming(true);
-    setStreamingData("");
-    streamingDataRef.current = "";
+    resetStreaming();
 
     const abortController = new AbortController();
     eventSourceRef.current = abortController;
@@ -193,7 +233,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
       () => {
         setStreaming(false);
         const finalMessage = streamingDataRef.current;
-        setStreamingData(""); // reset
+        resetStreaming();
 
         const assistantChat = {
           sender: "assistant",
@@ -203,7 +243,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
         };
 
         updateActiveChatMessages(assistantChat);
-        
+
         // Invalidate cache to get latest messages
         mutateMessages();
       },
@@ -262,8 +302,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
         updateActiveChatMessages(assistantChat);
       }
       setStreaming(false);
-      setStreamingData("");
-      streamingDataRef.current = "";
+      resetStreaming();
       eventSourceRef.current = null;
       setUploadedFiles([])
     }
@@ -405,8 +444,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
     );
 
     setStreaming(true);
-    setStreamingData("");
-    streamingDataRef.current = "";
+    resetStreaming();
 
     const abortController = new AbortController();
     eventSourceRef.current = abortController;
@@ -418,7 +456,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
       onComplete: () => {
         setStreaming(false);
         const finalMessage = streamingDataRef.current;
-        setStreamingData("");
+        resetStreaming();
         updateActiveChatMessages({
           sender: "assistant",
           content: finalMessage,
