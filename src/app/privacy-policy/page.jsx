@@ -1,23 +1,15 @@
-"use client";
-
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+// Server Component (§10.2.2). The only interactive island is the Back
+// button — extracted to <BackButton /> so the surrounding prose renders
+// on the server with no hydration.
+import BackButton from "@/components/BackButton";
 
 const PrivacyPolicy = () => {
-  const router = useRouter();
-
   return (
     <div className="min-h-screen bg-white text-black transition-colors duration-300 dark:bg-gray-950 dark:text-white">
       <div className="mx-auto max-w-4xl px-8 py-8 md:px-16">
         {/* Header with Back Button */}
         <div className="mb-12 flex items-center justify-start">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:border-gray-400 hover:text-black dark:border-gray-700 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-white"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </button>
+          <BackButton />
         </div>
 
         {/* Content */}

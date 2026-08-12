@@ -1,5 +1,7 @@
-'use client';
-
+// Server Component (§10.2.2). Uses zero client-side APIs — just renders
+// static YouTube embeds + the FAQSection (which owns its own client
+// boundary). Header + FAQSection are client components; a Server parent
+// can still render them, only the parent shell stops needing hydration.
 import TwiqBg from "@/components/dashboardComponent/twiqBg";
 import { FAQSection } from "@/components/landingPageComponents/FAQSection";
 import { Header } from "@/components/landingPageComponents/Header";
