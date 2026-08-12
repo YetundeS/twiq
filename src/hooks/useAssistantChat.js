@@ -11,6 +11,7 @@ import { useResponsiveSidebarToggle } from "@/store/useResponsiveSidebarToggle";
 import { useChatMessages } from "./useApiCache";
 import { withDeduplication } from "@/utils/requestDeduplication";
 import { generateSignString } from "@/lib/utils";
+import { createRafBatcher } from "@/lib/rafBatcher";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -29,12 +30,15 @@ export default function useAssistantChat(modelName, assistantSlug) {
   const [showToggleChat, setShowToggleChat] = useState(false);
   const [coach, setCoach] = useState(null);
   const streamingDataRef = useRef("");
-  // rAF batching (§10.2 perf sprint). Chunks arrive faster than 60fps on
-  // fast connections — one setStreamingData per chunk = 30-60 React commits
-  // per second of the whole message window. Coalescing per animation frame
-  // caps that at ~60Hz with no visible latency (tokens still surface at the
-  // next paint they'd have anyway).
-  const pendingStreamingRafRef = useRef(null);
+  // rAF batching (§10.2 perf sprint). When SSE chunks arrive in bursts
+  // (fast models, network buffering) each one used to trigger a React
+  // commit of the whole message window. The batcher caps commits at
+  // paint-frame cadence — see src/lib/rafBatcher.js. Lazily initialized
+  // so hydration doesn't allocate an unused batcher on servers.
+  const streamingBatcherRef = useRef(null);
+  if (streamingBatcherRef.current === null) {
+    streamingBatcherRef.current = createRafBatcher();
+  }
   const eventSourceRef = useRef(null);
   const messagesEndRef = useRef(null);
   const { user } = useAuthStore()
@@ -136,14 +140,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
   // content) but schedule at most one React commit per animation frame.
   const updateStreamingData = (chunk) => {
     streamingDataRef.current += chunk;
-    if (pendingStreamingRafRef.current !== null) return; // already scheduled
-    if (typeof window === "undefined" || typeof window.requestAnimationFrame !== "function") {
-      // SSR / non-browser env fallback — commit synchronously.
-      setStreamingData(streamingDataRef.current);
-      return;
-    }
-    pendingStreamingRafRef.current = window.requestAnimationFrame(() => {
-      pendingStreamingRafRef.current = null;
+    streamingBatcherRef.current.schedule(() => {
       setStreamingData(streamingDataRef.current);
     });
   };
@@ -153,10 +150,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
   // that want to keep the accumulated content (onComplete/onAbort insert
   // paths) should read streamingDataRef.current BEFORE calling this.
   const resetStreaming = () => {
-    if (pendingStreamingRafRef.current !== null) {
-      window.cancelAnimationFrame(pendingStreamingRafRef.current);
-      pendingStreamingRafRef.current = null;
-    }
+    streamingBatcherRef.current.cancel();
     streamingDataRef.current = "";
     setStreamingData("");
   };
@@ -164,12 +158,8 @@ export default function useAssistantChat(modelName, assistantSlug) {
   // Cancel any pending rAF on unmount so it can't fire against an
   // unmounted component (React warns; not a hard crash but noisy).
   useEffect(() => {
-    return () => {
-      if (pendingStreamingRafRef.current !== null && typeof window !== "undefined") {
-        window.cancelAnimationFrame(pendingStreamingRafRef.current);
-        pendingStreamingRafRef.current = null;
-      }
-    };
+    const batcher = streamingBatcherRef.current;
+    return () => batcher?.cancel();
   }, []);
 
   // sendMessage accepts an optional `overrideText`. Retry-on-error uses it to
