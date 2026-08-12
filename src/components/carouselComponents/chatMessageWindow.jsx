@@ -1,9 +1,12 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import SpinnerLoader from "../dashboardComponent/spinnerLoader";
 import ModelTemplates from "../modelsComponent/modelTemplates";
 import "./cc.css";
 import ChatMessage, { ChatLoader } from "./chatMessage/chatMessage";
 import { ModelPicker } from "./ModelPicker";
+import { parseMessageIdFromHash } from "@/lib/messageHash";
+
+const HIGHLIGHT_MS = 2000;
 
 const ChatMessageWindow = memo(({
   chats,
@@ -27,6 +30,31 @@ const ChatMessageWindow = memo(({
   // default → the most-recent sibling wins (matches the backend model
   // filter and matches user expectation post-regenerate).
   const [activeByParent, setActiveByParent] = useState({});
+
+  // Search-fragment scroll-into-view (§6.11 polish). When landing on a
+  // session via /platform/[org]/[coach]/[id]#message-N, scroll that
+  // message into view + pulse it briefly. Guarded by a ref so the user's
+  // subsequent scrolling doesn't retrigger. Depends on chats.length so it
+  // waits for the message list to finish loading.
+  const handledHashRef = useRef(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!chats?.length) return;
+    const hash = window.location.hash;
+    const targetId = parseMessageIdFromHash(hash);
+    if (!targetId) return;
+    if (handledHashRef.current === hash) return;
+    // Wait a paint tick — the message list may have just rendered.
+    const raf = requestAnimationFrame(() => {
+      const el = document.getElementById(`message-${targetId}`);
+      if (!el) return; // stale link, losing sibling, or deleted row — silent no-op
+      handledHashRef.current = hash;
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.classList.add("messageHighlightPulse");
+      setTimeout(() => el.classList.remove("messageHighlightPulse"), HIGHLIGHT_MS);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [chats?.length]);
 
   // Group messages that share a parent_id. Messages without parent_id are
   // never in a group (they're the parent user turns + all legacy rows).
