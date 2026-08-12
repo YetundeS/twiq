@@ -1,10 +1,11 @@
 import { MoveUp, Plus, Upload } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import SquareIcon from "../shapes/stop";
 import "./cc.css";
 import FileBadge from "./fileBadge";
 import { validateFilesForUpload } from "@/lib/fileUploadValidation";
+import { getCharCountState } from "@/lib/charCount";
 
 const ChatInputArea = ({
   inputValue,
@@ -29,6 +30,10 @@ const ChatInputArea = ({
       textarea.style.height = Math.min(textarea.scrollHeight, 200) + "px"; // max height 200px
     }
   }, [inputValue]);
+
+  // Char count (§6.7). Informational only — hitting 'danger' doesn't
+  // block send; backend quota/tiktoken remains the authoritative gate.
+  const charCount = useMemo(() => getCharCountState(inputValue), [inputValue]);
 
   // Shared add-files pipeline: click-to-upload, drag-drop, paste-image all
   // funnel through here so validation + toast wording stay consistent.
@@ -179,6 +184,15 @@ const ChatInputArea = ({
               </label>
             </div>
           </div>
+          {charCount.visibility === "visible" && (
+            <span
+              className={`charCount charCount--${charCount.level}`}
+              aria-live="polite"
+              title="Character count — long messages may hit context limits"
+            >
+              {charCount.display}
+            </span>
+          )}
           <div className="inputbtn_box">
             {!streamingData ? (
               <div
