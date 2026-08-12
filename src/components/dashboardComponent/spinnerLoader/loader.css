@@ -56,3 +56,19 @@
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
+
+/* Explicit dark-mode override for the inline variant. Same properties as
+ * .loader.inline above, but with higher specificity (0,3,0 via `.dark
+ * .loader.inline` vs 0,2,0 for `.dark .loader`) so the inline currentColor
+ * behavior wins regardless of file ordering. Guards against a future
+ * reorder silently reverting inline spinners to solid white in dark mode
+ * (qcheck M1). */
+.dark .loader.inline {
+  width: 16px;
+  height: 16px;
+  border-top-width: 2px;
+  border-right-width: 2px;
+  border-top-color: currentColor;
+  border-right-color: transparent;
+  vertical-align: middle;
+}
