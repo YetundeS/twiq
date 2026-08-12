@@ -12,6 +12,16 @@ export const CHAR_COUNT_VISIBILITY_THRESHOLD = 200;   // hide chip for typical s
 export const CHAR_COUNT_WARN_AT = 5000;               // orange: "getting long"
 export const CHAR_COUNT_DANGER_AT = 10000;            // red: "very long"
 
+// Explicit map from level → CSS modifier class. Lets the consumer render
+// defensively without string-interpolating a potentially invalid value
+// into className. Every level from getCharCountState must have an entry
+// here (enforced by the spec — see "LEVEL_CLASS_NAME covers every level").
+export const LEVEL_CLASS_NAME = {
+  normal: "",
+  warn: "charCount--warn",
+  danger: "charCount--danger",
+};
+
 /**
  * @param {string | null | undefined} text
  * @param {{visibilityAt?: number, warnAt?: number, dangerAt?: number}} [opts]
