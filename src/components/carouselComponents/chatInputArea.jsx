@@ -1,10 +1,11 @@
 import { MoveUp, Plus, Upload } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import SquareIcon from "../shapes/stop";
 import "./cc.css";
 import FileBadge from "./fileBadge";
 import { validateFilesForUpload } from "@/lib/fileUploadValidation";
+import { getCharCountState, LEVEL_CLASS_NAME } from "@/lib/charCount";
 
 const ChatInputArea = ({
   inputValue,
@@ -30,18 +31,31 @@ const ChatInputArea = ({
     }
   }, [inputValue]);
 
+  // Char count (§6.7). Informational only — hitting 'danger' doesn't
+  // block send; backend quota/tiktoken remains the authoritative gate.
+  const charCount = useMemo(() => getCharCountState(inputValue), [inputValue]);
+
+  // Mirror uploadedFiles into a ref so addFiles can read current state
+  // WITHOUT wrapping validation + toast in a setState reducer. Reducers
+  // must be pure — React 18 StrictMode double-invokes them in dev, which
+  // would double-toast every rejection (qcheck M1).
+  const uploadedFilesRef = useRef(uploadedFiles);
+  useEffect(() => {
+    uploadedFilesRef.current = uploadedFiles;
+  }, [uploadedFiles]);
+
   // Shared add-files pipeline: click-to-upload, drag-drop, paste-image all
   // funnel through here so validation + toast wording stay consistent.
   const addFiles = useCallback((incoming) => {
     if (!incoming?.length) return;
-    setUploadedFiles((prev) => {
-      const existing = prev || [];
-      const { accepted, rejections } = validateFilesForUpload(incoming, existing);
-      for (const r of rejections) {
-        toast.error(r.message, { style: { color: "red", border: "none" } });
-      }
-      return accepted.length ? [...existing, ...accepted] : existing;
-    });
+    const existing = uploadedFilesRef.current || [];
+    const { accepted, rejections } = validateFilesForUpload(incoming, existing);
+    for (const r of rejections) {
+      toast.error(r.message, { style: { color: "red", border: "none" } });
+    }
+    if (accepted.length) {
+      setUploadedFiles((prev) => [...(prev || []), ...accepted]);
+    }
   }, [setUploadedFiles]);
 
   const handleFileChange = (event) => {
@@ -124,6 +138,19 @@ const ChatInputArea = ({
     };
   }, [addFiles]);
 
+  // Escape to force-hide the drop overlay (qcheck L2). Covers the edge
+  // case where dragleave doesn't fire — e.g. user drags into the browser,
+  // then Cmd+Tabs away, or the browser loses focus mid-drag. Also gives
+  // keyboard-only users a way to cancel.
+  useEffect(() => {
+    if (!isDraggingOver) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setIsDraggingOver(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isDraggingOver]);
+
   return (
     <>
       {isDraggingOver && (
@@ -179,6 +206,15 @@ const ChatInputArea = ({
               </label>
             </div>
           </div>
+          {charCount.visibility === "visible" && (
+            <span
+              className={`charCount ${LEVEL_CLASS_NAME[charCount.level] ?? ""}`.trim()}
+              aria-live="polite"
+              title="Character count — long messages may hit context limits"
+            >
+              {charCount.display}
+            </span>
+          )}
           <div className="inputbtn_box">
             {!streamingData ? (
               <div
