@@ -9,8 +9,9 @@ import AddBetaUserDialog from '@/components/adminComponents/AddBetaUserDialog';
 import CoachesPanel from '@/components/adminComponents/CoachesPanel';
 import PlanModelsPanel from '@/components/adminComponents/PlanModelsPanel';
 import SystemLogs from '@/components/adminComponents/SystemLogs';
+import MetricsPanel from '@/components/adminComponents/MetricsPanel';
 import { Button } from '@/components/ui/button';
-import { Plus, RefreshCw, Home, Users, FileText, Package, Bot } from 'lucide-react';
+import { Plus, RefreshCw, Home, Users, FileText, Package, Bot, Activity } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter, useParams } from 'next/navigation';
 import useAuthStore from '@/store/authStore';
@@ -181,6 +182,19 @@ const Admin = () => {
                 Coaches
               </div>
             </button>
+            <button
+              onClick={() => setActiveTab('metrics')}
+              className={`py-2 px-1 sm:px-2 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
+                activeTab === 'metrics'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Activity className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                Metrics
+              </div>
+            </button>
           </nav>
         </div>
 
@@ -225,6 +239,10 @@ const Admin = () => {
           <div className="mt-6">
             <CoachesPanel />
           </div>
+        )}
+
+        {activeTab === 'metrics' && (
+          <MetricsPanel />
         )}
       </div>
     </div>

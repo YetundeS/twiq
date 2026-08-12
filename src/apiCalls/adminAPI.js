@@ -319,6 +319,20 @@ export const getLogStats = async () => {
   }
 };
 
+// ---------------------------------------------------------------------------
+// Chat observability metrics (Phase 2 §6.14)
+// ---------------------------------------------------------------------------
+// GET /admin/metrics/chat?window=24h|7d|30d — aggregated TTFT / TPS /
+// stream duration percentiles by model, coach, and day. Backend cap of
+// 50k rows per window (row_cap_hit=true flags it).
+export const getChatMetrics = async (window = "24h") => {
+  const response = await axios.get(
+    `${API_URL}/admin/metrics/chat`,
+    { ...getAuthHeaders(), params: { window } }
+  );
+  return response.data;
+};
+
 // Cleanup old logs (30+ days)
 export const cleanupOldLogs = async () => {
   try {
