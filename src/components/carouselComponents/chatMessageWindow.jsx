@@ -3,6 +3,7 @@ import SpinnerLoader from "../dashboardComponent/spinnerLoader";
 import ModelTemplates from "../modelsComponent/modelTemplates";
 import "./cc.css";
 import ChatMessage, { ChatLoader } from "./chatMessage/chatMessage";
+import { ModelPicker } from "./ModelPicker";
 
 const ChatMessageWindow = memo(({
   chats,
@@ -145,6 +146,7 @@ const ChatMessageWindow = memo(({
 
   return (
     <div className="chats_area">
+      <ModelPicker coach={coach} />
       <div className="chats_area_container">
         {chats?.length > 0 ? (
           <>
