@@ -25,7 +25,7 @@ import useDeleteAccountStore from "@/store/useDeleteAccountStore";
 import { useResponsiveSidebarToggle } from "@/store/useResponsiveSidebarToggle";
 import useSusbcriptionDialogStore from "@/store/useSusbcriptionDialogStore";
 import "@/styles/platformStyles.css";
-import { CircularProgress } from "@mui/material";
+import SpinnerLoader from "@/components/dashboardComponent/spinnerLoader";
 import { getSupabase } from "@/lib/supabase";
 import { Lock, PanelRightOpen } from "lucide-react";
 import Image from "next/image";
@@ -260,7 +260,7 @@ const Settings = () => {
                           onClick={handleSaveProfilePic}
                         >
                           {loading ? (
-                            <CircularProgress color="black" size="14px" />
+                            <SpinnerLoader inline />
                           ) : (
                             <p>Save Profile Picture</p>
                           )}
@@ -316,7 +316,7 @@ const Settings = () => {
                     onClick={handlePasswordUpdate}
                   >
                     {passwordLoading ? (
-                      <CircularProgress color="inherit" size="16px" />
+                      <SpinnerLoader inline />
                     ) : (
                       "Update Password"
                     )}
