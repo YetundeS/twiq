@@ -38,6 +38,7 @@ import LogOutDialog from "../dashboardComponent/logOutDialog";
 import NewChatBtn from "../dashboardComponent/newChatBtn";
 import SpinnerLoader from "../dashboardComponent/spinnerLoader";
 import { hasAccess } from './index';
+import { SearchDialog } from './SearchDialog';
 
 
 
@@ -111,6 +112,7 @@ export function AppSidebarDesktop() {
                 <PanelRightOpen className="pageIcon" size="22px" />
               </div>
               <NewChatBtn />
+              <SearchDialog />
             </div>
           </SidebarGroupLabel>
           <div className="scrollableArea">
