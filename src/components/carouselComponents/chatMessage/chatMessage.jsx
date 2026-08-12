@@ -83,6 +83,10 @@ const ChatMessage = memo(({
 
   const messageContent = (
     <div
+      // id + data-message-id let the search-fragment scroll-into-view effect
+      // (chatMessageWindow useEffect) find this element via #message-N.
+      id={chat?.id != null ? `message-${chat.id}` : undefined}
+      data-message-id={chat?.id != null ? String(chat.id) : undefined}
       className="messageWrapper"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

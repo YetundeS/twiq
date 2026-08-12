@@ -275,3 +275,16 @@
     }
 }
 
+/* Search-fragment landing pulse (§6.11 polish). Applied briefly to a
+ * .messageWrapper when arriving via #message-N so the eye tracks the
+ * target. Fades warm yellow → transparent over ~2s. */
+@keyframes messageHighlightPulseKF {
+    0%   { background-color: rgba(253, 224, 71, 0.55); }
+    100% { background-color: rgba(253, 224, 71, 0); }
+}
+
+.messageHighlightPulse {
+    animation: messageHighlightPulseKF 2s ease-out both;
+    border-radius: 8px;
+}
+

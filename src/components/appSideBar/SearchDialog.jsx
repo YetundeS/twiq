@@ -160,6 +160,14 @@ export function SearchDialog({ trigger, open, onOpenChange } = {}) {
     const url = `/platform/${organization}/${r.assistant_slug}/${r.session_id}#message-${r.message_id}`;
     router.push(url);
     setDialogOpen(false);
+    // Next.js App Router's history.pushState doesn't always fire
+    // 'hashchange' when only the fragment changes on the same pathname
+    // (e.g. clicking a second search result within the same session).
+    // Dispatch manually so the chatMessageWindow scroll effect picks it
+    // up. Deferred so we run AFTER router.push has settled the URL.
+    if (typeof window !== "undefined") {
+      setTimeout(() => window.dispatchEvent(new Event("hashchange")), 0);
+    }
   };
 
   return (
