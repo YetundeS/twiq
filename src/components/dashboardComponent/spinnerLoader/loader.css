@@ -15,6 +15,20 @@
   height: 28px;
 }
 
+/* Inline variant — drop-in for MUI's tiny <CircularProgress size="14-17px" />
+ * that used to live inside buttons. Uses currentColor so the spinner takes
+ * the parent text color (dark on light buttons, white on dark buttons)
+ * without a manual color prop. */
+.loader.inline {
+  width: 16px;
+  height: 16px;
+  border-top-width: 2px;
+  border-right-width: 2px;
+  border-top-color: currentColor;
+  border-right-color: transparent;
+  vertical-align: middle;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

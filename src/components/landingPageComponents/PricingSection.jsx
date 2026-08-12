@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { getPricingPlans } from "@/utils/pricingConfig";
 import useAuthStore from "@/store/authStore";
 import useSusbcriptionDialogStore from "@/store/useSusbcriptionDialogStore";
-import { CircularProgress } from "@mui/material";
+import SpinnerLoader from "@/components/dashboardComponent/spinnerLoader";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -167,7 +167,7 @@ export function PricingSection({ platform }) {
                   {subscribingPlanId !== plan.priceId ? (
                     <p>{plan.buttonText}</p>
                   ) : (
-                    <CircularProgress color="inherit" size="17px" />
+                    <SpinnerLoader inline />
                   )}
                 </Button>
               </div>
