@@ -11,7 +11,7 @@
 // - Hidden when there's no active session yet (fresh chat pane, pre-first-turn).
 
 import { updateSession } from "@/apiCalls/chatSessions";
-import { getModelsAPI } from "@/apiCalls/userAPI";
+import { loadModelsCached } from "@/lib/modelsCache";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useSideBar } from "@/store/sidebarStore";
+import useAuthStore from "@/store/authStore";
 import useModelsStore from "@/store/useModelsStore";
 import { Check, ChevronDown, Cpu } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -34,24 +35,14 @@ function shortModelId(id) {
   return parts[parts.length - 1];
 }
 
-// Module-scoped cache — GET /api/models is capped 5min in the backend cache
-// too, but avoiding the round-trip on every session switch is a nice touch.
-let cachedModels = null;
-let cachedAt = 0;
-const CACHE_MS = 5 * 60 * 1000;
-
-async function loadModelsCached() {
-  const now = Date.now();
-  if (cachedModels && now - cachedAt < CACHE_MS) return cachedModels;
-  const out = await getModelsAPI();
-  cachedModels = out.models || [];
-  cachedAt = now;
-  return cachedModels;
-}
+// Cache logic lives in @/lib/modelsCache (extracted for unit-testability).
+// Keyed by userId so switching users on the same tab doesn't leak the
+// prior user's plan-allowed models into the dropdown.
 
 export function ModelPicker({ coach }) {
   const { activeSessionID } = useModelsStore();
   const { sidebarSessions, updateSessionInSideBar } = useSideBar();
+  const { user } = useAuthStore();
   const [models, setModels] = useState([]);
   const [busy, setBusy] = useState(false);
 
@@ -60,13 +51,20 @@ export function ModelPicker({ coach }) {
     [sidebarSessions, activeSessionID]
   );
 
+  // Re-fetch when the user id changes (logout / login-as-different-user
+  // on the same tab). The cache is keyed by userId so different users
+  // never see each other's plan-allowed models.
   useEffect(() => {
     let cancelled = false;
-    loadModelsCached()
+    if (!user?.id) {
+      setModels([]);
+      return;
+    }
+    loadModelsCached(user.id)
       .then((m) => { if (!cancelled) setModels(m); })
       .catch(() => { /* silent — picker falls back to coach default */ });
     return () => { cancelled = true; };
-  }, []);
+  }, [user?.id]);
 
   // Hide until there's a session to modify.
   if (!session) return null;
