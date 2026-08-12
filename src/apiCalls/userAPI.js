@@ -14,3 +14,15 @@ export const getUsage = async () => {
   });
   return response.data?.usage;
 };
+
+// GET /models — allowed models for the caller's plan (§6.9 model picker).
+// Returns { models, plan } | throws.
+export const getModelsAPI = async () => {
+  const response = await API.get("/models", {
+    headers: { ...addAuthHeader() },
+  });
+  return {
+    models: response.data?.models ?? [],
+    plan: response.data?.plan ?? null,
+  };
+};
