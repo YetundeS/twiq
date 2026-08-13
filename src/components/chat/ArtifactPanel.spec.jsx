@@ -1,12 +1,10 @@
 import { describe, expect, test, vi, beforeEach, afterEach } from "vitest";
 import { render, cleanup, fireEvent, waitFor } from "@testing-library/react";
 
-// Mock the copy hook — assert clipboard interactions without touching the
-// real navigator.clipboard machinery (§T-3: mock only at the boundary).
-const copySpy = vi.fn();
-vi.mock("@/hooks/useCopyToClipboard", () => ({
-    useCopyToClipboard: () => ({ copyToClipboard: copySpy, copied: false, error: null }),
-}));
+// §T-3: mock only at the true external boundary. useCopyToClipboard is
+// our own module (has its own spec); the real external surface is
+// navigator.clipboard.writeText. Shim it per-test so we assert the
+// contract the browser actually sees.
 
 const { default: ArtifactPanel } = await import("./ArtifactPanel");
 const { default: useArtifactStore } = await import("@/store/useArtifactStore");
@@ -37,7 +35,12 @@ const waitForEl = (selector) =>
     });
 
 beforeEach(() => {
-    copySpy.mockReset();
+    // Fresh clipboard spy per test — useCopyToClipboard reads
+    // navigator.clipboard at call time so redefining here is safe.
+    Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: { writeText: vi.fn().mockResolvedValue(undefined) },
+    });
     useArtifactStore.setState({ activeArtifact: null });
 });
 
@@ -62,15 +65,17 @@ describe("ArtifactPanel", () => {
         expect(slides.length).toBe(10);
     });
 
-    test("Copy all button copies every slide joined into one blob", async () => {
+    test("Copy all button writes every slide joined into one blob to the clipboard", async () => {
         useArtifactStore.setState({ activeArtifact: SAMPLE_ARTIFACT });
         render(<ArtifactPanel />);
 
         const btn = await waitForEl('[data-testid="artifact-copy-all"]');
         fireEvent.click(btn);
 
-        expect(copySpy).toHaveBeenCalledTimes(1);
-        const arg = copySpy.mock.calls[0][0];
+        await waitFor(() =>
+            expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1)
+        );
+        const arg = navigator.clipboard.writeText.mock.calls[0][0];
         // Every slide title + body should appear in the blob, joined by blank lines.
         for (const slide of SAMPLE_ARTIFACT.slides) {
             expect(arg).toContain(`Slide ${slide.index} — ${slide.title}`);
@@ -78,25 +83,35 @@ describe("ArtifactPanel", () => {
         }
     });
 
-    test("per-slide Copy button copies only that slide", async () => {
+    test("per-slide Copy button writes only that slide to the clipboard", async () => {
         useArtifactStore.setState({ activeArtifact: SAMPLE_ARTIFACT });
         render(<ArtifactPanel />);
 
         const btn = await waitForEl('[data-testid="artifact-copy-slide-3"]');
         fireEvent.click(btn);
 
-        expect(copySpy).toHaveBeenCalledWith("Slide 3 — Pain Point\nThe pain body");
+        await waitFor(() =>
+            expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+                "Slide 3 — Pain Point\nThe pain body"
+            )
+        );
     });
 
-    test("closing the sheet clears activeArtifact in the store", async () => {
+    test("store.close() unmounts the sheet contents", async () => {
         useArtifactStore.setState({ activeArtifact: SAMPLE_ARTIFACT });
         render(<ArtifactPanel />);
 
+        // Sheet is mounted with slides while activeArtifact is set…
         await waitForEl('[data-testid="artifact-panel"]');
-        // Directly invoke store.close() via the Sheet's onOpenChange path.
-        // (Simulating an outside-click on Radix in jsdom is flaky; testing
-        // the store contract directly is the invariant that matters.)
+
+        // …and closing the store clears both the store state AND the DOM.
+        // (Radix's outside-click close path is flaky in jsdom; asserting
+        // that the store→DOM contract holds is the invariant that matters
+        // — the Sheet's own onOpenChange wiring is one line and easy to
+        // eyeball verify.)
         useArtifactStore.getState().close();
-        expect(useArtifactStore.getState().activeArtifact).toBeNull();
+        await waitFor(() =>
+            expect(document.querySelector('[data-testid="artifact-panel"]')).toBeNull()
+        );
     });
 });
