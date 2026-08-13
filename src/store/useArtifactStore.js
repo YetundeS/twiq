@@ -6,7 +6,7 @@ import { create } from "zustand";
 
 /**
  * @typedef {Object} ArtifactPayload
- * @property {"carousel" | "video_script"} kind — artifact type discriminator
+ * @property {"carousel" | "video_script" | "linkedin_post"} kind — artifact type discriminator
  * @property {string | null} sourceMessageId — chat_messages.id the artifact came from (or null on optimistic rows)
  * @property {string} title — human title for the panel header
  * @property {Array<{index: number, key: string, title: string, body: string}>} [slides] — carousel only

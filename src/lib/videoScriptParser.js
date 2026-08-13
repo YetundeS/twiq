@@ -14,13 +14,14 @@
 // renders the raw message as plain markdown as usual.
 //
 // Same tolerance surface as the carousel parser (markdown bold, headings,
-// emoji prefixes, list markers). Duplicated buildLabelMatcher rather than
-// extracted — three occurrences is the earliest reasonable extraction
-// point, and today we only have two.
+// emoji prefixes, list markers). Regex + strip helpers extracted to
+// artifactRegexHelpers.js on the third use (linkedin-post parser).
 //
 // False-positive guard: requires ≥3 of the 4 canonical labels
 // (`MIN_MATCHES=3`, i.e. 75%) — same relative strictness as carousel
 // (8 of 10 = 80%). A single stray "Hook:" line in prose won't trip it.
+
+import { buildLabelMatcher, stripBoldMarkers } from "./artifactRegexHelpers";
 
 const SECTION_LABELS = [
     { key: "hook",     label: "Hook",     patterns: ["hook"] },
@@ -33,16 +34,6 @@ const HASHTAGS_LABEL = { key: "hashtags", patterns: ["hashtags", "hashtag"] };
 
 const MIN_MATCHES = 3;
 
-function buildLabelMatcher(patterns) {
-    const alt = patterns
-        .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-        .join("|");
-    return new RegExp(
-        `^\\s*(?:#{1,3}\\s+)?(?:(?:\\d+\\.|[-*])\\s+)?(?:[^\\s\\w]+\\s+)?(?:\\*\\*|__)?\\s*(?:${alt})\\s*(?:\\*\\*|__)?\\s*:\\s*(.*)$`,
-        "i"
-    );
-}
-
 const SECTION_MATCHERS = SECTION_LABELS.map((s) => ({
     ...s,
     regex: buildLabelMatcher(s.patterns),
@@ -52,13 +43,6 @@ const HASHTAGS_MATCHER = {
     ...HASHTAGS_LABEL,
     regex: buildLabelMatcher(HASHTAGS_LABEL.patterns),
 };
-
-function stripBoldMarkers(raw) {
-    return (raw || "")
-        .replace(/^\s*(\*\*|__)\s*/, "")
-        .replace(/\s*(\*\*|__)\s*$/, "")
-        .trim();
-}
 
 /**
  * Parse Video-Scripts-coach content into a structured artifact.
