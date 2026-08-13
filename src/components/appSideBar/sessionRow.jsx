@@ -20,11 +20,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { useSideBar } from "@/store/sidebarStore";
 import useModelsStore from "@/store/useModelsStore";
-import { Archive, ArchiveRestore, MessagesSquare, MoreHorizontal, Pin, PinOff, Trash2 } from "lucide-react";
+import { Archive, ArchiveRestore, MessagesSquare, MoreHorizontal, Pin, PinOff, Share2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import ShareSessionDialog from "./ShareSessionDialog";
 
 export function SessionRow({ session, organization, activeSessionID }) {
   const router = useRouter();
@@ -38,6 +39,7 @@ export function SessionRow({ session, organization, activeSessionID }) {
   const [deleteInFlight, setDeleteInFlight] = useState(false);
   const [pinInFlight, setPinInFlight] = useState(false);
   const [archiveInFlight, setArchiveInFlight] = useState(false);
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const renameInputRef = useRef(null);
 
   const isActive = activeSessionID === session.id;
@@ -210,6 +212,14 @@ export function SessionRow({ session, organization, activeSessionID }) {
                     </>
                   )}
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    setShareDialogOpen(true);
+                  }}
+                >
+                  <Share2 size={14} /> Share
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="sessionRowMenuDelete"
@@ -225,6 +235,12 @@ export function SessionRow({ session, organization, activeSessionID }) {
           </div>
         )}
       </div>
+
+      <ShareSessionDialog
+        sessionId={session.id}
+        open={shareDialogOpen}
+        onOpenChange={setShareDialogOpen}
+      />
 
       <Dialog open={confirmDeleteOpen} onOpenChange={setConfirmDeleteOpen}>
         <DialogContent>
