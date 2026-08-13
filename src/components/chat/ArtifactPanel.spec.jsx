@@ -27,6 +27,19 @@ const SAMPLE_ARTIFACT = {
     ],
 };
 
+const SAMPLE_VIDEO_SCRIPT = {
+    kind: "video_script",
+    sourceMessageId: "43",
+    title: "Video script",
+    sections: [
+        { index: 1, key: "hook",     title: "Hook",     body: "The hook line" },
+        { index: 2, key: "build_up", title: "Build-Up", body: "The build-up paragraph" },
+        { index: 3, key: "value",    title: "Value",    body: "The value paragraph" },
+        { index: 4, key: "cta",      title: "CTA",      body: "The CTA line" },
+    ],
+    hashtags: "#foo #bar #baz",
+};
+
 const waitForEl = (selector) =>
     waitFor(() => {
         const el = document.querySelector(selector);
@@ -112,6 +125,74 @@ describe("ArtifactPanel", () => {
         useArtifactStore.getState().close();
         await waitFor(() =>
             expect(document.querySelector('[data-testid="artifact-panel"]')).toBeNull()
+        );
+    });
+
+    // -------------------------------------------------------------------------
+    // Video-script kind — same panel, different body renderer.
+    // -------------------------------------------------------------------------
+
+    test("renders 4 section cards + a hashtags footer for a video_script artifact", async () => {
+        useArtifactStore.setState({ activeArtifact: SAMPLE_VIDEO_SCRIPT });
+        render(<ArtifactPanel />);
+
+        const panel = await waitForEl('[data-testid="artifact-panel"]');
+        expect(panel.getAttribute("data-artifact-kind")).toBe("video_script");
+        expect(document.querySelectorAll('[data-testid^="artifact-section-"]').length).toBe(4);
+        expect(document.querySelector('[data-testid="artifact-hashtags"]')).not.toBeNull();
+    });
+
+    test("hashtags footer is hidden when the video_script artifact has no hashtags", async () => {
+        useArtifactStore.setState({
+            activeArtifact: { ...SAMPLE_VIDEO_SCRIPT, hashtags: null },
+        });
+        render(<ArtifactPanel />);
+
+        await waitForEl('[data-testid="artifact-panel"]');
+        expect(document.querySelector('[data-testid="artifact-hashtags"]')).toBeNull();
+    });
+
+    test("Copy full script writes every section + hashtags to the clipboard", async () => {
+        useArtifactStore.setState({ activeArtifact: SAMPLE_VIDEO_SCRIPT });
+        render(<ArtifactPanel />);
+
+        const btn = await waitForEl('[data-testid="artifact-copy-all"]');
+        fireEvent.click(btn);
+
+        await waitFor(() =>
+            expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1)
+        );
+        const arg = navigator.clipboard.writeText.mock.calls[0][0];
+        for (const section of SAMPLE_VIDEO_SCRIPT.sections) {
+            expect(arg).toContain(section.title);
+            expect(arg).toContain(section.body);
+        }
+        expect(arg).toContain("Hashtags: #foo #bar #baz");
+    });
+
+    test("per-section Copy button writes only that section to the clipboard", async () => {
+        useArtifactStore.setState({ activeArtifact: SAMPLE_VIDEO_SCRIPT });
+        render(<ArtifactPanel />);
+
+        const btn = await waitForEl('[data-testid="artifact-copy-section-3"]');
+        fireEvent.click(btn);
+
+        await waitFor(() =>
+            expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+                "Value\nThe value paragraph"
+            )
+        );
+    });
+
+    test("Copy hashtags button writes only the hashtags line", async () => {
+        useArtifactStore.setState({ activeArtifact: SAMPLE_VIDEO_SCRIPT });
+        render(<ArtifactPanel />);
+
+        const btn = await waitForEl('[data-testid="artifact-copy-hashtags"]');
+        fireEvent.click(btn);
+
+        await waitFor(() =>
+            expect(navigator.clipboard.writeText).toHaveBeenCalledWith("#foo #bar #baz")
         );
     });
 });
