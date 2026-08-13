@@ -1,8 +1,8 @@
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import SpinnerLoader from "../dashboardComponent/spinnerLoader";
 import ModelTemplates from "../modelsComponent/modelTemplates";
 import "./cc.css";
 import ChatMessage, { ChatLoader } from "./chatMessage/chatMessage";
+import MessageListSkeleton from "./MessageListSkeleton";
 import { ModelPicker } from "./ModelPicker";
 import { parseMessageIdFromHash } from "@/lib/messageHash";
 
@@ -184,8 +184,8 @@ const ChatMessageWindow = memo(({
   if (isFetchingChats) {
     return (
       <div className="chats_area">
-        <div className="loadingIndicator">
-          <SpinnerLoader />
+        <div className="chats_area_container">
+          <MessageListSkeleton />
         </div>
       </div>
     );

@@ -36,7 +36,7 @@ import { toast } from "sonner";
 import CrownIcon from "../dashboardComponent/crown";
 import LogOutDialog from "../dashboardComponent/logOutDialog";
 import NewChatBtn from "../dashboardComponent/newChatBtn";
-import SpinnerLoader from "../dashboardComponent/spinnerLoader";
+import SessionListSkeleton from "./SessionListSkeleton";
 import { hasAccess } from './index';
 import { SearchDialog } from './SearchDialog';
 
@@ -227,9 +227,7 @@ export function AppSidebarDesktop() {
                     )}
                   </>
                 ) : (
-                  <div className="loadingIndicator">
-                    <SpinnerLoader className="smaller" />
-                  </div>
+                  <SessionListSkeleton />
                 )}
               </SidebarMenu>
             </SidebarGroupContent>
