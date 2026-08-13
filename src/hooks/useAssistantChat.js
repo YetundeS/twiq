@@ -139,12 +139,18 @@ export default function useAssistantChat(modelName, assistantSlug) {
       // SWR revalidation is about to clobber optimistic rows that Zustand
       // had. Zero behavior change — still copies over — just tells us
       // when the theoretical race is actually happening in dev.
-      // Removes once we move writes to SWR-first in the follow-up PR.
-      recordMessageDrift(chats, messages, activeSessionID);
+      //
+      // Read current Zustand via getState() (NOT through `chats`) so the
+      // effect's dep array doesn't include a value the effect mutates.
+      // qcheck H1 fix — putting `chats` in deps caused an infinite
+      // render loop: effect writes to Zustand → chats ref changes →
+      // effect fires → writes to Zustand → ...
+      const currentChats = useModelsStore.getState().activeChatMessages;
+      recordMessageDrift(currentChats, messages, activeSessionID);
       setActiveChatMessages(messages);
       setMessagesHasMore(hasMore);
     }
-  }, [messages, hasMore, chats, activeSessionID, setActiveChatMessages, setMessagesHasMore]);
+  }, [messages, hasMore, activeSessionID, setActiveChatMessages, setMessagesHasMore]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
