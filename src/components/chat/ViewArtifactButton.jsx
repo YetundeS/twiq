@@ -12,9 +12,10 @@
 // key off the `kind` string — no other file needs to know.
 
 import { useMemo } from "react";
-import { LayoutGrid, FileText } from "lucide-react";
+import { LayoutGrid, FileText, Newspaper } from "lucide-react";
 import { parseCarouselArtifact } from "@/lib/artifactParser";
 import { parseVideoScriptArtifact } from "@/lib/videoScriptParser";
+import { parseLinkedinPostArtifact } from "@/lib/linkedinPostParser";
 import useArtifactStore from "@/store/useArtifactStore";
 
 // Ordered: first parser to match wins. Order matters only if a single
@@ -40,6 +41,27 @@ const KNOWN_ARTIFACTS = [
         parser: parseVideoScriptArtifact,
         // Parser returns { sections, hashtags }.
         toPayload: (parsed) => ({ sections: parsed.sections, hashtags: parsed.hashtags }),
+    },
+    // Both LinkedIn coaches (business + personal) emit the same 3-section
+    // shape. Two entries → same parser + kind so the panel doesn't need
+    // to distinguish them.
+    {
+        coach: "linkedin_business",
+        kind: "linkedin_post",
+        title: "LinkedIn post",
+        buttonLabel: "View as LinkedIn post",
+        Icon: Newspaper,
+        parser: parseLinkedinPostArtifact,
+        toPayload: (parsed) => ({ sections: parsed.sections }),
+    },
+    {
+        coach: "linkedin_personal",
+        kind: "linkedin_post",
+        title: "LinkedIn post",
+        buttonLabel: "View as LinkedIn post",
+        Icon: Newspaper,
+        parser: parseLinkedinPostArtifact,
+        toPayload: (parsed) => ({ sections: parsed.sections }),
     },
 ];
 

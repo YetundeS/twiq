@@ -29,6 +29,8 @@
 // so a generic prose reply with a stray "Tip 1:" line doesn't get
 // misidentified as a carousel.
 
+import { buildLabelMatcher, stripBoldMarkers } from "./artifactRegexHelpers";
+
 // Ordered canonical labels. `key` = internal id; `label` = user-facing
 // slide title in the panel. Aliases handle common naming variants the
 // coach occasionally produces (e.g. "Support Text" instead of "Body").
@@ -46,37 +48,6 @@ const SLIDE_LABELS = [
 ];
 
 const MIN_MATCHES = 8;
-
-// Match: optional markdown-heading marker, optional list marker, optional
-// emoji + space, optional bold markers, then the label, optional bold
-// close, colon, then rest-of-line as body.
-//
-//   line = <heading?> <list?> <emoji?> <bold?> LABEL <bold?> ':' <body>
-//
-// Kept as a builder rather than a giant static regex so each label's
-// aliases can be plugged in individually and the pattern set stays
-// readable.
-function buildLabelMatcher(patterns) {
-    // Escape any regex metachars in patterns (defensive — current
-    // patterns are letters + spaces, but future aliases might not be).
-    const alt = patterns
-        .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-        .join("|");
-    // Anchored at start; case-insensitive; captures the body.
-    // - Optional markdown heading (`#`, `##`, `###`) followed by space
-    // - Optional list marker (`1.`, `-`, `*`) followed by space
-    // - Optional emoji cluster + space (broad match; \p{Extended_Pictographic}
-    //   isn't universally supported, so fall back to a permissive char set)
-    // - Optional bold open (`**` or `__`)
-    // - The label
-    // - Optional bold close (`**` or `__`)
-    // - Colon
-    // - Body (rest of line, trimmed later)
-    return new RegExp(
-        `^\\s*(?:#{1,3}\\s+)?(?:(?:\\d+\\.|[-*])\\s+)?(?:[^\\s\\w]+\\s+)?(?:\\*\\*|__)?\\s*(?:${alt})\\s*(?:\\*\\*|__)?\\s*:\\s*(.*)$`,
-        "i"
-    );
-}
 
 const MATCHERS = SLIDE_LABELS.map((s) => ({
     ...s,
@@ -103,15 +74,9 @@ export function parseCarouselArtifact(content) {
             if (matched.has(key)) continue; // first-match-wins per label
             const m = line.match(regex);
             if (m) {
-                // Strip a leading bold-close (`**Hook:**` puts the closing
-                // `**` after the colon, so it ends up at the head of the
-                // captured body). Same for underscore-style bold + a
-                // stray trailing bold-close on the body.
-                const body = (m[1] || "")
-                    .replace(/^\s*(\*\*|__)\s*/, "")
-                    .replace(/\s*(\*\*|__)\s*$/, "")
-                    .trim();
-                matched.set(key, body);
+                // Strip bold-close markers that end up on the body side
+                // when the coach writes `**Hook:**` (colon inside bold).
+                matched.set(key, stripBoldMarkers(m[1]));
                 break; // this line consumed
             }
         }

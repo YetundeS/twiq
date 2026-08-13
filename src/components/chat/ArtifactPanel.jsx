@@ -7,14 +7,17 @@
 // store.open(payload) to fill it.
 //
 // Dispatches on activeArtifact.kind:
-//   - "carousel"     → 10 slide cards (CarouselArtifactBody)
-//   - "video_script" → 4 section cards + hashtags footer (VideoScriptArtifactBody)
+//   - "carousel"      → 10 slide cards (CarouselArtifactBody)
+//   - "video_script"  → 4 section cards + optional hashtags footer (SectionsArtifactBody)
+//   - "linkedin_post" → 3 section cards, no hashtags (SectionsArtifactBody)
 //
-// New artifact types slot in as another body sub-component + one branch
-// in the switch. Header, Copy-all button, and Sheet framing stay generic.
+// video_script and linkedin_post share a renderer (both are section
+// stacks); hashtags is opt-in via the `hashtags` prop. New artifact
+// types slot in as another body sub-component + one branch in the
+// switch. Header, Copy-all button, and Sheet framing stay generic.
 
 import { useMemo } from "react";
-import { Copy, FileText, LayoutGrid } from "lucide-react";
+import { Copy, FileText, LayoutGrid, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     Sheet,
@@ -36,7 +39,7 @@ function formatCarouselFull(slides = []) {
         .join("\n\n");
 }
 
-function formatVideoScriptFull(sections = [], hashtags = null) {
+function formatSectionsFull(sections = [], hashtags = null) {
     const body = sections
         .map((s) => `${s.title}\n${s.body}`.trim())
         .join("\n\n");
@@ -93,7 +96,7 @@ function CarouselArtifactBody({ slides, copyToClipboard }) {
     );
 }
 
-function VideoScriptArtifactBody({ sections, hashtags, copyToClipboard }) {
+function SectionsArtifactBody({ sections, hashtags, copyToClipboard }) {
     return (
         <div className="px-4 pb-8 flex flex-col gap-3">
             {sections.map((section) => (
@@ -172,7 +175,9 @@ export default function ArtifactPanel() {
         if (!activeArtifact) return "";
         if (kind === "carousel") return formatCarouselFull(activeArtifact.slides);
         if (kind === "video_script")
-            return formatVideoScriptFull(activeArtifact.sections, activeArtifact.hashtags);
+            return formatSectionsFull(activeArtifact.sections, activeArtifact.hashtags);
+        if (kind === "linkedin_post")
+            return formatSectionsFull(activeArtifact.sections);
         return "";
     }, [activeArtifact, kind]);
 
@@ -180,15 +185,18 @@ export default function ArtifactPanel() {
         if (!next) close();
     };
 
-    const headerIcon = kind === "video_script" ? FileText : LayoutGrid;
-    const description =
-        kind === "video_script"
-            ? "4-section video script. Read-only for now — regenerate via chat to make changes."
-            : "10-slide carousel preview. Read-only for now — regenerate via chat to make changes.";
-    const copyAllLabel =
-        kind === "video_script" ? "Copy full script" : "Copy all slides";
-
-    const HeaderIcon = headerIcon;
+    // Kind → header UI. Kept as a small local table rather than a
+    // registry export because both this file and ViewArtifactButton
+    // pick their own icons for their own affordance — coupling them
+    // through a shared registry would add indirection without saving
+    // any real duplication.
+    const KIND_UI = {
+        carousel:      { Icon: LayoutGrid, description: "10-slide carousel preview. Read-only for now — regenerate via chat to make changes.", copyAllLabel: "Copy all slides" },
+        video_script:  { Icon: FileText,   description: "4-section video script. Read-only for now — regenerate via chat to make changes.",     copyAllLabel: "Copy full script" },
+        linkedin_post: { Icon: Newspaper,  description: "3-section LinkedIn post. Read-only for now — regenerate via chat to make changes.",   copyAllLabel: "Copy full post" },
+    };
+    const ui = KIND_UI[kind] ?? KIND_UI.carousel;
+    const HeaderIcon = ui.Icon;
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
@@ -202,7 +210,7 @@ export default function ArtifactPanel() {
                         <HeaderIcon size={18} className="text-muted-foreground" />
                         <SheetTitle>{activeArtifact?.title || "Artifact"}</SheetTitle>
                     </div>
-                    <SheetDescription>{description}</SheetDescription>
+                    <SheetDescription>{ui.description}</SheetDescription>
                     <div className="pt-2">
                         <Button
                             type="button"
@@ -211,7 +219,7 @@ export default function ArtifactPanel() {
                             onClick={() => copyToClipboard(fullText)}
                             data-testid="artifact-copy-all"
                         >
-                            <Copy size={14} /> {copyAllLabel}
+                            <Copy size={14} /> {ui.copyAllLabel}
                         </Button>
                     </div>
                 </SheetHeader>
@@ -223,9 +231,16 @@ export default function ArtifactPanel() {
                     />
                 )}
                 {kind === "video_script" && (
-                    <VideoScriptArtifactBody
+                    <SectionsArtifactBody
                         sections={activeArtifact.sections ?? []}
                         hashtags={activeArtifact.hashtags ?? null}
+                        copyToClipboard={copyToClipboard}
+                    />
+                )}
+                {kind === "linkedin_post" && (
+                    <SectionsArtifactBody
+                        sections={activeArtifact.sections ?? []}
+                        hashtags={null}
                         copyToClipboard={copyToClipboard}
                     />
                 )}

@@ -40,6 +40,17 @@ const SAMPLE_VIDEO_SCRIPT = {
     hashtags: "#foo #bar #baz",
 };
 
+const SAMPLE_LINKEDIN_POST = {
+    kind: "linkedin_post",
+    sourceMessageId: "44",
+    title: "LinkedIn post",
+    sections: [
+        { index: 1, key: "hook",      title: "Hook",      body: "The hook line" },
+        { index: 2, key: "main_body", title: "Main Body", body: "Paragraph one.\n\nParagraph two." },
+        { index: 3, key: "cta",       title: "CTA",       body: "The CTA line" },
+    ],
+};
+
 const waitForEl = (selector) =>
     waitFor(() => {
         const el = document.querySelector(selector);
@@ -193,6 +204,55 @@ describe("ArtifactPanel", () => {
 
         await waitFor(() =>
             expect(navigator.clipboard.writeText).toHaveBeenCalledWith("#foo #bar #baz")
+        );
+    });
+
+    // -------------------------------------------------------------------------
+    // LinkedIn post kind — reuses the sections renderer, no hashtags footer.
+    // -------------------------------------------------------------------------
+
+    test("renders 3 section cards + NO hashtags footer for a linkedin_post artifact", async () => {
+        useArtifactStore.setState({ activeArtifact: SAMPLE_LINKEDIN_POST });
+        render(<ArtifactPanel />);
+
+        const panel = await waitForEl('[data-testid="artifact-panel"]');
+        expect(panel.getAttribute("data-artifact-kind")).toBe("linkedin_post");
+        expect(document.querySelectorAll('[data-testid^="artifact-section-"]').length).toBe(3);
+        // LinkedIn posts don't carry hashtags — footer must NOT render even
+        // though the SectionsArtifactBody renderer is capable of showing one.
+        expect(document.querySelector('[data-testid="artifact-hashtags"]')).toBeNull();
+    });
+
+    test("Copy full post writes every section joined into one blob", async () => {
+        useArtifactStore.setState({ activeArtifact: SAMPLE_LINKEDIN_POST });
+        render(<ArtifactPanel />);
+
+        const btn = await waitForEl('[data-testid="artifact-copy-all"]');
+        fireEvent.click(btn);
+
+        await waitFor(() =>
+            expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1)
+        );
+        const arg = navigator.clipboard.writeText.mock.calls[0][0];
+        for (const section of SAMPLE_LINKEDIN_POST.sections) {
+            expect(arg).toContain(section.title);
+            expect(arg).toContain(section.body);
+        }
+        // No hashtags trailer for linkedin_post.
+        expect(arg).not.toContain("Hashtags:");
+    });
+
+    test("per-section Copy button on linkedin_post writes only that section", async () => {
+        useArtifactStore.setState({ activeArtifact: SAMPLE_LINKEDIN_POST });
+        render(<ArtifactPanel />);
+
+        const btn = await waitForEl('[data-testid="artifact-copy-section-2"]');
+        fireEvent.click(btn);
+
+        await waitFor(() =>
+            expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+                "Main Body\nParagraph one.\n\nParagraph two."
+            )
         );
     });
 });
