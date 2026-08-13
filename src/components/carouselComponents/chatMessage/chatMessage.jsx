@@ -13,6 +13,7 @@ import MessageContextMenu from "./MessageContextMenu";
 import MessageErrorBanner from "./MessageErrorBanner";
 import ModelBadge from "./ModelBadge";
 import RetryWithModelMenu from "./RetryWithModelMenu";
+import SuggestionPills from "./SuggestionPills";
 import UserMessageEditor from "./UserMessageEditor";
 import "./cm.css";
 
@@ -49,6 +50,7 @@ const ChatMessage = memo(({
   onRetry,
   onRegenerate,
   onEdit,
+  setInputValue,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -142,6 +144,15 @@ const ChatMessage = memo(({
           )}
         </div>
       </div>
+      {/* Suggested next actions (Phase 3 track 1). Silent no-op when
+          suggestions is null/empty — legacy rows, aborted-partial
+          replies, and generation failures all render nothing. */}
+      {isAIMessage && !isErrorMessage && !isEditing && (
+        <SuggestionPills
+          suggestions={chat?.suggestions}
+          onPick={setInputValue}
+        />
+      )}
       {isAIMessage && !isErrorMessage && (
         <div
           className={`message-actions-container ${isHovered ? "visible" : ""}`}

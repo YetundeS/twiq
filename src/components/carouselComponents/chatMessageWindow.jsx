@@ -144,11 +144,12 @@ const ChatMessageWindow = memo(({
           onRetry={isLast && isErroredAssistant ? onRetryLast : undefined}
           onRegenerate={onRegenerate}
           onEdit={onEdit}
+          setInputValue={setInputValue}
           key={chat.id || `${chat.sessionID}-${i}`} // Use unique key if available
         />
       );
     });
-  }, [chats, uploadedFiles, assistantSlug, coach, siblingGroups, activeByParent, onRetryLast, onRegenerate, onEdit]);
+  }, [chats, uploadedFiles, assistantSlug, coach, siblingGroups, activeByParent, onRetryLast, onRegenerate, onEdit, setInputValue]);
 
   // Memoize the streaming message to avoid unnecessary re-renders
   const streamingMessage = useMemo(() => {
