@@ -3,6 +3,7 @@
 
 import { fetchUser } from "@/apiCalls/authAPI";
 import { AppSidebar } from "@/components/appSideBar";
+import ArtifactPanel from "@/components/chat/ArtifactPanel";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
@@ -66,7 +67,12 @@ export default function DashboardLayout({ children }) {
 
   // Render with or without sidebar based on route
   if (!shouldShowSidebar) {
-    return <div className="dashboard_wrapper">{children}</div>;
+    return (
+      <div className="dashboard_wrapper">
+        {children}
+        <ArtifactPanel />
+      </div>
+    );
   }
 
   return (
@@ -74,6 +80,7 @@ export default function DashboardLayout({ children }) {
       <div className="dashboard_wrapper">
         <AppSidebar />
         {children}
+        <ArtifactPanel />
       </div>
     </SidebarProvider>
   );
