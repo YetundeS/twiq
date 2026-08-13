@@ -12,12 +12,42 @@ import { useChatMessages } from "./useApiCache";
 import { withDeduplication } from "@/utils/requestDeduplication";
 import { generateSignString } from "@/lib/utils";
 import { createRafBatcher } from "@/lib/rafBatcher";
+import { detectMessageDrift } from "@/lib/messageDrift";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useIsMobile } from "./use-mobile";
 import useKeyboardShortcuts from "./useKeyboardShortcuts";
 
+// Drift diagnostic buffer (§5.5.5). Bounded ring — inspect via
+// window.__twiqDriftLog in dev tools. Not shipped to any backend today;
+// see docs on messageDrift.js for regression-harness use.
+const DRIFT_LOG_MAX = 20;
+
+function recordMessageDrift(prevChats, nextMessages, sessionId) {
+  const report = detectMessageDrift(prevChats, nextMessages);
+  if (!report.drifted) return;
+  const entry = {
+    at: new Date().toISOString(),
+    sessionId,
+    ...report,
+  };
+  if (typeof window !== "undefined") {
+    if (!Array.isArray(window.__twiqDriftLog)) window.__twiqDriftLog = [];
+    window.__twiqDriftLog.push(entry);
+    if (window.__twiqDriftLog.length > DRIFT_LOG_MAX) {
+      window.__twiqDriftLog.splice(0, window.__twiqDriftLog.length - DRIFT_LOG_MAX);
+    }
+  }
+  if (process.env.NODE_ENV !== "production") {
+    // Loud in dev so we notice; silent in prod (log buffer still fills).
+    // eslint-disable-next-line no-console
+    console.warn(
+      "[messageDrift] SWR revalidation dropped rows the local Zustand snapshot had.",
+      entry
+    );
+  }
+}
 
 export default function useAssistantChat(modelName, assistantSlug) {
   const [inputValue, setInputValue] = useState("");
@@ -105,10 +135,22 @@ export default function useAssistantChat(modelName, assistantSlug) {
 
   useEffect(() => {
     if (messages && messages.length > 0) {
+      // Zustand↔SWR drift diagnostic (audit §5.5.5). Observe whether the
+      // SWR revalidation is about to clobber optimistic rows that Zustand
+      // had. Zero behavior change — still copies over — just tells us
+      // when the theoretical race is actually happening in dev.
+      //
+      // Read current Zustand via getState() (NOT through `chats`) so the
+      // effect's dep array doesn't include a value the effect mutates.
+      // qcheck H1 fix — putting `chats` in deps caused an infinite
+      // render loop: effect writes to Zustand → chats ref changes →
+      // effect fires → writes to Zustand → ...
+      const currentChats = useModelsStore.getState().activeChatMessages;
+      recordMessageDrift(currentChats, messages, activeSessionID);
       setActiveChatMessages(messages);
       setMessagesHasMore(hasMore);
     }
-  }, [messages, hasMore, setActiveChatMessages, setMessagesHasMore]);
+  }, [messages, hasMore, activeSessionID, setActiveChatMessages, setMessagesHasMore]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
