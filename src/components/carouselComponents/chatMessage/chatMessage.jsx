@@ -15,7 +15,7 @@ import ModelBadge from "./ModelBadge";
 import RetryWithModelMenu from "./RetryWithModelMenu";
 import SuggestionPills from "./SuggestionPills";
 import UserMessageEditor from "./UserMessageEditor";
-import ViewAsCarouselButton from "@/components/chat/ViewAsCarouselButton";
+import ViewArtifactButton from "@/components/chat/ViewArtifactButton";
 import "./cm.css";
 
 // Memoized function to parse OpenAI response
@@ -181,7 +181,7 @@ const ChatMessage = memo(({
               />
             </>
           )}
-          <ViewAsCarouselButton chat={chat} assistantSlug={assistantSlug} />
+          <ViewArtifactButton chat={chat} assistantSlug={assistantSlug} />
           <ModelBadge model={chat?.model} />
         </div>
       )}

@@ -6,10 +6,12 @@ import { create } from "zustand";
 
 /**
  * @typedef {Object} ArtifactPayload
- * @property {"carousel"} kind — artifact type discriminator (only "carousel" in MVP)
+ * @property {"carousel" | "video_script"} kind — artifact type discriminator
  * @property {string | null} sourceMessageId — chat_messages.id the artifact came from (or null on optimistic rows)
- * @property {string} title — human title for the panel header (usually the coach display name)
- * @property {import("@/lib/artifactParser").parseCarouselArtifact["slides"]} slides
+ * @property {string} title — human title for the panel header
+ * @property {Array<{index: number, key: string, title: string, body: string}>} [slides] — carousel only
+ * @property {Array<{index: number, key: string, title: string, body: string}>} [sections] — video_script only
+ * @property {string | null} [hashtags] — video_script only; the coach's trailing hashtags line
  */
 
 const useArtifactStore = create((set) => ({
