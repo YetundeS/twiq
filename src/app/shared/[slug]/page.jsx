@@ -12,10 +12,9 @@
 // and 410 via a distinct expired panel so viewers know the link WAS real.
 
 import { notFound } from "next/navigation";
+import { fetchSharedPublicSession } from "@/apiCalls/shareSession";
 import SharedChatView from "./SharedChatView";
 import SharedExpired from "./SharedExpired";
-
-const SERVER_URI = process.env.NEXT_PUBLIC_SERVER_URI;
 
 export const metadata = {
   title: "Shared chat — TWIQ",
@@ -26,26 +25,9 @@ export const metadata = {
 // requests and we never want to hand back a stale cached HTML.
 export const dynamic = "force-dynamic";
 
-async function fetchShared(slug) {
-  if (!SERVER_URI) return { status: 500 };
-  try {
-    const res = await fetch(`${SERVER_URI}/shared/${encodeURIComponent(slug)}`, {
-      cache: "no-store",
-    });
-    const status = res.status;
-    if (status === 200) {
-      const body = await res.json();
-      return { status, body };
-    }
-    return { status };
-  } catch (_err) {
-    return { status: 500 };
-  }
-}
-
 export default async function SharedSessionPage({ params }) {
   const { slug } = await params;
-  const { status, body } = await fetchShared(slug);
+  const { status, body } = await fetchSharedPublicSession(slug);
 
   if (status === 404) notFound();
   if (status === 410) return <SharedExpired />;
