@@ -2,7 +2,13 @@
 const nextConfig = {
   // Image optimization
   images: {
-    domains: ['api.dicebear.com', "hbdzdybodzljzkolefcj.supabase.co"],
+    // Next 16 removed `images.domains` in favor of `images.remotePatterns`
+    // (the latter allows per-protocol and path-prefix scoping instead of
+    // whole-domain allow-listing — meaningful security tightening).
+    remotePatterns: [
+      { protocol: 'https', hostname: 'api.dicebear.com' },
+      { protocol: 'https', hostname: 'hbdzdybodzljzkolefcj.supabase.co' },
+    ],
     dangerouslyAllowSVG: true, // ⚠️ USE WITH CAUTION
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     formats: ['image/webp', 'image/avif'], // Use modern formats
