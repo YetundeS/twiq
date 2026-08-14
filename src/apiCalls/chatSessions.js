@@ -95,10 +95,148 @@ export const fetchChats = async (user, slug, updateSideBarSessions, setIsFetchin
     }
 };
 
+export const updateSession = async (sessionId, patch) => {
+    if (!sessionId) return null;
+
+    const authHeader = addAuthHeader();
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/${sessionId}`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader,
+                },
+                body: JSON.stringify(patch),
+            }
+        );
+
+        if (!response.ok) {
+            let description = response.statusText || "Please try again";
+            try {
+                const body = await response.json();
+                if (body?.error) description = body.error;
+            } catch (_) { /* ignore parse failures */ }
+
+            toast.error("Failed to update session", {
+                description,
+                style: { border: "none", color: "red" },
+            });
+            return null;
+        }
+
+        const data = await response.json();
+        return data?.session ?? null;
+    } catch (_err) {
+        toast.error("Failed to update session", {
+            description: "Something went wrong - please try again",
+            style: { border: "none", color: "red" },
+        });
+        return null;
+    }
+};
+
+export const deleteSession = async (sessionId) => {
+    if (!sessionId) return false;
+
+    const authHeader = addAuthHeader();
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/${sessionId}`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader,
+                },
+            }
+        );
+
+        if (!response.ok) {
+            let description = response.statusText || "Please try again";
+            try {
+                const body = await response.json();
+                if (body?.error) description = body.error;
+            } catch (_) { /* ignore parse failures */ }
+
+            toast.error("Failed to delete session", {
+                description,
+                style: { border: "none", color: "red" },
+            });
+            return false;
+        }
+
+        return true;
+    } catch (_err) {
+        toast.error("Failed to delete session", {
+            description: "Something went wrong - please try again",
+            style: { border: "none", color: "red" },
+        });
+        return false;
+    }
+};
+
+// GET /api/chats/coach/:slug — read-only coach identity + model allowlist.
+// Feeds the retry-with-model picker so we can offer the fallback model
+// as an alternative to the coach default.
+export const fetchCoachPublicProfile = async (slug) => {
+    if (!slug) return null;
+    const authHeader = addAuthHeader();
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/coach/${slug}`,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader,
+                },
+            }
+        );
+        if (!response.ok) return null;
+        const data = await response.json();
+        return data?.coach ?? null;
+    } catch (_err) {
+        return null;
+    }
+};
+
+// Cross-session search (§6.11). Returns { results, count } or { error }.
+// Doesn't toast — callers usually render inline validation state instead.
+export const searchChatsAPI = async (q, limit = 20) => {
+    const authHeader = addAuthHeader();
+    const params = new URLSearchParams({ q: q ?? "", limit: String(limit) });
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/search?${params.toString()}`,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    ...authHeader,
+                },
+            }
+        );
+
+        if (!response.ok) {
+            let error = response.statusText || "Search failed";
+            try {
+                const body = await response.json();
+                if (body?.error) error = body.error;
+            } catch (_) { /* ignore */ }
+            return { error, results: [] };
+        }
+
+        const data = await response.json();
+        return { results: data?.results ?? [], count: data?.count ?? 0 };
+    } catch (_err) {
+        return { error: "Network error. Please try again.", results: [] };
+    }
+};
+
 export const fetchChat = async (sessionId) => {
     try {
         if (!sessionId) return;
-        
+
         // 🔹 Get auth headers
         const authHeader = addAuthHeader();
         const response = await fetch(

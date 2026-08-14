@@ -14,6 +14,136 @@ const getAuthHeaders = () => {
   };
 };
 
+// ---------------------------------------------------------------------------
+// Plan-models CRUD (Phase 2 §12.2)
+// ---------------------------------------------------------------------------
+
+export const listPlanModels = async () => {
+  const res = await axios.get(`${API_URL}/admin/plan-models`, getAuthHeaders());
+  return res.data?.planModels ?? [];
+};
+
+export const createPlanModel = async (body) => {
+  try {
+    const res = await axios.post(`${API_URL}/admin/plan-models`, body, getAuthHeaders());
+    return res.data?.planModel;
+  } catch (err) {
+    const msg = err?.response?.data?.error || err.message || "createPlanModel failed";
+    throw new Error(msg);
+  }
+};
+
+export const updatePlanModel = async (id, patch) => {
+  try {
+    const res = await axios.patch(`${API_URL}/admin/plan-models/${id}`, patch, getAuthHeaders());
+    return res.data?.planModel;
+  } catch (err) {
+    const msg = err?.response?.data?.error || err.message || "updatePlanModel failed";
+    throw new Error(msg);
+  }
+};
+
+export const deletePlanModel = async (id) => {
+  try {
+    const res = await axios.delete(`${API_URL}/admin/plan-models/${id}`, getAuthHeaders());
+    return res.data;
+  } catch (err) {
+    const msg = err?.response?.data?.error || err.message || "deletePlanModel failed";
+    throw new Error(msg);
+  }
+};
+
+// OpenRouter's live catalog — used to seed the "Add Model" dropdown.
+// Backend caches this 24h so the frontend can fetch on-demand without
+// worrying about upstream load.
+export const listOpenRouterModels = async () => {
+  const res = await axios.get(`${API_URL}/admin/openrouter/models`, getAuthHeaders());
+  return res.data?.models ?? [];
+};
+
+// ---------------------------------------------------------------------------
+// Coach management (§12.1)
+// ---------------------------------------------------------------------------
+
+export const listCoaches = async () => {
+  const res = await axios.get(`${API_URL}/admin/coaches`, getAuthHeaders());
+  return res.data?.coaches ?? [];
+};
+
+export const getCoach = async (slug) => {
+  const res = await axios.get(`${API_URL}/admin/coaches/${slug}`, getAuthHeaders());
+  return res.data?.coach ?? null;
+};
+
+export const createCoach = async (body) => {
+  try {
+    const res = await axios.post(`${API_URL}/admin/coaches`, body, getAuthHeaders());
+    return res.data?.coach;
+  } catch (err) {
+    throw new Error(err?.response?.data?.error || err.message || "createCoach failed");
+  }
+};
+
+export const updateCoach = async (slug, patch) => {
+  try {
+    const res = await axios.patch(`${API_URL}/admin/coaches/${slug}`, patch, getAuthHeaders());
+    return res.data?.coach;
+  } catch (err) {
+    throw new Error(err?.response?.data?.error || err.message || "updateCoach failed");
+  }
+};
+
+// Soft delete — sets is_published=false; existing user sessions still work.
+export const archiveCoach = async (slug) => {
+  try {
+    const res = await axios.delete(`${API_URL}/admin/coaches/${slug}`, getAuthHeaders());
+    return res.data;
+  } catch (err) {
+    throw new Error(err?.response?.data?.error || err.message || "archiveCoach failed");
+  }
+};
+
+// ---------------------------------------------------------------------------
+// Coach KB uploads (§12.1)
+// ---------------------------------------------------------------------------
+
+export const listCoachKb = async (slug) => {
+  const res = await axios.get(`${API_URL}/admin/coaches/${slug}/knowledge`, getAuthHeaders());
+  return res.data?.files ?? [];
+};
+
+// Uploads use FormData — must NOT set Content-Type or the browser can't
+// generate the multipart boundary. getAuthHeaders() spreads Content-Type
+// too, so we build a custom header set for this call.
+export const uploadCoachKb = async (slug, files) => {
+  const formData = new FormData();
+  for (const file of files) formData.append("files", file);
+  try {
+    const authHeader = addAuthHeader();
+    const res = await axios.post(
+      `${API_URL}/admin/coaches/${slug}/knowledge`,
+      formData,
+      { headers: authHeader }
+    );
+    return res.data;
+  } catch (err) {
+    throw new Error(err?.response?.data?.error || err.message || "uploadCoachKb failed");
+  }
+};
+
+export const deleteCoachKbFile = async (slug, fileId) => {
+  try {
+    const res = await axios.delete(
+      `${API_URL}/admin/coaches/${slug}/knowledge/${fileId}`,
+      getAuthHeaders()
+    );
+    return res.data;
+  } catch (err) {
+    throw new Error(err?.response?.data?.error || err.message || "deleteCoachKbFile failed");
+  }
+};
+
+
 // Grant beta access to a user
 export const grantBetaAccess = async ({ userEmail, betaPlan, startDate, durationDays }) => {
   try {
@@ -187,6 +317,20 @@ export const getLogStats = async () => {
     console.error("Error fetching log statistics:", error);
     throw error.response?.data || error;
   }
+};
+
+// ---------------------------------------------------------------------------
+// Chat observability metrics (Phase 2 §6.14)
+// ---------------------------------------------------------------------------
+// GET /admin/metrics/chat?window=24h|7d|30d — aggregated TTFT / TPS /
+// stream duration percentiles by model, coach, and day. Backend cap of
+// 50k rows per window (row_cap_hit=true flags it).
+export const getChatMetrics = async (window = "24h") => {
+  const response = await axios.get(
+    `${API_URL}/admin/metrics/chat`,
+    { ...getAuthHeaders(), params: { window } }
+  );
+  return response.data;
 };
 
 // Cleanup old logs (30+ days)

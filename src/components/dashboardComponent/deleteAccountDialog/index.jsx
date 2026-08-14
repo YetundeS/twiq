@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import useAuthStore from "@/store/authStore";
 import useDeleteAccountStore from "@/store/useDeleteAccountStore";
-import { CircularProgress } from "@mui/material";
+import SpinnerLoader from "@/components/dashboardComponent/spinnerLoader";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -98,7 +98,7 @@ const DeleteAccountDialog = () => {
             onClick={handleDeleteAccount}
           >
             {loading ? (
-              <CircularProgress color="black" size="14px" />
+              <SpinnerLoader inline />
             ) : (
               <p>Yes, delete my account</p>
             )}

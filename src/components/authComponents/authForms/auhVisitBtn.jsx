@@ -1,4 +1,4 @@
-import { CircularProgress } from '@mui/material';
+import SpinnerLoader from '@/components/dashboardComponent/spinnerLoader';
 import './authVisit.css';
 
 const AuhVisitBtn = ({ text = "Sign In", black, red, onClick, loading }) => {
@@ -7,7 +7,7 @@ const AuhVisitBtn = ({ text = "Sign In", black, red, onClick, loading }) => {
             {!loading ? (
                 <p>{text}</p>
             ) : (
-                <CircularProgress color="white" size="17px" />
+                <SpinnerLoader inline />
             )}</div>
     )
 }

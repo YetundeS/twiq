@@ -36,6 +36,18 @@ export const useSideBar = create((set) => ({
           };
     }),
 
+  updateSessionInSideBar: (sessionId, patch) =>
+    set((state) => ({
+      sidebarSessions: state.sidebarSessions.map((s) =>
+        s.id === sessionId ? { ...s, ...patch } : s
+      ),
+    })),
+
+  removeFromSideBarSessions: (sessionId) =>
+    set((state) => ({
+      sidebarSessions: state.sidebarSessions.filter((s) => s.id !== sessionId),
+    })),
+
   setCurrentAssistantSlug: (newAssistantSlug) =>
     set(() => ({
       currentAssistantSlug: newAssistantSlug,

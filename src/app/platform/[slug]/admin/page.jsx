@@ -6,9 +6,12 @@ import { getDashboardStats, getBetaUsers } from '@/apiCalls/adminAPI';
 import BetaUserStats from '@/components/adminComponents/BetaUserStats';
 import BetaUserTable from '@/components/adminComponents/BetaUserTable';
 import AddBetaUserDialog from '@/components/adminComponents/AddBetaUserDialog';
+import CoachesPanel from '@/components/adminComponents/CoachesPanel';
+import PlanModelsPanel from '@/components/adminComponents/PlanModelsPanel';
 import SystemLogs from '@/components/adminComponents/SystemLogs';
+import MetricsPanel from '@/components/adminComponents/MetricsPanel';
 import { Button } from '@/components/ui/button';
-import { Plus, RefreshCw, Home, Users, FileText } from 'lucide-react';
+import { Plus, RefreshCw, Home, Users, FileText, Package, Bot, Activity } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter, useParams } from 'next/navigation';
 import useAuthStore from '@/store/authStore';
@@ -153,6 +156,45 @@ const Admin = () => {
                 System Logs
               </div>
             </button>
+            <button
+              onClick={() => setActiveTab('models')}
+              className={`py-2 px-1 sm:px-2 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
+                activeTab === 'models'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                Models
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('coaches')}
+              className={`py-2 px-1 sm:px-2 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
+                activeTab === 'coaches'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Bot className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                Coaches
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('metrics')}
+              className={`py-2 px-1 sm:px-2 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
+                activeTab === 'metrics'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Activity className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                Metrics
+              </div>
+            </button>
           </nav>
         </div>
 
@@ -185,6 +227,22 @@ const Admin = () => {
           <div className="mt-6">
             <SystemLogs />
           </div>
+        )}
+
+        {activeTab === 'models' && (
+          <div className="mt-6">
+            <PlanModelsPanel />
+          </div>
+        )}
+
+        {activeTab === 'coaches' && (
+          <div className="mt-6">
+            <CoachesPanel />
+          </div>
+        )}
+
+        {activeTab === 'metrics' && (
+          <MetricsPanel />
         )}
       </div>
     </div>

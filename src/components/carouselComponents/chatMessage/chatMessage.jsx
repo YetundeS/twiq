@@ -2,11 +2,20 @@ import { memo, useMemo, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import { Pencil, RefreshCw } from "lucide-react";
 import FileBadge from "../fileBadge";
 import { MarkdownComponents } from "../markdown";
+import BranchPicker from "./BranchPicker";
+import CoachIdentity from "./CoachIdentity";
 import MessageCopyButton from "./MessageCopyButton";
 import MessageSpeakerButton from "./MessageSpeakerButton";
 import MessageContextMenu from "./MessageContextMenu";
+import MessageErrorBanner from "./MessageErrorBanner";
+import ModelBadge from "./ModelBadge";
+import RetryWithModelMenu from "./RetryWithModelMenu";
+import SuggestionPills from "./SuggestionPills";
+import UserMessageEditor from "./UserMessageEditor";
+import ViewArtifactButton from "@/components/chat/ViewArtifactButton";
 import "./cm.css";
 
 // Memoized function to parse OpenAI response
@@ -33,17 +42,34 @@ const parseOpenAIResponse = (raw) => {
   };
 };
 
-const ChatMessage = memo(({ chat, uploadedFiles }) => {
+const ChatMessage = memo(({
+  chat,
+  uploadedFiles,
+  assistantSlug,
+  coach,
+  siblingInfo,
+  onRetry,
+  onRegenerate,
+  onEdit,
+  setInputValue,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const isAIMessage = chat?.sender !== "user";
+  const isErrorMessage = isAIMessage && chat?.status === "error";
+  // Only rows persisted to DB have an id we can act on. Optimistic UI rows
+  // (added during streaming) don't yet — hide edit/regenerate for them.
+  const canRegenerate = isAIMessage && !isErrorMessage && !!chat?.id && typeof onRegenerate === "function";
+  const canEdit = !isAIMessage && !!chat?.id && typeof onEdit === "function";
+  const wasEdited = !isAIMessage && !!chat?.edited_at;
 
   // Memoize the parsed AI response to avoid recalculating on every render
   const aiRes = useMemo(() => {
-    if (isAIMessage && chat?.content) {
+    if (isAIMessage && !isErrorMessage && chat?.content) {
       return parseOpenAIResponse(chat.content);
     }
     return { markdown: "", trailingText: null };
-  }, [chat?.content, isAIMessage]);
+  }, [chat?.content, isAIMessage, isErrorMessage]);
 
   // Memoize the file badges to avoid re-rendering if files haven't changed
   const fileBadges = useMemo(() => {
@@ -60,10 +86,25 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
 
   const messageContent = (
     <div
+      // id + data-message-id let the search-fragment scroll-into-view effect
+      // (chatMessageWindow useEffect) find this element via #message-N.
+      id={chat?.id != null ? `message-${chat.id}` : undefined}
+      data-message-id={chat?.id != null ? String(chat.id) : undefined}
       className="messageWrapper"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {isAIMessage && !isErrorMessage && assistantSlug && (
+        <CoachIdentity assistantSlug={assistantSlug} />
+      )}
+      {siblingInfo && (
+        <BranchPicker
+          index={siblingInfo.index}
+          total={siblingInfo.total}
+          onPrev={siblingInfo.onPrev}
+          onNext={siblingInfo.onNext}
+        />
+      )}
       {chat?.sender === "user" && chat?.has_files && (
         <div className="messageUploads hide-scrollbar">
           <div className="messageUploads_innerCont">{fileBadges}</div>
@@ -72,10 +113,21 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
       <div
         className={`chatMessage_message ${
           chat?.sender === "user" ? "user" : "markdown"
-        } ${chat?.status === "error" ? "error" : ""}`}
+        } ${isErrorMessage ? "errorBanner" : ""}`}
       >
         <div className="aitextMessageBlock">
-          {isAIMessage ? (
+          {isErrorMessage ? (
+            <MessageErrorBanner content={chat?.content} onRetry={onRetry} />
+          ) : isEditing ? (
+            <UserMessageEditor
+              initialContent={chat?.content}
+              onCancel={() => setIsEditing(false)}
+              onSave={async (next) => {
+                const ok = await onEdit(chat.id, next);
+                if (ok) setIsEditing(false);
+              }}
+            />
+          ) : isAIMessage ? (
             <>
               <Markdown
                 remarkPlugins={[remarkGfm]}
@@ -93,7 +145,16 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
           )}
         </div>
       </div>
-      {isAIMessage && (
+      {/* Suggested next actions (Phase 3 track 1). Silent no-op when
+          suggestions is null/empty — legacy rows, aborted-partial
+          replies, and generation failures all render nothing. */}
+      {isAIMessage && !isErrorMessage && !isEditing && (
+        <SuggestionPills
+          suggestions={chat?.suggestions}
+          onPick={setInputValue}
+        />
+      )}
+      {isAIMessage && !isErrorMessage && (
         <div
           className={`message-actions-container ${isHovered ? "visible" : ""}`}
         >
@@ -101,6 +162,43 @@ const ChatMessage = memo(({ chat, uploadedFiles }) => {
           {process.env.NEXT_PUBLIC_TTS_ENABLED === "true" && (
             <MessageSpeakerButton content={chat?.content} />
           )}
+          {canRegenerate && (
+            <>
+              <button
+                type="button"
+                className="messageActionBtn"
+                aria-label="Regenerate reply"
+                onClick={() => onRegenerate(chat.id)}
+                title="Regenerate reply"
+              >
+                <RefreshCw size={14} />
+              </button>
+              <RetryWithModelMenu
+                coach={coach}
+                onPick={(modelId) =>
+                  onRegenerate(chat.id, modelId ? { modelId } : undefined)
+                }
+              />
+            </>
+          )}
+          <ViewArtifactButton chat={chat} assistantSlug={assistantSlug} />
+          <ModelBadge model={chat?.model} />
+        </div>
+      )}
+      {canEdit && !isEditing && (
+        <div
+          className={`message-actions-container user ${isHovered ? "visible" : ""}`}
+        >
+          {wasEdited && <span className="messageEditedTag">edited</span>}
+          <button
+            type="button"
+            className="messageActionBtn"
+            aria-label="Edit message"
+            onClick={() => setIsEditing(true)}
+            title="Edit message"
+          >
+            <Pencil size={14} />
+          </button>
         </div>
       )}
     </div>

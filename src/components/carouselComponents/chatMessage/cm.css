@@ -179,3 +179,351 @@
 .dark .chatMessage_message.user {
     background-color: var(--active-sidebar-item);
 }
+
+
+/* Model badge — appears alongside message actions on assistant replies */
+.modelBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.01em;
+    color: var(--page-text);
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 999px;
+    opacity: 0.75;
+    text-transform: none;
+}
+
+.dark .modelBadge {
+    color: var(--page-text-dark);
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+
+/* Inline error banner — replaces the plain red block for turn errors */
+.chatMessage_message.errorBanner {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+}
+
+.messageErrorBanner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(220, 38, 38, 0.35);
+    background-color: rgba(220, 38, 38, 0.06);
+    color: var(--page-text);
+    font-size: 13px;
+    line-height: 1.4;
+    max-width: 560px;
+}
+
+.messageErrorBanner__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #b91c1c;
+}
+
+.messageErrorBanner__icon {
+    flex-shrink: 0;
+}
+
+.messageErrorBanner__body {
+    margin: 0;
+    color: inherit;
+    text-transform: none;
+}
+
+.messageErrorBanner__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.messageErrorBanner__retry {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.65rem;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    background-color: #b91c1c;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.messageErrorBanner__retry:hover {
+    background-color: #991b1b;
+}
+
+.messageErrorBanner__retry:focus-visible {
+    outline: 2px solid #fca5a5;
+    outline-offset: 2px;
+}
+
+.messageErrorBanner__link {
+    font-size: 12px;
+    color: #b91c1c;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.messageErrorBanner__link:hover {
+    color: #7f1d1d;
+}
+
+.dark .messageErrorBanner {
+    color: var(--page-text-dark);
+    background-color: rgba(248, 113, 113, 0.08);
+    border-color: rgba(248, 113, 113, 0.35);
+}
+
+.dark .messageErrorBanner__head,
+.dark .messageErrorBanner__link {
+    color: #fca5a5;
+}
+
+.dark .messageErrorBanner__link:hover {
+    color: #fecaca;
+}
+
+/* Coach identity header on assistant replies */
+.coachIdentity {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0 0.25rem;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--page-text);
+    opacity: 0.8;
+}
+
+.coachIdentity__iconWrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.coachIdentity__iconWrap svg {
+    width: 12px;
+    height: 12px;
+}
+
+.dark .coachIdentity {
+    color: var(--page-text-dark);
+}
+
+.dark .coachIdentity__iconWrap {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+
+/* Message action buttons — Regenerate on assistant, Edit on user */
+.messageActionBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--page-text);
+    border: none;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.messageActionBtn:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    opacity: 1;
+}
+
+.dark .messageActionBtn {
+    color: var(--page-text-dark);
+}
+
+.dark .messageActionBtn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.message-actions-container.user {
+    align-self: flex-end;
+    margin-top: 2px;
+}
+
+.messageEditedTag {
+    font-size: 10.5px;
+    color: var(--page-text);
+    opacity: 0.55;
+    padding: 0 4px;
+    font-style: italic;
+}
+
+.dark .messageEditedTag {
+    color: var(--page-text-dark);
+}
+
+
+/* Inline user-message editor */
+.userMessageEditor {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 260px;
+}
+
+.userMessageEditor__textarea {
+    width: 100%;
+    min-height: 60px;
+    max-height: 300px;
+    padding: 0.5rem 0.7rem;
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.4;
+    color: inherit;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 12px;
+    resize: none;
+    outline: none;
+}
+
+.userMessageEditor__textarea:focus {
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+.userMessageEditor__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.userMessageEditor__btn {
+    padding: 0.3rem 0.75rem;
+    font-size: 12px;
+    font-weight: 500;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.userMessageEditor__cancel {
+    background-color: transparent;
+    color: inherit;
+    opacity: 0.75;
+}
+
+.userMessageEditor__cancel:hover {
+    opacity: 1;
+}
+
+.userMessageEditor__save {
+    background-color: rgba(0, 0, 0, 0.35);
+    color: white;
+}
+
+.userMessageEditor__save:hover:not(:disabled) {
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+.userMessageEditor__save:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* Branch picker — < N/M > cycler on messages with siblings */
+.branchPicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 2px 6px;
+    font-size: 11px;
+    color: var(--page-text);
+    opacity: 0.65;
+    align-self: flex-start;
+}
+
+.branchPicker__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.branchPicker__btn:hover:not(:disabled) {
+    background-color: rgba(0, 0, 0, 0.06);
+    opacity: 1;
+}
+
+.branchPicker__btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.branchPicker__label {
+    font-variant-numeric: tabular-nums;
+    min-width: 30px;
+    text-align: center;
+}
+
+.dark .branchPicker {
+    color: var(--page-text-dark);
+}
+
+.dark .branchPicker__btn:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+
+/* Retry-with-model dropdown */
+.retryWithModel__content {
+    min-width: 200px;
+}
+
+.retryWithModel__content [role="menuitem"] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.retryWithModel__label {
+    color: inherit;
+}
+
+.retryWithModel__model {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    opacity: 0.75;
+}
