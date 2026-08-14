@@ -1,4 +1,5 @@
 import { addAuthHeader } from "@/lib/utils";
+import { syncTokensAfterLogin, clearAuthTokens } from "@/lib/authTokenSync";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -17,9 +18,11 @@ export const createUser = async (formData) => {
       organization_name,
     });
 
-    // Store token in localStorage
+    // Store token in localStorage AND hand to Supabase so its session
+    // manager auto-refreshes it before expiry.
     localStorage.setItem("twiq_access_token", response.data.access_token);
     localStorage.setItem("twiq_refresh_token", response.data.refresh_token);
+    await syncTokensAfterLogin(response.data.access_token, response.data.refresh_token);
 
     return { status: response.status, user: response.data?.user };
   } catch (err) {
@@ -37,9 +40,10 @@ export const loginUser = async (formData) => {
   try {
     const response = await API.post(`/user/login`, { email, password });
 
-    // Store token in localStorage
+    // Store token in localStorage AND hand to Supabase for auto-refresh.
     localStorage.setItem("twiq_access_token", response.data.access_token);
     localStorage.setItem("twiq_refresh_token", response.data.refresh_token);
+    await syncTokensAfterLogin(response.data.access_token, response.data.refresh_token);
 
     return { status: response.status, user: response.data?.user };
   } catch (err) {
@@ -74,8 +78,14 @@ export const logOutUser = async () => {
       err?.response?.data?.error || err?.message
     );
   } finally {
-    // ✅ Remove token from localStorage regardless of success or failure
-    localStorage.removeItem("twiq_access_token");
+    // Clear Supabase session + localStorage. Two-layer defence: Supabase
+    // signOut fires SIGNED_OUT which the listener uses to clear
+    // localStorage, but clearAuthTokens() also removes them directly in
+    // case the listener isn't wired yet.
+    await clearAuthTokens();
+    // Also clear the historically-orphaned refresh_token that older
+    // logout code paths left behind.
+    localStorage.removeItem("twiq_refresh_token");
   }
 
   return { status: 200, message: "Logged out locally." };
