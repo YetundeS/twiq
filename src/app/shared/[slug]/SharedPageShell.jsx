@@ -8,6 +8,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import TwiqBg from "@/components/dashboardComponent/twiqBg";
+import SharedThemeToggle from "./SharedThemeToggle";
 
 export default function SharedPageShell({ children }) {
   return (
@@ -37,6 +38,7 @@ export default function SharedPageShell({ children }) {
           className="hidden h-auto w-[120px] dark:block"
         />
       </Link>
+      <SharedThemeToggle />
       <div className="relative z-10">{children}</div>
     </>
   );

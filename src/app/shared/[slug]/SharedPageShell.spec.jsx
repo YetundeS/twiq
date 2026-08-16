@@ -20,6 +20,13 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+// Stub the ThemeProvider hook so the toggle can render without wrapping
+// each test in a real provider (which delays mount via localStorage read
+// and would force async waits into every shell test).
+vi.mock("@/components/ui/theme-provider", () => ({
+  useTheme: () => ({ theme: "light", setTheme: () => {} }),
+}));
+
 describe("SharedPageShell", () => {
   test("renders children so pages can compose their own content inside", () => {
     render(
@@ -51,5 +58,15 @@ describe("SharedPageShell", () => {
   test("renders the TwiqBg backdrop so the page has the branded background", () => {
     const { container } = render(<SharedPageShell />);
     expect(container.querySelector(".twiqBg")).not.toBeNull();
+  });
+
+  test("renders a theme-toggle button so viewers can switch light/dark", async () => {
+    render(<SharedPageShell />);
+    // useTheme is mocked with theme='light' → the toggle should offer to
+    // switch to dark. The button is behind a mount-guard so wait for it.
+    const toggle = await screen.findByRole("button", {
+      name: /switch to dark mode/i,
+    });
+    expect(toggle).toBeDefined();
   });
 });
