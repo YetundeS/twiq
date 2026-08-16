@@ -564,6 +564,14 @@
   background-color: var(--active-sidebar-item);
 }
 
+.dark .sidebarArchivedToggle {
+  color: var(--page-text-dark);
+}
+
+.dark .sidebarArchivedToggle:hover {
+  background-color: var(--active-sidebar-item-dark);
+}
+
 
 /* mobile sidebar */
 
