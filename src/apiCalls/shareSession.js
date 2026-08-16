@@ -124,9 +124,14 @@ export const revokeShare = async (sessionId) => {
  *   (404 revoked/unknown, 410 expired, 500 network) return { status } alone.
  */
 export const fetchSharedPublicSession = async (slug) => {
-    const base = process.env.NEXT_PUBLIC_SERVER_URI;
-    if (!base) return { status: 500 };
+    const raw = process.env.NEXT_PUBLIC_SERVER_URI;
+    if (!raw) return { status: 500 };
     if (!slug || typeof slug !== "string") return { status: 404 };
+    // /shared/* is deliberately mounted OUTSIDE /api/* on the backend
+    // (dedicated publicShareLimiter + permissive CORS). Every other apiCall
+    // in this repo lives under /api/*, so NEXT_PUBLIC_SERVER_URI carries the
+    // /api suffix on prod — strip it here so we reach the public route.
+    const base = raw.replace(/\/api\/?$/, "");
     try {
         const res = await fetch(`${base}/shared/${encodeURIComponent(slug)}`, {
             cache: "no-store",
