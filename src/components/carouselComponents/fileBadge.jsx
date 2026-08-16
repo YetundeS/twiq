@@ -6,7 +6,7 @@ import {
 
 const MAX_NAME_LENGTH = 14;
 
-const getFileIcon = (type) => {
+export const getFileIcon = (type) => {
   const supportedTextTypes = [
     'application/pdf',
     'text/plain',
@@ -19,7 +19,10 @@ const getFileIcon = (type) => {
     return <FileText className="w-4 h-4 text-blue-500" />;
   }
 
-  if (type.startsWith('image/')) {
+  // Null-safe: shared-view file rows come through with `type` undefined
+  // because the backend redacts linkedFiles down to `{ name }` only.
+  // Fall through to the generic icon when we don't know the MIME.
+  if (type && type.startsWith('image/')) {
     return <FileImage className="w-4 h-4 text-green-500" />;
   }
 
