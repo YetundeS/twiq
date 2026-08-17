@@ -1,9 +1,9 @@
 "use client";
 
-import { hasAccess } from '@/components/appSideBar';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar';
-import { models } from '@/constants/sidebar';
+import { getCoachIcon } from '@/constants/sidebar';
+import useCoaches, { canAccessCoach } from '@/hooks/useCoaches';
 import { generateSignString } from '@/lib/utils';
 import useAuthStore from '@/store/authStore';
 import "@/styles/platformStyles.css";
@@ -16,6 +16,7 @@ import CrownIcon from '../crown';
 const NewChatBtn = ({ alt, mobile }) => {
   const [organization, setOrganization] = useState("");
   const { user } = useAuthStore();
+  const { coaches } = useCoaches();
 
   useEffect(() => {
     if (!user?.organization_name) {
@@ -60,17 +61,18 @@ const NewChatBtn = ({ alt, mobile }) => {
                         side={mobile ? "bottom" : "right"}
                         alignOffset={4}
                         sideOffset={8} className="menubarContent z-[999999999]">
-                        {models?.map((item, i) => {
-                          const userHasAccess = hasAccess(user?.subscription_plan, item.name);
+                        {coaches?.map((coach) => {
+                          const userHasAccess = canAccessCoach(user?.subscription_plan, coach);
+                          const Icon = getCoachIcon(coach.slug);
                           return (
-                            <MenubarItem key={i} className="menubarItem">
+                            <MenubarItem key={coach.slug} className="menubarItem">
                                 <a
-                                    href={`/platform/${organization}/${item.url}/`}
+                                    href={`/platform/${organization}/${coach.slug}/`}
                                     className="menu_sideBarItem"
-                                    onClick={(e) => handleClick(e, userHasAccess, item.name)}
+                                    onClick={(e) => handleClick(e, userHasAccess, coach.display_name)}
                                 >
-                                {userHasAccess ? (<item.icon />) : (<CrownIcon fill="gold" stroke="gold" />)}
-                                    <span>{item.name}</span>
+                                {userHasAccess ? (<Icon className="home-icon" />) : (<CrownIcon fill="gold" stroke="gold" />)}
+                                    <span>{coach.display_name}</span>
                                 </a>
                             </MenubarItem>
                           )
