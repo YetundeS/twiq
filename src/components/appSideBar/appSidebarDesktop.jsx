@@ -24,7 +24,8 @@ import {
   MenubarItem,
   MenubarMenu, MenubarTrigger
 } from "@/components/ui/menubar";
-import { models } from "@/constants/sidebar";
+import { getCoachIcon } from "@/constants/sidebar";
+import useCoaches, { canAccessCoach } from "@/hooks/useCoaches";
 import { useSidebarChats } from "@/hooks/useSideBarHook";
 import useLogOutDialogStore from "@/store/useLogOutDialogStore";
 import useModelsStore from "@/store/useModelsStore";
@@ -50,6 +51,7 @@ export function AppSidebarDesktop() {
   const { openDialog } = useLogOutDialogStore();
   const { isFetching } = useSidebarChats();
   const { activeSessionID } = useModelsStore();
+  const { coaches } = useCoaches();
 
     const toggleSidebar = useResponsiveSidebarToggle();
     const { openSubDialog } = useSusbcriptionDialogStore();
@@ -156,17 +158,18 @@ export function AppSidebarDesktop() {
                       <MenubarContent 
                         align="start"
                         side="right" className="menubarContent">
-                        {models?.map((item, i) => {
-                          const userHasAccess = hasAccess(user?.subscription_plan, item.name);
+                        {coaches?.map((coach) => {
+                          const userHasAccess = canAccessCoach(user?.subscription_plan, coach);
+                          const Icon = getCoachIcon(coach.slug);
                           return (
-                            <MenubarItem key={i} className="menubarItem">
+                            <MenubarItem key={coach.slug} className="menubarItem">
                               <a
-                                href={`/platform/${organization}/${item.url}/`}
+                                href={`/platform/${organization}/${coach.slug}/`}
                                 className="menu_sideBarItem"
-                                onClick={(e) => handleClick(e, userHasAccess, item.name)}
+                                onClick={(e) => handleClick(e, userHasAccess, coach.display_name)}
                               >
-                                {userHasAccess ? (<item.icon />) : (<CrownIcon fill="gold" stroke="gold" />)}
-                                <span>{item.name}</span>
+                                {userHasAccess ? (<Icon className="home-icon" />) : (<CrownIcon fill="gold" stroke="gold" />)}
+                                <span>{coach.display_name}</span>
                               </a>
                             </MenubarItem>
                           )
