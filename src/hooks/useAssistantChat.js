@@ -1,5 +1,6 @@
 import { editChatMessage, fetchMessages } from "@/apiCalls/chatMessage";
 import { fetchCoachPublicProfile } from "@/apiCalls/chatSessions";
+import { invalidateModelsCache } from "@/lib/modelsCache";
 import { regenerateChatMessage } from "@/apiCalls/regenerateChatMessage";
 import { sendChatMessage } from "@/apiCalls/sendChatMessage";
 import { hasAccess } from "@/components/appSideBar";
@@ -396,20 +397,47 @@ export default function useAssistantChat(modelName, assistantSlug) {
     setShowToggleChat(!isSidebarOpen || isMobile);
   }, [isSidebarOpen, isMobile]);
 
-  // Fetch coach public profile once per assistantSlug. Powers the
-  // retry-with-model dropdown and any future coach-metadata UI. Fails
-  // silently — the dropdown just hides itself if coach is null.
+  // Fetch coach public profile per assistantSlug. Powers the retry-with-
+  // model dropdown, the ModelPicker's "Default (<model>)" label, and any
+  // future coach-metadata UI. Fails silently — the dropdown just hides
+  // itself if coach is null.
+  //
+  // Also re-fetch on window focus. Admins can update coach.default_model
+  // (or the plan's allowed models) at any time; without this, a user
+  // sitting on a chat page with the tab focused sees a stale "Default"
+  // label until they navigate coaches or hard-refresh. Focus re-fetch is
+  // cheap (single small GET) and gives an "eventually consistent" feel
+  // within seconds of returning to the tab.
   useEffect(() => {
     if (!assistantSlug) {
       setCoach(null);
       return;
     }
     let cancelled = false;
-    fetchCoachPublicProfile(assistantSlug).then((data) => {
-      if (!cancelled) setCoach(data);
-    });
-    return () => { cancelled = true; };
-  }, [assistantSlug]);
+    const refetch = () => {
+      fetchCoachPublicProfile(assistantSlug).then((data) => {
+        if (!cancelled) setCoach(data);
+      });
+    };
+    refetch();
+
+    const onFocus = () => {
+      // Bust the plan-models cache too so the ModelPicker's alternatives
+      // list reflects any admin change to plan_models. Keyed by userId
+      // per modelsCache.js — invalidating our slot only.
+      if (user?.id) invalidateModelsCache(user.id);
+      refetch();
+    };
+    if (typeof window !== "undefined") {
+      window.addEventListener("focus", onFocus);
+    }
+    return () => {
+      cancelled = true;
+      if (typeof window !== "undefined") {
+        window.removeEventListener("focus", onFocus);
+      }
+    };
+  }, [assistantSlug, user?.id]);
 
   const startNewChat = useCallback(() => {
     if (!assistantSlug) return;
