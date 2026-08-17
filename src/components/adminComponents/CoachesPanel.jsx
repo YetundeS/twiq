@@ -6,6 +6,7 @@ import { Archive, Plus, RefreshCw, Pencil, EyeOff, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import CoachEditorDialog from "./CoachEditorDialog";
+import ConfirmDialog from "./ConfirmDialog";
 
 const CoachesPanel = () => {
   const [coaches, setCoaches] = useState([]);
@@ -14,6 +15,8 @@ const CoachesPanel = () => {
   // null when creating; the coach row when editing an existing one.
   const [editingCoach, setEditingCoach] = useState(null);
   const [busySlug, setBusySlug] = useState(null);
+  // null when nothing pending, or the coach row awaiting confirmation.
+  const [archiveCandidate, setArchiveCandidate] = useState(null);
 
   const refresh = async () => {
     setLoading(true);
@@ -52,12 +55,13 @@ const CoachesPanel = () => {
     toast.success(wasCreate ? "Coach created" : "Coach updated");
   };
 
-  const handleArchive = async (coach) => {
-    const confirmed = window.confirm(
-      `Archive ${coach.display_name}? Users will lose access from the "New Chat" picker but existing sessions will continue to work.`
-    );
-    if (!confirmed) return;
+  const requestArchive = (coach) => {
+    setArchiveCandidate(coach);
+  };
 
+  const confirmArchive = async () => {
+    const coach = archiveCandidate;
+    if (!coach) return;
     setBusySlug(coach.slug);
     try {
       await archiveCoach(coach.slug);
@@ -65,6 +69,7 @@ const CoachesPanel = () => {
         prev.map((c) => (c.slug === coach.slug ? { ...c, is_published: false } : c))
       );
       toast.success(`${coach.display_name} archived`);
+      setArchiveCandidate(null);
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -196,7 +201,7 @@ const CoachesPanel = () => {
                           size="sm"
                           variant="outline"
                           disabled={busySlug === coach.slug}
-                          onClick={() => handleArchive(coach)}
+                          onClick={() => requestArchive(coach)}
                           title="Archive (hide from picker; keep existing sessions)"
                         >
                           <Archive className="h-3.5 w-3.5" />
@@ -219,6 +224,19 @@ const CoachesPanel = () => {
           setEditingCoach(null);
         }}
         onSaved={handleSaved}
+      />
+
+      <ConfirmDialog
+        open={archiveCandidate !== null}
+        onOpenChange={(open) => {
+          if (!open) setArchiveCandidate(null);
+        }}
+        title={`Archive ${archiveCandidate?.display_name ?? "this coach"}?`}
+        description="Users will lose access from the New Chat picker. Existing sessions will continue to work."
+        confirmLabel="Archive coach"
+        busyLabel="Archiving…"
+        busy={busySlug === archiveCandidate?.slug}
+        onConfirm={confirmArchive}
       />
     </div>
   );
