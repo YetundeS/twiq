@@ -1,6 +1,6 @@
 "use client";
 
-import { createCoach, updateCoach } from "@/apiCalls/adminAPI";
+import { createCoach, listPlanModels, updateCoach } from "@/apiCalls/adminAPI";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -33,6 +33,72 @@ const emptyDraft = () => ({
   is_published: true,
 });
 
+// Small helper: renders a native select over the plan-models list, plus
+// an "Other (custom)" escape hatch that reveals a text input for models
+// not yet in plan_models. Local component — used twice in the same file,
+// no reason to hoist further.
+const OTHER_VALUE = "__other__";
+function ModelSelectField({
+  id,
+  label,
+  hint,
+  value,
+  onChange,
+  disabled,
+  availableModels,
+  allowEmpty = false,
+  placeholder = "openai/gpt-4o",
+}) {
+  const isKnown = availableModels.some((m) => m.model_id === value);
+  const isEmpty = !value;
+  // On existing coaches whose model isn't in the current plan-models list
+  // (e.g. an admin typed a one-off before this dropdown existed), keep it
+  // showing as "Other" so we don't silently swap their model on save.
+  const [customMode, setCustomMode] = useState(false);
+  const showCustom = customMode || (!isEmpty && !isKnown);
+  const selectValue = showCustom ? OTHER_VALUE : isEmpty ? "" : value;
+
+  return (
+    <div>
+      <Label htmlFor={id}>{label}</Label>
+      <select
+        id={id}
+        value={selectValue}
+        disabled={disabled}
+        onChange={(e) => {
+          const next = e.target.value;
+          if (next === OTHER_VALUE) {
+            setCustomMode(true);
+            // Don't clobber existing custom value; leave it for the input.
+            return;
+          }
+          setCustomMode(false);
+          onChange(next);
+        }}
+        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 font-mono"
+      >
+        {allowEmpty && <option value="">— none —</option>}
+        {availableModels.map((m) => (
+          <option key={m.model_id} value={m.model_id}>
+            {m.display_name} ({m.model_id})
+          </option>
+        ))}
+        <option value={OTHER_VALUE}>Other (custom)…</option>
+      </select>
+      {showCustom && (
+        <Input
+          value={value || ""}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          className="font-mono text-xs mt-2"
+          disabled={disabled}
+        />
+      )}
+      {hint && <p className="text-xs text-gray-500 mt-1">{hint}</p>}
+    </div>
+  );
+}
+
 // Only send changed fields to PATCH so we don't accidentally overwrite
 // something a concurrent admin edited in the interim.
 const buildPatch = (original, draft) => {
@@ -56,6 +122,10 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
   const [draft, setDraft] = useState(emptyDraft());
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("general");
+  // Deduped list of model_ids across every plan (via GET /admin/plan-models).
+  // Powers the default_model + fallback_model dropdowns so admins don't have
+  // to remember exact OpenRouter identifiers.
+  const [availableModels, setAvailableModels] = useState([]);
 
   useEffect(() => {
     if (isOpen) {
@@ -63,6 +133,30 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
       setActiveTab("general");
     }
   }, [isOpen, coach]);
+
+  // Load the model allowlist once per dialog-open. Fails quietly — the
+  // dropdowns fall back to "Other (custom)" only, matching pre-fix UX.
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    listPlanModels()
+      .then((rows) => {
+        if (cancelled) return;
+        // Dedupe by model_id across plans. Prefer the first display_name we
+        // see for each id.
+        const seen = new Map();
+        for (const r of rows || []) {
+          if (!r?.model_id || seen.has(r.model_id)) continue;
+          seen.set(r.model_id, {
+            model_id: r.model_id,
+            display_name: r.display_name || r.model_id,
+          });
+        }
+        setAvailableModels([...seen.values()]);
+      })
+      .catch(() => { /* silent — dropdown just shows Other */ });
+    return () => { cancelled = true; };
+  }, [isOpen]);
 
   const setField = (field, value) => {
     setDraft((prev) => ({ ...prev, [field]: value }));
@@ -207,28 +301,26 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label htmlFor="default_model">Default model</Label>
-                <Input
-                  id="default_model"
-                  value={draft.default_model}
-                  onChange={(e) => setField("default_model", e.target.value)}
-                  placeholder="openai/gpt-4o"
-                  className="font-mono text-xs"
-                  disabled={saving}
-                />
-              </div>
-              <div>
-                <Label htmlFor="fallback_model">Fallback model</Label>
-                <Input
-                  id="fallback_model"
-                  value={draft.fallback_model || ""}
-                  onChange={(e) => setField("fallback_model", e.target.value)}
-                  placeholder="anthropic/claude-3.5-sonnet"
-                  className="font-mono text-xs"
-                  disabled={saving}
-                />
-              </div>
+              <ModelSelectField
+                id="default_model"
+                label="Default model"
+                value={draft.default_model}
+                onChange={(v) => setField("default_model", v)}
+                disabled={saving}
+                availableModels={availableModels}
+                placeholder="openai/gpt-4o"
+              />
+              <ModelSelectField
+                id="fallback_model"
+                label="Fallback model"
+                hint="Optional. Used when the primary model errors mid-stream."
+                value={draft.fallback_model || ""}
+                onChange={(v) => setField("fallback_model", v)}
+                disabled={saving}
+                availableModels={availableModels}
+                allowEmpty
+                placeholder="anthropic/claude-3.5-sonnet"
+              />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
