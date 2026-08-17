@@ -1,7 +1,9 @@
 import { editChatMessage, fetchMessages } from "@/apiCalls/chatMessage";
 import { fetchCoachPublicProfile } from "@/apiCalls/chatSessions";
+import { invalidateModelsCache } from "@/lib/modelsCache";
 import { regenerateChatMessage } from "@/apiCalls/regenerateChatMessage";
 import { sendChatMessage } from "@/apiCalls/sendChatMessage";
+import { parseMessageIdFromHash } from "@/lib/messageHash";
 import { hasAccess } from "@/components/appSideBar";
 import { modelDetailsMap } from "@/constants/carousel";
 import useAuthStore from "@/store/authStore";
@@ -393,18 +395,127 @@ export default function useAssistantChat(modelName, assistantSlug) {
     };
   }, []);
 
+  // Search-fragment scroll-into-view (§6.11 polish). When landing on this
+  // session via /platform/[org]/[coach]/[id]#message-N (from SearchDialog),
+  // scroll that message into view + pulse it. Three layered robustness
+  // fixes on top of the original chatMessageWindow.jsx implementation:
+  //
+  //   1. Poll for the target element for ~1s (10 × 100ms) in case the DOM
+  //      hasn't finished painting when the effect first fires.
+  //   2. If the target message id isn't in the loaded window at all, call
+  //      loadMoreMessages() (prepends older history) and re-run — up to
+  //      MAX_PAGES additional pages before giving up.
+  //   3. Fallback toast when we've exhausted history and the message
+  //      genuinely can't be found (deleted, wrong link, sibling that lost
+  //      to a regenerate).
+  //
+  // handledHashRef ensures we only do this dance once per hash — resets
+  // on hash change.
+  const searchScrollHashRef = useRef(null);
+  const searchScrollPagesLoadedRef = useRef(0);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const HIGHLIGHT_MS = 2000;
+    const POLL_INTERVAL_MS = 100;
+    const POLL_MAX_ATTEMPTS = 10; // 10 × 100ms = 1s window for DOM to paint
+    const MAX_PAGES_TO_LOAD = 5; // hard cap on auto-load-more iterations
+
+    let pollTimer = null;
+    let cancelled = false;
+
+    const attemptScroll = () => {
+      const hash = window.location.hash;
+      const targetId = parseMessageIdFromHash(hash);
+      if (!targetId) return;
+      if (searchScrollHashRef.current === hash) return;
+
+      // First: is the target even in the loaded window?
+      const loaded = useModelsStore.getState().activeChatMessages || [];
+      const inLoaded = loaded.some((m) => String(m?.id) === String(targetId));
+
+      if (!inLoaded) {
+        // Try to page backwards until it appears or we exhaust history.
+        if (
+          messagesHasMore &&
+          searchScrollPagesLoadedRef.current < MAX_PAGES_TO_LOAD
+        ) {
+          searchScrollPagesLoadedRef.current += 1;
+          loadMoreMessages();
+          // The effect re-runs when activeChatMessages updates (via the
+          // chats dep below); we'll attempt again there.
+          return;
+        }
+        // Exhausted — mark handled and surface a clear message.
+        searchScrollHashRef.current = hash;
+        toast.info("That message isn't in this chat's loaded history.", {
+          description: "It may have been deleted or is beyond what's saved.",
+          style: { border: "none" },
+        });
+        return;
+      }
+
+      // Target row is in state; poll the DOM until React has painted it.
+      let attempts = 0;
+      const pollForElement = () => {
+        if (cancelled) return;
+        const el = document.getElementById(`message-${targetId}`);
+        if (el) {
+          searchScrollHashRef.current = hash;
+          searchScrollPagesLoadedRef.current = 0;
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          el.classList.add("messageHighlightPulse");
+          setTimeout(
+            () => el.classList.remove("messageHighlightPulse"),
+            HIGHLIGHT_MS,
+          );
+          return;
+        }
+        attempts += 1;
+        if (attempts >= POLL_MAX_ATTEMPTS) return; // give up quietly
+        pollTimer = setTimeout(pollForElement, POLL_INTERVAL_MS);
+      };
+      pollForElement();
+    };
+
+    if (chats?.length) attemptScroll();
+    window.addEventListener("hashchange", attemptScroll);
+    return () => {
+      cancelled = true;
+      if (pollTimer !== null) clearTimeout(pollTimer);
+      window.removeEventListener("hashchange", attemptScroll);
+    };
+    // chats?.length in deps so re-runs after loadMoreMessages prepends
+    // older history. messagesHasMore + loadMoreMessages captured via
+    // closure — they're stable enough (from useCallback) that including
+    // them here would just churn without changing behavior.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chats?.length]);
+
+  // Reset the search-scroll bookkeeping on session change.
+  useEffect(() => {
+    searchScrollHashRef.current = null;
+    searchScrollPagesLoadedRef.current = 0;
+  }, [sessionId]);
+
   useEffect(() => {
     setShowToggleChat(!isSidebarOpen || isMobile);
   }, [isSidebarOpen, isMobile]);
 
-  // Fetch coach public profile once per assistantSlug. Powers the
-  // retry-with-model dropdown, the ModelPicker's "Default (<model>)"
-  // label, and any future coach-metadata UI. Fails silently — the
-  // dropdown just hides itself if coach is null.
+  // Fetch coach public profile per assistantSlug. Powers the retry-with-
+  // model dropdown, the ModelPicker's "Default (<model>)" label, and any
+  // future coach-metadata UI. Fails silently — the dropdown just hides
+  // itself if coach is null.
   //
-  // Mirrors the result into useModelsStore.activeCoach so the picker
-  // can read it without needing 14 pages of prop drilling to plumb
-  // coach into ChatInputArea.
+  // Mirrors the result into useModelsStore.activeCoach so ModelPicker
+  // can read it without prop-drilling coach through 14 page files.
+  //
+  // Also re-fetch on window focus. Admins can update coach.default_model
+  // (or the plan's allowed models) at any time; without this, a user
+  // sitting on a chat page with the tab focused sees a stale "Default"
+  // label until they navigate coaches or hard-refresh. Focus re-fetch is
+  // cheap (single small GET) and gives an "eventually consistent" feel
+  // within seconds of returning to the tab.
   useEffect(() => {
     if (!assistantSlug) {
       setCoach(null);
@@ -412,13 +523,32 @@ export default function useAssistantChat(modelName, assistantSlug) {
       return;
     }
     let cancelled = false;
-    fetchCoachPublicProfile(assistantSlug).then((data) => {
-      if (cancelled) return;
-      setCoach(data);
-      setActiveCoach(data);
-    });
-    return () => { cancelled = true; };
-  }, [assistantSlug, setActiveCoach]);
+    const refetch = () => {
+      fetchCoachPublicProfile(assistantSlug).then((data) => {
+        if (cancelled) return;
+        setCoach(data);
+        setActiveCoach(data);
+      });
+    };
+    refetch();
+
+    const onFocus = () => {
+      // Bust the plan-models cache too so the ModelPicker's alternatives
+      // list reflects any admin change to plan_models. Keyed by userId
+      // per modelsCache.js — invalidating our slot only.
+      if (user?.id) invalidateModelsCache(user.id);
+      refetch();
+    };
+    if (typeof window !== "undefined") {
+      window.addEventListener("focus", onFocus);
+    }
+    return () => {
+      cancelled = true;
+      if (typeof window !== "undefined") {
+        window.removeEventListener("focus", onFocus);
+      }
+    };
+  }, [assistantSlug, user?.id, setActiveCoach]);
 
   const startNewChat = useCallback(() => {
     if (!assistantSlug) return;

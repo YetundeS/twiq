@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import ModelTemplates from "../modelsComponent/modelTemplates";
 import "./cc.css";
 import ChatMessage, { ChatLoader } from "./chatMessage/chatMessage";
@@ -6,9 +6,9 @@ import MessageListSkeleton from "./MessageListSkeleton";
 // ModelPicker moved to ChatInputArea so it stays visible while the message
 // list scrolls (§6.9 UX fix — was living up here inside the scrolling
 // container, so you had to scroll back to the top to switch models).
-import { parseMessageIdFromHash } from "@/lib/messageHash";
-
-const HIGHLIGHT_MS = 2000;
+// Search-fragment scroll-into-view (§6.11 polish) also moved out — into
+// useAssistantChat, where it has access to loadMoreMessages to page
+// backwards when the target is older than the loaded window.
 
 const ChatMessageWindow = memo(({
   chats,
@@ -32,50 +32,6 @@ const ChatMessageWindow = memo(({
   // default → the most-recent sibling wins (matches the backend model
   // filter and matches user expectation post-regenerate).
   const [activeByParent, setActiveByParent] = useState({});
-
-  // Search-fragment scroll-into-view (§6.11 polish). When landing on a
-  // session via /platform/[org]/[coach]/[id]#message-N, scroll that
-  // message into view + pulse it briefly.
-  //
-  // Two triggers:
-  //   1. chats.length changes (initial mount / newly-loaded messages)
-  //   2. window 'hashchange' event (user clicks a second search result while
-  //      already viewing this session — same session, same messages, but
-  //      new hash). Next.js router.push may not always fire hashchange, so
-  //      SearchDialog manually dispatches one after navigate.
-  //
-  // handledHashRef guards against re-triggering after the user scrolls
-  // manually. Reset naturally on session change (component unmounts).
-  const handledHashRef = useRef(null);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    let cancelled = false;
-    let rafId = null;
-
-    const attemptScroll = () => {
-      const hash = window.location.hash;
-      const targetId = parseMessageIdFromHash(hash);
-      if (!targetId) return;
-      if (handledHashRef.current === hash) return;
-      rafId = requestAnimationFrame(() => {
-        if (cancelled) return;
-        const el = document.getElementById(`message-${targetId}`);
-        if (!el) return; // stale link, losing sibling, or deleted row — silent no-op
-        handledHashRef.current = hash;
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-        el.classList.add("messageHighlightPulse");
-        setTimeout(() => el.classList.remove("messageHighlightPulse"), HIGHLIGHT_MS);
-      });
-    };
-
-    if (chats?.length) attemptScroll();
-    window.addEventListener("hashchange", attemptScroll);
-    return () => {
-      cancelled = true;
-      if (rafId !== null) cancelAnimationFrame(rafId);
-      window.removeEventListener("hashchange", attemptScroll);
-    };
-  }, [chats?.length]);
 
   // Group messages that share a parent_id. Messages without parent_id are
   // never in a group (they're the parent user turns + all legacy rows).

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { FileText, Trash2, Upload, RefreshCw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import ConfirmDialog from "./ConfirmDialog";
 
 const KB_ACCEPT = ".pdf,.txt,.md,.docx,.html";
 
@@ -24,6 +25,8 @@ const CoachKbTab = ({ slug }) => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [busyId, setBusyId] = useState(null);
+  // null when idle, else the file row awaiting delete confirmation.
+  const [deleteCandidate, setDeleteCandidate] = useState(null);
   const inputRef = useRef(null);
 
   const refresh = async () => {
@@ -79,17 +82,19 @@ const CoachKbTab = ({ slug }) => {
     }
   };
 
-  const handleDelete = async (file) => {
-    const confirmed = window.confirm(
-      `Delete ${file.file_name}? Its vectors will be removed from Pinecone and this coach's retrieval will stop surfacing them on the next query.`
-    );
-    if (!confirmed) return;
+  const requestDelete = (file) => {
+    setDeleteCandidate(file);
+  };
 
+  const confirmDelete = async () => {
+    const file = deleteCandidate;
+    if (!file) return;
     setBusyId(file.id);
     try {
       await deleteCoachKbFile(slug, file.id);
       setFiles((prev) => prev.filter((f) => f.id !== file.id));
       toast.success(`Deleted ${file.file_name}`);
+      setDeleteCandidate(null);
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -163,7 +168,7 @@ const CoachKbTab = ({ slug }) => {
                 variant="outline"
                 className="text-red-600 hover:bg-red-50 shrink-0"
                 disabled={busyId === file.id}
-                onClick={() => handleDelete(file)}
+                onClick={() => requestDelete(file)}
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
@@ -171,6 +176,19 @@ const CoachKbTab = ({ slug }) => {
           ))}
         </ul>
       )}
+
+      <ConfirmDialog
+        open={deleteCandidate !== null}
+        onOpenChange={(open) => {
+          if (!open) setDeleteCandidate(null);
+        }}
+        title={`Delete ${deleteCandidate?.file_name ?? "this file"}?`}
+        description="Its vectors will be removed from Pinecone and this coach's retrieval will stop surfacing them on the next query."
+        confirmLabel="Delete file"
+        busyLabel="Deleting…"
+        busy={busyId === deleteCandidate?.id}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 };
