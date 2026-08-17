@@ -11,6 +11,7 @@ import { Plus, RefreshCw, Trash2, Star, CheckCircle2, XCircle } from "lucide-rea
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import AddPlanModelDialog from "./AddPlanModelDialog";
+import ConfirmDialog from "./ConfirmDialog";
 
 const PLANS = ["STARTER", "PRO", "ENTERPRISE"];
 
@@ -20,6 +21,8 @@ const PlanModelsPanel = () => {
   const [addOpen, setAddOpen] = useState(false);
   const [addPlan, setAddPlan] = useState("STARTER");
   const [busyId, setBusyId] = useState(null);
+  // null when idle, else the row awaiting delete confirmation.
+  const [deleteCandidate, setDeleteCandidate] = useState(null);
 
   const refresh = async () => {
     setLoading(true);
@@ -89,21 +92,23 @@ const PlanModelsPanel = () => {
     }
   };
 
-  const handleDelete = async (row) => {
+  const requestDelete = (row) => {
     if (row.is_default) {
       toast.error("Promote another model to default before deleting this one");
       return;
     }
-    const confirmed = window.confirm(
-      `Remove ${row.display_name} from ${row.plan}? Users on that plan will lose access to this model.`
-    );
-    if (!confirmed) return;
+    setDeleteCandidate(row);
+  };
 
+  const confirmDelete = async () => {
+    const row = deleteCandidate;
+    if (!row) return;
     setBusyId(row.id);
     try {
       await deletePlanModel(row.id);
       setRows((prev) => prev.filter((r) => r.id !== row.id));
       toast.success("Model removed");
+      setDeleteCandidate(null);
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -225,7 +230,7 @@ const PlanModelsPanel = () => {
                       variant="outline"
                       className="text-red-600 hover:bg-red-50"
                       disabled={busyId === row.id || row.is_default}
-                      onClick={() => handleDelete(row)}
+                      onClick={() => requestDelete(row)}
                       title={row.is_default ? "Promote another to default first" : "Remove"}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
@@ -244,6 +249,19 @@ const PlanModelsPanel = () => {
         existingModelIds={new Set(grouped[addPlan].map((r) => r.model_id))}
         onClose={() => setAddOpen(false)}
         onAdded={handleAdded}
+      />
+
+      <ConfirmDialog
+        open={deleteCandidate !== null}
+        onOpenChange={(open) => {
+          if (!open) setDeleteCandidate(null);
+        }}
+        title={`Remove ${deleteCandidate?.display_name ?? "this model"} from ${deleteCandidate?.plan ?? "the plan"}?`}
+        description="Users on that plan will lose access to this model."
+        confirmLabel="Remove"
+        busyLabel="Removing…"
+        busy={busyId === deleteCandidate?.id}
+        onConfirm={confirmDelete}
       />
     </div>
   );
