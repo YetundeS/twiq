@@ -281,6 +281,18 @@ export default function useAssistantChat(modelName, assistantSlug) {
 
         // Invalidate cache to get latest messages
         mutateMessages();
+
+        // Suggestion pills (§6.15 Phase 3 track 1) are generated on the
+        // backend via setImmediate AFTER the response is sent, then
+        // persisted to chat_messages.suggestions. The mutateMessages()
+        // above runs BEFORE that background job completes, so pills
+        // don't render on the just-completed reply. Refetch twice more
+        // (2s + 5s) to catch typical + slow generations. Each mutate
+        // is a single GET; SWR dedupes so rapid-fire won't hammer the
+        // backend. If suggestions still haven't landed by 5s, they show
+        // on next natural refetch (page nav, focus, etc).
+        setTimeout(() => mutateMessages(), 2000);
+        setTimeout(() => mutateMessages(), 5000);
       },
       (error) => {
         closeStreaming();
