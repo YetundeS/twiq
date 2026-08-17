@@ -80,17 +80,18 @@ export default function useAssistantChat(modelName, assistantSlug) {
 
 
   const { addToSideBarSessions, updateSessionInSideBar, isSidebarOpen, isMobileSidebarOpen } = useSideBar();
-  const { 
-    activeSessionID, 
-    activeChatMessages: chats, 
+  const {
+    activeSessionID,
+    activeChatMessages: chats,
     messagesHasMore,
     messagesPage,
-    updateActiveSessionID, 
-    updateActiveChatMessages, 
+    updateActiveSessionID,
+    updateActiveChatMessages,
     setActiveChatMessages,
     setMessagesHasMore,
     setMessagesPage,
-    resetMessagesPagination
+    resetMessagesPagination,
+    setActiveCoach,
   } = useModelsStore();
 
   const modelDescription = modelDetailsMap[assistantSlug]?.description;
@@ -397,19 +398,27 @@ export default function useAssistantChat(modelName, assistantSlug) {
   }, [isSidebarOpen, isMobile]);
 
   // Fetch coach public profile once per assistantSlug. Powers the
-  // retry-with-model dropdown and any future coach-metadata UI. Fails
-  // silently — the dropdown just hides itself if coach is null.
+  // retry-with-model dropdown, the ModelPicker's "Default (<model>)"
+  // label, and any future coach-metadata UI. Fails silently — the
+  // dropdown just hides itself if coach is null.
+  //
+  // Mirrors the result into useModelsStore.activeCoach so the picker
+  // can read it without needing 14 pages of prop drilling to plumb
+  // coach into ChatInputArea.
   useEffect(() => {
     if (!assistantSlug) {
       setCoach(null);
+      setActiveCoach(null);
       return;
     }
     let cancelled = false;
     fetchCoachPublicProfile(assistantSlug).then((data) => {
-      if (!cancelled) setCoach(data);
+      if (cancelled) return;
+      setCoach(data);
+      setActiveCoach(data);
     });
     return () => { cancelled = true; };
-  }, [assistantSlug]);
+  }, [assistantSlug, setActiveCoach]);
 
   const startNewChat = useCallback(() => {
     if (!assistantSlug) return;

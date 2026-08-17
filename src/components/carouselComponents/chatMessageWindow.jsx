@@ -3,7 +3,9 @@ import ModelTemplates from "../modelsComponent/modelTemplates";
 import "./cc.css";
 import ChatMessage, { ChatLoader } from "./chatMessage/chatMessage";
 import MessageListSkeleton from "./MessageListSkeleton";
-import { ModelPicker } from "./ModelPicker";
+// ModelPicker moved to ChatInputArea so it stays visible while the message
+// list scrolls (§6.9 UX fix — was living up here inside the scrolling
+// container, so you had to scroll back to the top to switch models).
 import { parseMessageIdFromHash } from "@/lib/messageHash";
 
 const HIGHLIGHT_MS = 2000;
@@ -194,7 +196,6 @@ const ChatMessageWindow = memo(({
 
   return (
     <div className="chats_area">
-      <ModelPicker coach={coach} />
       <div className="chats_area_container">
         {chats?.length > 0 ? (
           <>

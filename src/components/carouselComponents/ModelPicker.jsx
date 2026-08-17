@@ -1,6 +1,7 @@
 "use client";
 
-// Per-session model picker (§6.9). Rendered above the chat message window.
+// Per-session model picker (§6.9). Rendered inside the chat input row so
+// it stays visible as the user scrolls the message list.
 //
 // UX:
 // - "Default (Coach's pick)" is always the first option and clears the
@@ -9,6 +10,9 @@
 // - Selection triggers PATCH /api/chats/:id — optimistic sidebar update, toast
 //   on failure with rollback.
 // - Hidden when there's no active session yet (fresh chat pane, pre-first-turn).
+//
+// Reads `coach` from useModelsStore.activeCoach (populated by useAssistantChat)
+// so it doesn't need to be prop-drilled through 14 page files.
 
 import { updateSession } from "@/apiCalls/chatSessions";
 import { loadModelsCached } from "@/lib/modelsCache";
@@ -39,8 +43,8 @@ function shortModelId(id) {
 // Keyed by userId so switching users on the same tab doesn't leak the
 // prior user's plan-allowed models into the dropdown.
 
-export function ModelPicker({ coach }) {
-  const { activeSessionID } = useModelsStore();
+export function ModelPicker() {
+  const { activeSessionID, activeCoach: coach } = useModelsStore();
   const { sidebarSessions, updateSessionInSideBar } = useSideBar();
   const { user } = useAuthStore();
   const [models, setModels] = useState([]);
