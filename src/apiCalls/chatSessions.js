@@ -203,13 +203,33 @@ export const fetchCoachPublicProfile = async (slug) => {
 
 // Cross-session search (§6.11). Returns { results, count } or { error }.
 // Doesn't toast — callers usually render inline validation state instead.
-export const searchChatsAPI = async (q, limit = 20) => {
+//
+// Two lifecycle knobs the caller controls:
+//   - `signal`  — pass an AbortController.signal to cancel this request when
+//                 a newer query comes in. Without it, rapid typing pipelines
+//                 stale requests to the backend, which back up on cold
+//                 starts and eventually surface as "Network error".
+//   - `timeoutMs` — hard client-side timeout. Composed with `signal` so
+//                 whichever aborts first wins. Default 12s.
+export const SEARCH_TIMEOUT_MS = 12000;
+
+export const searchChatsAPI = async (q, limit = 20, { signal, timeoutMs = SEARCH_TIMEOUT_MS } = {}) => {
     const authHeader = addAuthHeader();
     const params = new URLSearchParams({ q: q ?? "", limit: String(limit) });
+
+    // Compose the caller's abort signal with a timeout signal so either can
+    // cancel the fetch. AbortSignal.any() is baseline-widely available and
+    // handles the case where the caller passed no signal (undefined is
+    // filtered out of the array).
+    const signals = [AbortSignal.timeout(timeoutMs)];
+    if (signal) signals.push(signal);
+    const composedSignal = AbortSignal.any(signals);
+
     try {
         const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_URI}/chats/search?${params.toString()}`,
             {
+                signal: composedSignal,
                 headers: {
                     "Content-Type": "application/json",
                     ...authHeader,
@@ -228,7 +248,20 @@ export const searchChatsAPI = async (q, limit = 20) => {
 
         const data = await response.json();
         return { results: data?.results ?? [], count: data?.count ?? 0 };
-    } catch (_err) {
+    } catch (err) {
+        // AbortError from the caller's signal — silent (caller cancelled).
+        if (err?.name === "AbortError" && signal?.aborted) {
+            return { aborted: true, results: [] };
+        }
+        // TimeoutError (from AbortSignal.timeout) — distinguish from
+        // generic network failure so the UI can suggest retrying vs check
+        // your connection.
+        if (err?.name === "TimeoutError" || err?.name === "AbortError") {
+            return {
+                error: "Search took too long — the server may be waking up. Try again.",
+                results: [],
+            };
+        }
         return { error: "Network error. Please try again.", results: [] };
     }
 };
