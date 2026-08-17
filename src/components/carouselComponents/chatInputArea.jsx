@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import SquareIcon from "../shapes/stop";
 import "./cc.css";
 import FileBadge from "./fileBadge";
+import { ModelPicker } from "./ModelPicker";
 import { validateFilesForUpload } from "@/lib/fileUploadValidation";
 import { getCharCountState, LEVEL_CLASS_NAME } from "@/lib/charCount";
 
@@ -215,6 +216,10 @@ const ChatInputArea = ({
               {charCount.display}
             </span>
           )}
+          {/* Per-session model override (§6.9). Lives here (not above the
+              message list) so it stays visible as the user scrolls. Hidden
+              until there's an active session. */}
+          <ModelPicker />
           <div className="inputbtn_box">
             {!streamingData ? (
               <div

@@ -118,8 +118,14 @@ const useModelsStore = create((set) => ({
   activeChatMessages: [],
   messagesHasMore: false,
   messagesPage: 1,
-  
+  // Coach profile for the current chat page. Hoisted here (was
+  // useAssistantChat local state) so ModelPicker can read it without
+  // being prop-drilled through 14 page files. Written by useAssistantChat
+  // after fetchCoachPublicProfile resolves.
+  activeCoach: null,
+
   updateActiveSessionID: (newSessionID) => set({ activeSessionID: newSessionID }),
+  setActiveCoach: (coach) => set({ activeCoach: coach }),
   
   updateActiveChatMessages: (newChatMessage) => set((state) => ({ 
     activeChatMessages: [...state?.activeChatMessages, newChatMessage]

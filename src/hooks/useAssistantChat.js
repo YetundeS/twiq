@@ -82,17 +82,18 @@ export default function useAssistantChat(modelName, assistantSlug) {
 
 
   const { addToSideBarSessions, updateSessionInSideBar, isSidebarOpen, isMobileSidebarOpen } = useSideBar();
-  const { 
-    activeSessionID, 
-    activeChatMessages: chats, 
+  const {
+    activeSessionID,
+    activeChatMessages: chats,
     messagesHasMore,
     messagesPage,
-    updateActiveSessionID, 
-    updateActiveChatMessages, 
+    updateActiveSessionID,
+    updateActiveChatMessages,
     setActiveChatMessages,
     setMessagesHasMore,
     setMessagesPage,
-    resetMessagesPagination
+    resetMessagesPagination,
+    setActiveCoach,
   } = useModelsStore();
 
   const modelDescription = modelDetailsMap[assistantSlug]?.description;
@@ -506,6 +507,9 @@ export default function useAssistantChat(modelName, assistantSlug) {
   // future coach-metadata UI. Fails silently — the dropdown just hides
   // itself if coach is null.
   //
+  // Mirrors the result into useModelsStore.activeCoach so ModelPicker
+  // can read it without prop-drilling coach through 14 page files.
+  //
   // Also re-fetch on window focus. Admins can update coach.default_model
   // (or the plan's allowed models) at any time; without this, a user
   // sitting on a chat page with the tab focused sees a stale "Default"
@@ -515,12 +519,15 @@ export default function useAssistantChat(modelName, assistantSlug) {
   useEffect(() => {
     if (!assistantSlug) {
       setCoach(null);
+      setActiveCoach(null);
       return;
     }
     let cancelled = false;
     const refetch = () => {
       fetchCoachPublicProfile(assistantSlug).then((data) => {
-        if (!cancelled) setCoach(data);
+        if (cancelled) return;
+        setCoach(data);
+        setActiveCoach(data);
       });
     };
     refetch();
@@ -541,7 +548,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
         window.removeEventListener("focus", onFocus);
       }
     };
-  }, [assistantSlug, user?.id]);
+  }, [assistantSlug, user?.id, setActiveCoach]);
 
   const startNewChat = useCallback(() => {
     if (!assistantSlug) return;

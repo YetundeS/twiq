@@ -3,12 +3,12 @@ import ModelTemplates from "../modelsComponent/modelTemplates";
 import "./cc.css";
 import ChatMessage, { ChatLoader } from "./chatMessage/chatMessage";
 import MessageListSkeleton from "./MessageListSkeleton";
-import { ModelPicker } from "./ModelPicker";
-
-// Search-fragment scroll-into-view (§6.11 polish) lives in
-// useAssistantChat now — it needs access to loadMoreMessages to page
-// backwards when the target is older than the loaded window. See the
-// searchScroll effect there.
+// ModelPicker moved to ChatInputArea so it stays visible while the message
+// list scrolls (§6.9 UX fix — was living up here inside the scrolling
+// container, so you had to scroll back to the top to switch models).
+// Search-fragment scroll-into-view (§6.11 polish) also moved out — into
+// useAssistantChat, where it has access to loadMoreMessages to page
+// backwards when the target is older than the loaded window.
 
 const ChatMessageWindow = memo(({
   chats,
@@ -152,7 +152,6 @@ const ChatMessageWindow = memo(({
 
   return (
     <div className="chats_area">
-      <ModelPicker coach={coach} />
       <div className="chats_area_container">
         {chats?.length > 0 ? (
           <>
