@@ -30,7 +30,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const MIN_QUERY = 3;
-const DEBOUNCE_MS = 200;
+// 350ms picked deliberately: 200ms fired mid-word for fast typists,
+// stacking 3-5 in-flight requests during cold starts. 350ms is the
+// standard for FTS boxes (matches Google's Suggest) and roughly halves
+// the number of wasted fetches while still feeling instant.
+const DEBOUNCE_MS = 350;
 
 // Backend snippet arrives as plain text with <mark>...</mark> around matches.
 // Split-and-render as React elements — safer than dangerouslySetInnerHTML
@@ -110,7 +114,9 @@ export function SearchDialog({ trigger, open, onOpenChange } = {}) {
     return () => clearTimeout(t);
   }, [q]);
 
-  // Fire the search whenever the debounced query changes
+  // Fire the search whenever the debounced query changes. The AbortController
+  // aborts the previous in-flight fetch on each new query so stale requests
+  // don't pile up on the backend (cold-start + rapid typing = "Network error").
   useEffect(() => {
     if (!debouncedQ) {
       setResults([]);
@@ -118,12 +124,13 @@ export function SearchDialog({ trigger, open, onOpenChange } = {}) {
       setLoading(false);
       return;
     }
-    let cancelled = false;
+    const controller = new AbortController();
     (async () => {
       setLoading(true);
       setError(null);
-      const out = await searchChatsAPI(debouncedQ, 20);
-      if (cancelled) return;
+      const out = await searchChatsAPI(debouncedQ, 20, { signal: controller.signal });
+      // aborted → the newer query owns the UI now; silent no-op.
+      if (out.aborted) return;
       if (out.error) {
         setError(out.error);
         setResults([]);
@@ -133,7 +140,7 @@ export function SearchDialog({ trigger, open, onOpenChange } = {}) {
       setLoading(false);
     })();
     return () => {
-      cancelled = true;
+      controller.abort();
     };
   }, [debouncedQ]);
 
