@@ -47,6 +47,15 @@ export default function CoachChatSurface() {
     messagesEndRef,
     aiSuggestions,
     showToggleChat,
+    // §6.6 action rail — retry-last-error / regenerate / edit-user-message.
+    // Missing these on the surface silently disables the whole action rail
+    // for every coach after the routing refactor (regression caught in
+    // qcheck H2). Some of the deleted per-coach pages plumbed these; some
+    // didn't — the drift is why it wasn't obvious at review time.
+    retryLastMessage,
+    regenerateAssistantReply,
+    editUserMessage,
+    coach,
   } = useAssistantChat(displayName, coachSlug);
 
   return (
@@ -74,6 +83,10 @@ export default function CoachChatSurface() {
             isFetchingChats={isFetchingChats}
             uploadedFiles={uploadedFiles}
             assistantSlug={coachSlug}
+            onRetryLast={retryLastMessage}
+            onRegenerate={regenerateAssistantReply}
+            onEdit={editUserMessage}
+            coach={coach}
           />
           <ChatInputArea
             inputValue={inputValue}
