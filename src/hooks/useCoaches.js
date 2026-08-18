@@ -13,6 +13,7 @@
 // (see canAccessCoach below).
 
 import useSWR from "swr";
+import { toast } from "sonner";
 import { getCoaches } from "@/apiCalls/coaches";
 
 const KEY = "/api/coaches";
@@ -24,6 +25,18 @@ export default function useCoaches() {
     // after admin edits.
     revalidateOnFocus: false,
     dedupingInterval: 60_000,
+    // Surface fetch failures instead of silently rendering an empty
+    // sidebar. SWR fires onError on every failed revalidation (including
+    // retries), so guard on shouldRetryOnError=false-equivalent behavior
+    // by only toasting the first-mount failure. In practice SWR's
+    // errorRetryCount default (a few attempts with backoff) means one or
+    // two toasts on a real outage, which is acceptable.
+    onError: (err) => {
+      toast.error("Couldn't load coaches", {
+        description: err?.message || "Try refreshing the page.",
+        style: { border: "none", color: "red" },
+      });
+    },
   });
   return {
     coaches: data ?? [],
