@@ -14,9 +14,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
+import { POPULAR_OPENROUTER_MODELS } from "@/constants/openrouterModels";
+import { Plus, Trash2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import CoachKbTab from "./CoachKbTab";
+
+// Kept in lock-step with the backend's validPromptTemplatesError
+// (twiq-backend controllers/coachProfilesController.js). If the caps
+// diverge, admins will hit backend 400s the FE didn't warn about.
+const PROMPT_TEMPLATES_MAX = 6;
+const PROMPT_TEMPLATE_MAX_CHARS = 500;
 
 const PLANS = ["STARTER", "PRO", "ENTERPRISE"];
 
@@ -31,6 +39,10 @@ const emptyDraft = () => ({
   default_retrieval_k: 6,
   default_history_n: 20,
   is_published: true,
+  icon_url: "",
+  // Array editor stores strings; we send [] to backend if empty (clears
+  // the column) or null if the admin didn't touch it (leaves as-is).
+  prompt_templates: [],
 });
 
 // Small helper: renders a native select over the plan-models list, plus
@@ -106,6 +118,7 @@ const buildPatch = (original, draft) => {
   const fields = [
     "display_name", "description", "system_prompt", "default_model",
     "fallback_model", "default_retrieval_k", "default_history_n", "is_published",
+    "icon_url",
   ];
   for (const f of fields) {
     if (draft[f] !== original[f]) patch[f] = draft[f];
@@ -114,6 +127,14 @@ const buildPatch = (original, draft) => {
   const origPlans = (original.allowed_plans || []).slice().sort().join(",");
   const nextPlans = (draft.allowed_plans || []).slice().sort().join(",");
   if (origPlans !== nextPlans) patch.allowed_plans = draft.allowed_plans;
+
+  // prompt_templates: string array. JSON-compare so a reorder counts as a
+  // change but same-content-same-order doesn't. Backend accepts [] to
+  // clear, so empty draft on a coach that previously had prompts sends
+  // the clear correctly.
+  const origPrompts = JSON.stringify(original.prompt_templates ?? []);
+  const nextPrompts = JSON.stringify(draft.prompt_templates ?? []);
+  if (origPrompts !== nextPrompts) patch.prompt_templates = draft.prompt_templates;
   return patch;
 };
 
@@ -129,13 +150,25 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
 
   useEffect(() => {
     if (isOpen) {
-      setDraft(coach ? { ...emptyDraft(), ...coach } : emptyDraft());
+      // Normalize on load: coach.prompt_templates may be null (unset in DB
+      // for admin-created + seed coaches). The editor works on arrays.
+      const normalized = coach
+        ? {
+            ...emptyDraft(),
+            ...coach,
+            prompt_templates: Array.isArray(coach.prompt_templates)
+              ? coach.prompt_templates
+              : [],
+            icon_url: coach.icon_url ?? "",
+          }
+        : emptyDraft();
+      setDraft(normalized);
       setActiveTab("general");
     }
   }, [isOpen, coach]);
 
   // Load the model allowlist once per dialog-open. Fails quietly — the
-  // dropdowns fall back to "Other (custom)" only, matching pre-fix UX.
+  // dropdown falls back to just the popular-models palette.
   useEffect(() => {
     if (!isOpen) return;
     let cancelled = false;
@@ -154,9 +187,19 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
         }
         setAvailableModels([...seen.values()]);
       })
-      .catch(() => { /* silent — dropdown just shows Other */ });
+      .catch(() => { /* silent — palette-only dropdown */ });
     return () => { cancelled = true; };
   }, [isOpen]);
+
+  // Merge the popular-models palette with the admin's plan_models list.
+  // Plan-models win on display_name when the same model_id appears in both
+  // (admin's curated label > generic default).
+  const modelPalette = useMemo(() => {
+    const merged = new Map();
+    for (const m of POPULAR_OPENROUTER_MODELS) merged.set(m.model_id, m);
+    for (const m of availableModels) merged.set(m.model_id, m);
+    return [...merged.values()];
+  }, [availableModels]);
 
   const setField = (field, value) => {
     setDraft((prev) => ({ ...prev, [field]: value }));
@@ -171,6 +214,30 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
           ? prev.allowed_plans.filter((p) => p !== plan)
           : [...prev.allowed_plans, plan],
       };
+    });
+  };
+
+  const addPromptTemplate = () => {
+    setDraft((prev) => {
+      const cur = prev.prompt_templates || [];
+      if (cur.length >= PROMPT_TEMPLATES_MAX) return prev;
+      return { ...prev, prompt_templates: [...cur, ""] };
+    });
+  };
+
+  const updatePromptTemplate = (index, value) => {
+    setDraft((prev) => {
+      const next = [...(prev.prompt_templates || [])];
+      next[index] = value;
+      return { ...prev, prompt_templates: next };
+    });
+  };
+
+  const removePromptTemplate = (index) => {
+    setDraft((prev) => {
+      const next = [...(prev.prompt_templates || [])];
+      next.splice(index, 1);
+      return { ...prev, prompt_templates: next };
     });
   };
 
@@ -202,6 +269,10 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
           default_retrieval_k: Number(draft.default_retrieval_k),
           default_history_n: Number(draft.default_history_n),
           is_published: draft.is_published,
+          icon_url: draft.icon_url?.trim() || null,
+          prompt_templates: draft.prompt_templates?.length
+            ? draft.prompt_templates
+            : null,
         });
       } else {
         const patch = buildPatch(coach, draft);
@@ -280,6 +351,38 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
                 disabled={saving}
               />
             </div>
+            <div>
+              <Label htmlFor="icon_url">Icon URL</Label>
+              <div className="flex gap-3 items-start">
+                <Input
+                  id="icon_url"
+                  type="url"
+                  value={draft.icon_url || ""}
+                  onChange={(e) => setField("icon_url", e.target.value)}
+                  placeholder="https://cdn.example.com/coach-icon.png"
+                  disabled={saving}
+                />
+                {draft.icon_url ? (
+                  // Preview surfaces broken URLs at edit-time so admins
+                  // don't ship a coach with a missing sidebar icon.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={draft.icon_url}
+                    alt="Coach icon preview"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                    onLoad={(e) => {
+                      e.currentTarget.style.display = "";
+                    }}
+                    className="h-10 w-10 rounded-md object-cover border border-gray-200 dark:border-gray-700"
+                  />
+                ) : null}
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                Optional. Overrides the default sidebar/picker icon for this coach. Must be an https URL your CSP/next.config allows.
+              </p>
+            </div>
           </TabsContent>
 
           {/* --- BEHAVIOR --- */}
@@ -307,7 +410,7 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
                 value={draft.default_model}
                 onChange={(v) => setField("default_model", v)}
                 disabled={saving}
-                availableModels={availableModels}
+                availableModels={modelPalette}
                 placeholder="openai/gpt-4o"
               />
               <ModelSelectField
@@ -317,7 +420,7 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
                 value={draft.fallback_model || ""}
                 onChange={(v) => setField("fallback_model", v)}
                 disabled={saving}
-                availableModels={availableModels}
+                availableModels={modelPalette}
                 allowEmpty
                 placeholder="anthropic/claude-3.5-sonnet"
               />
@@ -348,6 +451,60 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
                   disabled={saving}
                 />
                 <p className="text-xs text-gray-500 mt-1">Recent messages sent to model (1–100)</p>
+              </div>
+            </div>
+
+            {/* Starter prompts — rendered in the new-chat grid. Capped at 6
+                to match the FE layout (2 cols × 3 rows on md). Empty entries
+                are stripped server-side but flag them here to keep the UI
+                honest. */}
+            <div>
+              <div className="flex items-center justify-between">
+                <Label>Starter prompts</Label>
+                <span className="text-xs text-gray-500">
+                  {(draft.prompt_templates || []).length} / {PROMPT_TEMPLATES_MAX}
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 mt-1 mb-2">
+                Clickable prompt cards on the coach&apos;s empty-chat page. Leave empty to fall back to the built-in defaults for seed coaches.
+              </p>
+              <div className="space-y-2">
+                {(draft.prompt_templates || []).map((tpl, i) => (
+                  <div key={i} className="flex gap-2 items-start">
+                    <Textarea
+                      value={tpl}
+                      onChange={(e) => updatePromptTemplate(i, e.target.value)}
+                      placeholder={`Prompt ${i + 1}`}
+                      rows={2}
+                      maxLength={PROMPT_TEMPLATE_MAX_CHARS}
+                      disabled={saving}
+                      className="text-sm"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removePromptTemplate(i)}
+                      disabled={saving}
+                      aria-label={`Remove prompt ${i + 1}`}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addPromptTemplate}
+                  disabled={
+                    saving ||
+                    (draft.prompt_templates || []).length >= PROMPT_TEMPLATES_MAX
+                  }
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add prompt
+                </Button>
               </div>
             </div>
           </TabsContent>
