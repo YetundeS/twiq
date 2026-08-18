@@ -218,12 +218,29 @@ export const searchChatsAPI = async (q, limit = 20, { signal, timeoutMs = SEARCH
     const params = new URLSearchParams({ q: q ?? "", limit: String(limit) });
 
     // Compose the caller's abort signal with a timeout signal so either can
-    // cancel the fetch. AbortSignal.any() is baseline-widely available and
-    // handles the case where the caller passed no signal (undefined is
-    // filtered out of the array).
-    const signals = [AbortSignal.timeout(timeoutMs)];
-    if (signal) signals.push(signal);
-    const composedSignal = AbortSignal.any(signals);
+    // cancel the fetch. AbortSignal.any() is Chrome 116+ / Firefox 124+ /
+    // Safari 17.4+ (2024) — feature-detect and fall back to a manual
+    // AbortController + setTimeout race on older browsers so search doesn't
+    // silently die there.
+    let composedSignal;
+    if (typeof AbortSignal.any === "function") {
+        const signals = [AbortSignal.timeout(timeoutMs)];
+        if (signal) signals.push(signal);
+        composedSignal = AbortSignal.any(signals);
+    } else {
+        const controller = new AbortController();
+        const timer = setTimeout(() => {
+            const err = new Error("timeout");
+            err.name = "TimeoutError";
+            controller.abort(err);
+        }, timeoutMs);
+        if (signal) {
+            if (signal.aborted) controller.abort(signal.reason);
+            else signal.addEventListener("abort", () => controller.abort(signal.reason), { once: true });
+        }
+        controller.signal.addEventListener("abort", () => clearTimeout(timer), { once: true });
+        composedSignal = controller.signal;
+    }
 
     try {
         const response = await fetch(
