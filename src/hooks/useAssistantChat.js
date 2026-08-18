@@ -522,6 +522,11 @@ export default function useAssistantChat(modelName, assistantSlug) {
       setActiveCoach(null);
       return;
     }
+    // Clear immediately on slug change so ModelPicker doesn't briefly
+    // show the previous coach's "Default (X)" label during the async
+    // fetch of the new coach's profile (qcheck M5).
+    setCoach(null);
+    setActiveCoach(null);
     let cancelled = false;
     const refetch = () => {
       fetchCoachPublicProfile(assistantSlug).then((data) => {
