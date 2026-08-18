@@ -24,7 +24,32 @@ export const SLUG_ICONS = {
   video_scripts: NotepadText,
 };
 
-export function getCoachIcon(slug) {
+// Returns a React component for the coach's sidebar/picker icon.
+// Precedence: coach.icon_url (admin-supplied) → SLUG_ICONS[slug]
+// (curated for seed coaches) → MessagesSquare (generic fallback).
+//
+// When coach.icon_url is present we render an <img> wrapper that
+// mimics the sizing conventions of lucide icons (via className).
+// Falls back silently to MessagesSquare if the URL 404s so a broken
+// asset doesn't leave a blank slot in the sidebar.
+export function getCoachIcon(slug, coach) {
+  if (coach?.icon_url) {
+    const iconUrl = coach.icon_url;
+    const CustomIcon = function CustomCoachIcon({ className }) {
+      return (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={iconUrl}
+          alt=""
+          className={className}
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+        />
+      );
+    };
+    return CustomIcon;
+  }
   return SLUG_ICONS[slug] || MessagesSquare;
 }
 

@@ -9,26 +9,37 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import "./mt.css";
 
-const ModelTemplates = ({ setInputValue, assistantSlug }) => {
+const ModelTemplates = ({ setInputValue, assistantSlug, coach }) => {
   const pathname = usePathname();
   const [templates, setTemplates] = useState([]);
   const [assSlug, setAssSlug] = useState('');
   const [assIcon, setAssIcon] = useState('');
+  const [customIconUrl, setCustomIconUrl] = useState('');
   const [helpVideoID, setHelpVideoID] = useState('');
 
   useEffect(() => {
     const key = assistantSlug ? assistantSlug : pathname?.split("/").pop();
-    setAssSlug(assistantDisplayNames[key])
-    setAssIcon(assistantDisplayIcons[key])
-    setHelpVideoID(helpVideoIDs[key])
-    const matchedTemplates = assistantPromptTemplates[key];
 
-    if (matchedTemplates) {
-      setTemplates(matchedTemplates);
-    } else {
-      setTemplates([]);
-    }
-  }, [pathname, assistantSlug]);
+    // Prefer the coach's server-side fields when present. Falls back to
+    // the constants map so seed coaches keep their curated display names,
+    // icon set, and prompt starters until an admin overrides them.
+    const displayName = coach?.display_name || assistantDisplayNames[key];
+    const iconUrl = coach?.icon_url || null;
+    const iconKey = iconUrl ? null : assistantDisplayIcons[key];
+    const coachPrompts = Array.isArray(coach?.prompt_templates)
+      ? coach.prompt_templates.filter((p) => typeof p === "string" && p.trim())
+      : null;
+    const matchedTemplates =
+      coachPrompts && coachPrompts.length > 0
+        ? coachPrompts
+        : assistantPromptTemplates[key];
+
+    setAssSlug(displayName);
+    setAssIcon(iconKey);
+    setCustomIconUrl(iconUrl);
+    setHelpVideoID(helpVideoIDs[key]);
+    setTemplates(matchedTemplates || []);
+  }, [pathname, assistantSlug, coach]);
 
   return (
     <div className="modelTemplates">
@@ -55,7 +66,22 @@ const ModelTemplates = ({ setInputValue, assistantSlug }) => {
         </>
       </div>
       <div className="assSlugIcon">
-        {assIcon ? (
+        {customIconUrl ? (
+          // Admin-supplied icon_url — one image serves both themes because
+          // arbitrary URLs don't ship in a red/light pair. Falls through to
+          // the PenTool placeholder if the URL 404s.
+          <Image
+            src={customIconUrl}
+            width={500}
+            height={500}
+            alt={`${assSlug || "coach"} icon`}
+            className="modelImg"
+            unoptimized
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
+          />
+        ) : assIcon ? (
           <>
             {/* Light mode logo (visible only in light mode) */}
             <Image

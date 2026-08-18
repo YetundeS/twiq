@@ -63,7 +63,7 @@ const NewChatBtn = ({ alt, mobile }) => {
                         sideOffset={8} className="menubarContent z-[999999999]">
                         {coaches?.map((coach) => {
                           const userHasAccess = canAccessCoach(user?.subscription_plan, coach);
-                          const Icon = getCoachIcon(coach.slug);
+                          const Icon = getCoachIcon(coach.slug, coach);
                           return (
                             <MenubarItem key={coach.slug} className="menubarItem">
                                 <a

@@ -162,7 +162,7 @@ const ChatMessageWindow = memo(({
           </>
         ) : (
           <div className="newChatArea">
-            <ModelTemplates assistantSlug={assistantSlug} setInputValue={setInputValue} />
+            <ModelTemplates assistantSlug={assistantSlug} setInputValue={setInputValue} coach={coach} />
             <div className="messagesEnd" ref={messagesEndRef} />
           </div>
         )}
