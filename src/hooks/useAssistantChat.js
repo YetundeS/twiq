@@ -5,6 +5,7 @@ import { regenerateChatMessage } from "@/apiCalls/regenerateChatMessage";
 import { sendChatMessage } from "@/apiCalls/sendChatMessage";
 import { parseMessageIdFromHash } from "@/lib/messageHash";
 import { hasAccess } from "@/components/appSideBar";
+import { canAccessCoach } from "@/hooks/useCoaches";
 import { modelDetailsMap } from "@/constants/carousel";
 import useAuthStore from "@/store/authStore";
 import { useSideBar } from "@/store/sidebarStore";
@@ -217,7 +218,14 @@ export default function useAssistantChat(modelName, assistantSlug) {
     const text = typeof overrideText === "string" ? overrideText : inputValue;
     if (!text || streaming) return;
 
-    const hasModelAccess = hasAccess(user?.subscription_plan, modelName);
+    // Prefer the coach's server-side allowed_plans (data-driven) over the
+    // legacy hardcoded starter/proModels arrays. hasAccess() doesn't know
+    // about admin-created coaches — a Pro user hitting an admin coach the
+    // backend permits would otherwise see a spurious "upgrade" toast. Fall
+    // back to hasAccess only while `coach` is still loading (null).
+    const hasModelAccess = coach
+      ? canAccessCoach(user?.subscription_plan, coach)
+      : hasAccess(user?.subscription_plan, modelName);
 
     if (!hasModelAccess) {
       toast.error(`Upgrade to access "${modelName}" model`, {
@@ -326,6 +334,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
     streaming,
     user?.subscription_plan,
     modelName,
+    coach,
     uploadedFiles,
     activeSessionID,
     assistantSlug,
@@ -610,7 +619,12 @@ export default function useAssistantChat(modelName, assistantSlug) {
   const regenerateAssistantReply = useCallback(async (targetMessageId, options = {}) => {
     if (!targetMessageId || streaming) return;
 
-    const hasModelAccess = hasAccess(user?.subscription_plan, modelName);
+    // Same rationale as sendMessage: prefer coach.allowed_plans, fall back
+    // to the legacy hardcoded check while the coach profile is still
+    // hydrating.
+    const hasModelAccess = coach
+      ? canAccessCoach(user?.subscription_plan, coach)
+      : hasAccess(user?.subscription_plan, modelName);
     if (!hasModelAccess) {
       toast.error(`Upgrade to access "${modelName}" model`, {
         style: { border: "none", color: "red" },
@@ -660,7 +674,7 @@ export default function useAssistantChat(modelName, assistantSlug) {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chats, streaming, activeSessionID, user?.subscription_plan, modelName, setActiveChatMessages, updateActiveChatMessages, mutateMessages]);
+  }, [chats, streaming, activeSessionID, user?.subscription_plan, modelName, coach, setActiveChatMessages, updateActiveChatMessages, mutateMessages]);
 
   // Edit a user message in place. Optimistic update; roll back on API failure.
   // No auto-resend — user decides whether to send a new turn after editing.
