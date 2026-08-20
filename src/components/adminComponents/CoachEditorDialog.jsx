@@ -14,8 +14,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { ICON_PRESETS, resolveCoachIcon } from "@/constants/coachIconPresets";
 import { POPULAR_OPENROUTER_MODELS } from "@/constants/openrouterModels";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import CoachKbTab from "./CoachKbTab";
@@ -352,36 +353,63 @@ const CoachEditorDialog = ({ isOpen, coach, onClose, onSaved }) => {
               />
             </div>
             <div>
-              <Label htmlFor="icon_url">Icon URL</Label>
-              <div className="flex gap-3 items-start">
-                <Input
-                  id="icon_url"
-                  type="url"
-                  value={draft.icon_url || ""}
-                  onChange={(e) => setField("icon_url", e.target.value)}
-                  placeholder="https://cdn.example.com/coach-icon.png"
-                  disabled={saving}
-                />
-                {draft.icon_url ? (
-                  // Preview surfaces broken URLs at edit-time so admins
-                  // don't ship a coach with a missing sidebar icon.
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={draft.icon_url}
-                    alt="Coach icon preview"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                    onLoad={(e) => {
-                      e.currentTarget.style.display = "";
-                    }}
-                    className="h-10 w-10 rounded-md object-cover border border-gray-200 dark:border-gray-700"
-                  />
-                ) : null}
-              </div>
-              <p className="text-xs text-gray-500 mt-1">
-                Optional. Overrides the default sidebar/picker icon for this coach. Must be an https URL your CSP/next.config allows.
-              </p>
+              <Label>Icon</Label>
+              {/* Preset picker only. Legacy URL rows still render via the
+                  resolver (backwards compat), but new edits pick from the
+                  curated set so the visual language stays consistent. */}
+              {(() => {
+                const resolved = resolveCoachIcon(draft.icon_url);
+                const selectedKey = resolved.kind === "lucide" ? resolved.key : null;
+                const isLegacyUrl = resolved.kind === "image";
+                return (
+                  <>
+                    <div className="mt-1 grid grid-cols-8 gap-2">
+                      {ICON_PRESETS.map(({ key, label, Icon }) => {
+                        const isSelected = selectedKey === key;
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            title={label}
+                            aria-label={label}
+                            aria-pressed={isSelected}
+                            onClick={() => setField("icon_url", `lucide:${key}`)}
+                            disabled={saving}
+                            className={
+                              "flex h-10 w-10 items-center justify-center rounded-md border transition " +
+                              (isSelected
+                                ? "border-red-500 bg-red-50 dark:bg-red-950/40 dark:border-red-400"
+                                : "border-gray-200 hover:border-gray-400 dark:border-gray-700 dark:hover:border-gray-500")
+                            }
+                          >
+                            <Icon className="h-5 w-5" />
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="mt-2 flex items-center justify-between gap-2">
+                      <p className="text-xs text-gray-500">
+                        {selectedKey
+                          ? `Selected: ${ICON_PRESETS.find((p) => p.key === selectedKey)?.label}`
+                          : isLegacyUrl
+                            ? "Legacy URL (pick a preset to replace)"
+                            : "Optional. Falls back to a generic icon if unset."}
+                      </p>
+                      {draft.icon_url ? (
+                        <button
+                          type="button"
+                          onClick={() => setField("icon_url", "")}
+                          disabled={saving}
+                          className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                        >
+                          <X className="h-3 w-3" />
+                          Clear
+                        </button>
+                      ) : null}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </TabsContent>
 

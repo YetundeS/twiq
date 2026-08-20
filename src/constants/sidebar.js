@@ -6,6 +6,7 @@ import {
   MessagesSquare,
   Newspaper, NotepadText, Users
 } from "lucide-react";
+import { resolveCoachIcon } from "./coachIconPresets";
 
 // Per-slug icon map. Icons are React components — can't come from
 // the backend — so they stay local. Admin-created coaches whose slug
@@ -25,21 +26,21 @@ export const SLUG_ICONS = {
 };
 
 // Returns a React component for the coach's sidebar/picker icon.
-// Precedence: coach.icon_url (admin-supplied) → SLUG_ICONS[slug]
-// (curated for seed coaches) → MessagesSquare (generic fallback).
+// Precedence: coach.icon_url (admin-picked preset or legacy URL) →
+// SLUG_ICONS[slug] (curated for seed coaches) → MessagesSquare.
 //
-// When coach.icon_url is present we render an <img> wrapper that
-// mimics the sizing conventions of lucide icons (via className).
-// Falls back silently to MessagesSquare if the URL 404s so a broken
-// asset doesn't leave a blank slot in the sidebar.
+// icon_url now stores a preset key ("lucide:<Name>") from the admin
+// editor's preset picker. Legacy URL rows still render as <img> via
+// the resolver's backwards-compat branch.
 export function getCoachIcon(slug, coach) {
-  if (coach?.icon_url) {
-    const iconUrl = coach.icon_url;
+  const resolved = resolveCoachIcon(coach?.icon_url);
+  if (resolved.kind === "lucide") return resolved.Icon;
+  if (resolved.kind === "image") {
     const CustomIcon = function CustomCoachIcon({ className }) {
       return (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={iconUrl}
+          src={resolved.src}
           alt=""
           className={className}
           onError={(e) => {

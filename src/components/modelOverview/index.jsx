@@ -1,4 +1,5 @@
 import GlowEffect from "@/components/landingPageComponents/GlowEffect";
+import { resolveCoachIcon } from "@/constants/coachIconPresets";
 import { canAccessCoach } from "@/hooks/useCoaches";
 import { motion } from "framer-motion";
 import { MessagesSquare } from "lucide-react";
@@ -46,12 +47,10 @@ const ModelOverview = ({ specialModel, onClick, model, coach, organizationName, 
     ? canAccessCoach(subscription_plan, coach)
     : hasAccess(subscription_plan, title);
 
-  // Icon precedence: admin-supplied icon_url first (rendered as a plain
-  // <img> because arbitrary URLs bypass next/image domain restrictions
-  // via `unoptimized`), then the seed coach's static filename convention
-  // (/images/model_icons/<name>.png), then a generic MessagesSquare
-  // fallback for admin coaches with no icon set yet.
-  const iconUrl = coach?.icon_url || null;
+  // Icon precedence: admin's picked preset (lucide component) → legacy
+  // icon_url (image) → seed coach filename convention
+  // (/images/model_icons/<name>.png) → generic MessagesSquare fallback.
+  const resolvedIcon = resolveCoachIcon(coach?.icon_url);
   const iconFilename = model?.icon || null;
 
   const handleClick = (e) => {
@@ -86,9 +85,15 @@ const ModelOverview = ({ specialModel, onClick, model, coach, organizationName, 
           }}
           className="icon_container"
         >
-          {iconUrl ? (
+          {resolvedIcon.kind === "lucide" ? (
+            // Preset picker — lucide component. Sized to match the seed
+            // coaches' Image dimensions (~120px on the tile).
+            <div className="modelImg flex items-center justify-center">
+              <resolvedIcon.Icon aria-label={`${title} icon`} className="w-24 h-24" />
+            </div>
+          ) : resolvedIcon.kind === "image" ? (
             <Image
-              src={iconUrl}
+              src={resolvedIcon.src}
               width={300}
               height={300}
               alt={`${title} icon`}
