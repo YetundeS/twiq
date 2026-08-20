@@ -1,5 +1,7 @@
 import GlowEffect from "@/components/landingPageComponents/GlowEffect";
+import { canAccessCoach } from "@/hooks/useCoaches";
 import { motion } from "framer-motion";
+import { MessagesSquare } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { hasAccess } from "../appSideBar";
@@ -7,7 +9,7 @@ import CrownIcon from "../dashboardComponent/crown";
 import "./modelOverview.css";
 
 
-const ModelOverview = ({ specialModel, onClick, model, organizationName, subscription_plan }) => {
+const ModelOverview = ({ specialModel, onClick, model, coach, organizationName, subscription_plan }) => {
   const title = model?.title;
 
   if (specialModel) {
@@ -36,7 +38,21 @@ const ModelOverview = ({ specialModel, onClick, model, organizationName, subscri
     );
   }
 
-  const userHasAccess = hasAccess(subscription_plan, title);
+  // Prefer the backend coach's allowed_plans over the hardcoded
+  // starter/proModels arrays. Falls back to hasAccess for the brief
+  // window before the coaches SWR hydrates (or on the impossible case
+  // of a seed coach missing from the backend response).
+  const userHasAccess = coach
+    ? canAccessCoach(subscription_plan, coach)
+    : hasAccess(subscription_plan, title);
+
+  // Icon precedence: admin-supplied icon_url first (rendered as a plain
+  // <img> because arbitrary URLs bypass next/image domain restrictions
+  // via `unoptimized`), then the seed coach's static filename convention
+  // (/images/model_icons/<name>.png), then a generic MessagesSquare
+  // fallback for admin coaches with no icon set yet.
+  const iconUrl = coach?.icon_url || null;
+  const iconFilename = model?.icon || null;
 
   const handleClick = (e) => {
     if (!userHasAccess) {
@@ -70,13 +86,31 @@ const ModelOverview = ({ specialModel, onClick, model, organizationName, subscri
           }}
           className="icon_container"
         >
-          <Image
-            src={`/images/model_icons/${model?.icon}`}
-            width={300}
-            height={300}
-            alt="model icon"
-            className="modelImg"
-          />
+          {iconUrl ? (
+            <Image
+              src={iconUrl}
+              width={300}
+              height={300}
+              alt={`${title} icon`}
+              className="modelImg"
+              unoptimized
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+            />
+          ) : iconFilename ? (
+            <Image
+              src={`/images/model_icons/${iconFilename}`}
+              width={300}
+              height={300}
+              alt="model icon"
+              className="modelImg"
+            />
+          ) : (
+            <div className="modelImg flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-full">
+              <MessagesSquare className="text-gray-500 dark:text-gray-400 w-16 h-16" />
+            </div>
+          )}
         </motion.div>
         <div className={`info_container`}>
           <p className="model_title">{title}</p>
