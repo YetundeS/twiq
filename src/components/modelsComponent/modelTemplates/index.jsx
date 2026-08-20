@@ -2,6 +2,7 @@
 
 import HelpModelIcon from "@/components/dashboardComponent/helpIcon";
 import HelpVidDialog from "@/components/dashboardComponent/helpVideoDialog";
+import { resolveCoachIcon } from "@/constants/coachIconPresets";
 import { assistantDisplayIcons, assistantDisplayNames, assistantPromptTemplates, helpVideoIDs } from "@/constants/model";
 import { PenTool } from "lucide-react";
 import Image from "next/image";
@@ -14,7 +15,7 @@ const ModelTemplates = ({ setInputValue, assistantSlug, coach }) => {
   const [templates, setTemplates] = useState([]);
   const [assSlug, setAssSlug] = useState('');
   const [assIcon, setAssIcon] = useState('');
-  const [customIconUrl, setCustomIconUrl] = useState('');
+  const [customIconResolved, setCustomIconResolved] = useState({ kind: "none" });
   const [helpVideoID, setHelpVideoID] = useState('');
 
   useEffect(() => {
@@ -24,8 +25,8 @@ const ModelTemplates = ({ setInputValue, assistantSlug, coach }) => {
     // the constants map so seed coaches keep their curated display names,
     // icon set, and prompt starters until an admin overrides them.
     const displayName = coach?.display_name || assistantDisplayNames[key];
-    const iconUrl = coach?.icon_url || null;
-    const iconKey = iconUrl ? null : assistantDisplayIcons[key];
+    const resolved = resolveCoachIcon(coach?.icon_url);
+    const iconKey = resolved.kind === "none" ? assistantDisplayIcons[key] : null;
     const coachPrompts = Array.isArray(coach?.prompt_templates)
       ? coach.prompt_templates.filter((p) => typeof p === "string" && p.trim())
       : null;
@@ -36,7 +37,7 @@ const ModelTemplates = ({ setInputValue, assistantSlug, coach }) => {
 
     setAssSlug(displayName);
     setAssIcon(iconKey);
-    setCustomIconUrl(iconUrl);
+    setCustomIconResolved(resolved);
     setHelpVideoID(helpVideoIDs[key]);
     setTemplates(matchedTemplates || []);
   }, [pathname, assistantSlug, coach]);
@@ -66,12 +67,20 @@ const ModelTemplates = ({ setInputValue, assistantSlug, coach }) => {
         </>
       </div>
       <div className="assSlugIcon">
-        {customIconUrl ? (
-          // Admin-supplied icon_url — one image serves both themes because
-          // arbitrary URLs don't ship in a red/light pair. Falls through to
-          // the PenTool placeholder if the URL 404s.
+        {customIconResolved.kind === "lucide" ? (
+          // Preset picker — render the lucide component. Sized to match the
+          // seed coaches' Image dimensions (~120px on the chat surface).
+          <customIconResolved.Icon
+            aria-label={`${assSlug || "coach"} icon`}
+            className="modelImg h-24 w-24"
+          />
+        ) : customIconResolved.kind === "image" ? (
+          // Backwards compat — a legacy URL that pre-dates the preset picker.
+          // One image serves both themes because arbitrary URLs don't ship in
+          // a red/light pair; falls through to the PenTool placeholder on
+          // load failure.
           <Image
-            src={customIconUrl}
+            src={customIconResolved.src}
             width={500}
             height={500}
             alt={`${assSlug || "coach"} icon`}
