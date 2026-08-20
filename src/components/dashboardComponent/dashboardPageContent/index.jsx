@@ -2,10 +2,11 @@
 
 import AuhVisitBtn from "@/components/authComponents/authForms/auhVisitBtn";
 import ModelOverview from "@/components/modelOverview";
+import useCoaches from "@/hooks/useCoaches";
 import { generateSignString } from "@/lib/utils";
 import useAuthStore from "@/store/authStore";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { modelsOverview, TWIQ_FURTHER_DESC } from "../../../constants/dahsboard";
 import CopyrightTxt from "../copyrightTxt";
 import PlatformTop from "../platformTop";
@@ -13,9 +14,23 @@ import TwiqBg from "../twiqBg";
 import UpgradeBanner from "../UpgradeBanner";
 import "./dpc.css";
 
+// Maps a backend coach row → the { title, description[], icon, link }
+// shape the ModelOverview card expects. Used for admin-created coaches
+// whose slug doesn't have a hardcoded entry in constants/dahsboard.js.
+// Description is wrapped in an array to match the two-line seed layout.
+function adminCoachToOverview(coach) {
+  return {
+    title: coach.display_name || coach.slug,
+    description: coach.description ? [coach.description] : [],
+    icon: null,
+    link: coach.slug,
+  };
+}
+
 const DashboardPageContent = () => {
   const [organization, setOrganization] = useState("");
   const { user } = useAuthStore();
+  const { coaches } = useCoaches();
   const [twiqDefinition, setTwiqDefinition] = useState(false)
 
   useEffect(() => {
@@ -23,6 +38,25 @@ const DashboardPageContent = () => {
     const signString = generateSignString(user?.organization_name);
     setOrganization(signString);
   }, [user]);
+
+  // Merge order matters: keep the 7 hardcoded seed cards in their
+  // curated order (marketing copy + icons stay pixel-perfect), then
+  // append any admin-created coaches the backend returns that aren't
+  // in the hardcoded list. Each card also carries its backend `coach`
+  // when available so the plan gate can consult allowed_plans instead
+  // of the legacy hardcoded starter/proModels arrays.
+  const overviewCards = useMemo(() => {
+    const bySlug = new Map((coaches || []).map((c) => [c.slug, c]));
+    const seedCards = modelsOverview.map((m) => ({
+      model: m,
+      coach: bySlug.get(m.link) || null,
+    }));
+    const seedSlugs = new Set(modelsOverview.map((m) => m.link));
+    const adminCards = (coaches || [])
+      .filter((c) => !seedSlugs.has(c.slug))
+      .map((c) => ({ model: adminCoachToOverview(c), coach: c }));
+    return [...seedCards, ...adminCards];
+  }, [coaches]);
 
   const handleDownload = () => {
     const link = document.createElement('a');
@@ -89,10 +123,11 @@ const DashboardPageContent = () => {
               onClick={() => setTwiqDefinition(true)}
               specialModel={true}
             />)}
-          {modelsOverview?.map((model, i) => (
+          {overviewCards.map(({ model, coach }) => (
             <ModelOverview
               model={model}
-              key={i}
+              coach={coach}
+              key={model.link}
               organizationName={organization}
               subscription_plan={user?.subscription_plan}
             />
